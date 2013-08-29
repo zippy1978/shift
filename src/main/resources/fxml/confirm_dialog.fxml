@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.backelite.shift.gui.control.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+
+<AnchorPane minHeight="69.0" minWidth="289.0" prefHeight="122.99990000000253" prefWidth="377.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.dialog.ConfirmDialogController">
+  <children>
+    <AnchorPane minHeight="22.0" prefHeight="41.0" prefWidth="360.0" styleClass="bottom-tool-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <children>
+        <Button fx:id="positiveButton" alignment="CENTER" contentDisplay="CENTER" layoutY="10.0" mnemonicParsing="false" prefWidth="73.0" text="%yes" textAlignment="CENTER" AnchorPane.rightAnchor="97.0" />
+        <Button fx:id="negativeButton" alignment="CENTER" cancelButton="true" contentDisplay="CENTER" defaultButton="true" layoutY="10.0" mnemonicParsing="false" prefWidth="73.0" text="%no" textAlignment="CENTER" AnchorPane.rightAnchor="14.0" />
+      </children>
+    </AnchorPane>
+    <Label fx:id="messageLabel" prefHeight="55.0" prefWidth="283.0" wrapText="true" AnchorPane.leftAnchor="81.0" AnchorPane.topAnchor="14.0" />
+    <Label alignment="CENTER" prefHeight="55.0" prefWidth="57.0" styleClass="dialog-symbol" text="?" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="15.0" />
+  </children>
+</AnchorPane>

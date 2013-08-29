@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.backelite.shift.gui.control.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+
+<AnchorPane minHeight="69.0" minWidth="289.0" prefHeight="95.0" prefWidth="377.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.dialog.NewFolderDialogController">
+  <children>
+    <AnchorPane minHeight="22.0" prefHeight="41.0" prefWidth="360.0" styleClass="bottom-tool-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <children>
+        <Button fx:id="okButton" alignment="CENTER" contentDisplay="CENTER" defaultButton="true" layoutY="10.0" mnemonicParsing="false" prefWidth="73.0" text="%ok" textAlignment="CENTER" AnchorPane.rightAnchor="97.0" />
+        <Button fx:id="cancelButton" alignment="CENTER" cancelButton="true" contentDisplay="CENTER" layoutY="10.0" mnemonicParsing="false" text="%cancel" textAlignment="CENTER" AnchorPane.rightAnchor="14.0" />
+      </children>
+    </AnchorPane>
+    <ValidatedTextField fx:id="nameTextField" prefWidth="246.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="13.0" />
+    <Label text="%main.new_folder.folder_name" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="16.0" />
+    <Label fx:id="nameErrorLabel" alignment="CENTER_RIGHT" prefWidth="246.0" styleClass="error-label" text="Label" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="38.0" />
+  </children>
+</AnchorPane>

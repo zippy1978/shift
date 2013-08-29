@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>run</actionName>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-classpath %classpath com.backelite.shift.MainApp</exec.args>
+                <exec.executable>java</exec.executable>
+            </properties>
+        </action>
+        <action>
+            <actionName>CUSTOM-Update header comments</actionName>
+            <displayName>Update header comments</displayName>
+            <goals>
+                <goal>update-file-header</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-Native</actionName>
+            <displayName>Native</displayName>
+            <goals>
+                <goal>jfx:build-native</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-JAR</actionName>
+            <displayName>JAR</displayName>
+            <goals>
+                <goal>jfx:build-jar</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-Sign JAR</actionName>
+            <displayName>Sign JAR</displayName>
+            <goals>
+                <goal>fx:signjar</goal>
+            </goals>
+        </action>
+    </actions>

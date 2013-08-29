@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
+
+<AnchorPane id="statusBar" maxHeight="30.0" minHeight="23.0" prefHeight="30.0" prefWidth="491.0" styleClass="bottom-tool-bar" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.statusbar.StatusBarController">
+  <children>
+    <HBox fx:id="taskBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" minWidth="0.0" prefHeight="30.0" prefWidth="392.0" AnchorPane.leftAnchor="0.0">
+      <children>
+        <Label id="titleLabel" fx:id="taskTitleLabel" prefHeight="16.0" prefWidth="140.0" text="Label" HBox.hgrow="SOMETIMES" HBox.margin="$x1">
+          <labelFor>
+            <ProgressBar id="progressBar" fx:id="taskProgressBar" prefWidth="125.0" progress="0.0" HBox.hgrow="NEVER">
+              <HBox.margin>
+                <Insets left="5.0" fx:id="x1" />
+              </HBox.margin>
+            </ProgressBar>
+          </labelFor>
+        </Label>
+        <fx:reference source="taskProgressBar" />
+      </children>
+    </HBox>
+    <HBox alignment="CENTER_RIGHT" layoutY="1.0" prefHeight="30.0" prefWidth="87.0" AnchorPane.rightAnchor="0.0">
+      <children>
+        <Label fx:id="cursorPositionLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Label">
+          <HBox.margin>
+            <Insets right="5.0" />
+          </HBox.margin>
+        </Label>
+      </children>
+    </HBox>
+  </children>
+</AnchorPane>

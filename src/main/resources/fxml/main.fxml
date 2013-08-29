@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+
+<AnchorPane fx:id="main" id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.MainController">
+  <children>
+    <MenuBar fx:id="menuBar" useSystemMenuBar="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>  
+    <SplitPane fx:id="splitPane"  dividerPositions="0.30" focusTraversable="true" minHeight="376.0" prefHeight="376.0" prefWidth="600.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
+      <items>
+        <fx:include fx:id="projectNavigator" source="/fxml/project_navigator.fxml" prefHeight="364.0" prefWidth="114.0" maxWidth="400.0" minWidth="0.0"/>
+        <fx:include fx:id="editorsPane" source="/fxml/editors_pane.fxml" prefHeight="386.0" prefWidth="214.0" />
+      </items>
+    </SplitPane>
+    <fx:include fx:id="statusBar" source="/fxml/status_bar.fxml" prefHeight="30.0" prefWidth="214.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0"/>
+  </children>
+</AnchorPane>

@@ -1,0 +1,179 @@
+/*
+ * #%L
+ * styles.css - shift - Gilles Grousset - 2013
+ * %%
+ * Copyright (C) 2013 Gilles Grousset
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as 
+ * published by the Free Software Foundation, either version 3 of the 
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public 
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
+/* Application wide styles */
+
+.root{
+    -fx-font-size: 14pt;
+    /*-fx-font-family: "Source Code Pro";*/
+    -fx-font-family: "Helvetica";
+    -fx-background-color: rgb(246, 246, 246);
+    -fx-control-inner-background: white;
+    -fx-accent: rgb(170, 196, 0);
+    -fx-focus-color: rgb(170, 196, 0);
+    -fx-error-color: red;
+}
+
+/* Context menus */
+
+.context-menu {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-text-fill: rgb(24, 24, 24);
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 5px;
+}
+
+.menu-item:focused {
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: white;
+}
+
+/* Toolbars */
+
+.bottom-tool-bar {
+    -fx-padding: 5px;
+    -fx-background-insets: 0;
+    -fx-background-color: white;
+    -fx-effect: innershadow(two-pass-box , rgba(0,0,0,0.6) , 4, 0.0 , 0 , 0);
+}
+
+/* Buttons */
+
+.button {
+    -fx-background-radius: 5;
+    -fx-text-fill: white;
+    -fx-padding: 5;
+}
+
+/* Form controls */
+
+.text-input:focused .invalid {
+   -fx-background-color: -fx-error-color,-fx-box-border,-fx-control-inner-background;
+}
+
+/* Labels */
+
+.error-label {
+    -fx-text-fill: -fx-error-color;
+    -fx-font-size: 12pt;
+}
+
+/* Dialogs */
+
+.dialog-symbol {
+    -fx-font-size: 24pt;
+    -fx-text-fill: white;
+    -fx-background-color: -fx-accent;
+    -fx-background-radius: 50;
+}
+
+.dialog-error-symbol {
+       -fx-font-size: 24pt;
+    -fx-text-fill: white;
+    -fx-background-color: -fx-error-color;
+    -fx-background-radius: 50;
+}
+
+/* Main */
+
+#main {
+    -fx-padding: -1px;
+    -fx-background-insets: 0;
+}
+
+/* Split pane */
+
+#splitPane {
+    -fx-padding: 0px;
+    -fx-background-insets: 0;
+}
+
+#splitPane:horizontal > * > .split-pane-divider {
+    -fx-border-color:  transparent;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+/* Project navigator */
+
+#projectNavigator .tree-view {
+    -fx-background-insets: 0;
+}
+
+#projectNavigator .tree-cell {
+    -fx-text-fill: #333333;
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+    -fx-background-color: null;    
+    -fx-cell-size: 24;
+    -fx-indent: 6;
+    -fx-padding: 3;
+}
+
+#projectNavigator .tree-cell .folder {
+    -fx-font-weight: bold;
+}
+
+#projectNavigator .tree-cell:selected {
+    -fx-font-weight: bold;
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: white;
+}
+
+/* Editors pane */
+
+#editorsPane .tab-pane {
+    -fx-padding: 0px;
+    -fx-background-insets: 0;
+    -fx-background-color: #111111;
+}
+
+#editorsPane .tab-pane *.tab-header-background {
+    -fx-background-color: null;
+    -fx-effect: innershadow(two-pass-box , rgba(0,0,0,0.6) , 4, 0.0 , 0 , 0);
+}
+
+#editorsPane .tab:selected .tab-label {
+    -fx-text-fill: white;
+}
+
+#editorsPane .tab .tab-label {
+    -fx-text-fill: rgb(200, 200, 200);
+}
+
+#editorsPane .tab .close-button {
+    -fx-text-fill: -fx-accent;
+    -fx-font-weight: bold;
+}
+
+#editorsPane .tab {
+    -fx-background-radius: 5 5 0 0;
+    -fx-background-color: rgb(25, 25, 25);
+}
+
+#editorsPane .tab:selected {
+    -fx-background-color: 
+        rgb(50, 50, 50),
+        rgb(35, 35, 35);
+    -fx-background-radius: 5 5 0 0;
+    -fx-background-insets: 0, 1 1 0 1;
+}

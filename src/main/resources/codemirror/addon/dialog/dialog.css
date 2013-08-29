@@ -1,0 +1,53 @@
+/*
+ * #%L
+ * dialog.css - Shift - 2013
+ * %%
+ * Copyright (C) 2013 Gilles Grousset
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as 
+ * published by the Free Software Foundation, either version 3 of the 
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public 
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+.CodeMirror-dialog {
+  position: absolute;
+  left: 0; right: 0;
+  background: white;
+  z-index: 15;
+  padding: .1em .8em;
+  overflow: hidden;
+  color: #333;
+}
+
+.CodeMirror-dialog-top {
+  border-bottom: 1px solid #eee;
+  top: 0;
+}
+
+.CodeMirror-dialog-bottom {
+  border-top: 1px solid #eee;
+  bottom: 0;
+}
+
+.CodeMirror-dialog input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 20em;
+  color: inherit;
+  font-family: monospace;
+}
+
+.CodeMirror-dialog button {
+  font-size: 70%;
+}

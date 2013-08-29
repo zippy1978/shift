@@ -1,0 +1,620 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Gilles Grousset" />
+  <meta name="date" content="2013-07-21" />
+  <title>Shift - Developer guide</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="css/html.css" type="text/css" />
+</head>
+<body>
+<div id="header">
+<h1 class="title">Shift - Developer guide</h1>
+<h2 class="author">Gilles Grousset</h2>
+<h3 class="date">July 21, 2013</h3>
+</div>
+<div id="TOC">
+<ul>
+<li><a href="#getting-started"><span class="toc-section-number">1</span> Getting started</a><ul>
+<li><a href="#required-skills"><span class="toc-section-number">1.1</span> Required skills</a></li>
+<li><a href="#technical-setup-and-tools"><span class="toc-section-number">1.2</span> Technical setup and tools</a><ul>
+<li><a href="#java"><span class="toc-section-number">1.2.1</span> Java</a></li>
+<li><a href="#maven"><span class="toc-section-number">1.2.2</span> Maven</a></li>
+<li><a href="#ide"><span class="toc-section-number">1.2.3</span> IDE</a></li>
+</ul></li>
+<li><a href="#building-from-sources"><span class="toc-section-number">1.3</span> Building from sources</a><ul>
+<li><a href="#running-the-application"><span class="toc-section-number">1.3.1</span> Running the application</a></li>
+<li><a href="#packaging-the-application"><span class="toc-section-number">1.3.2</span> Packaging the application</a></li>
+</ul></li>
+<li><a href="#conventions"><span class="toc-section-number">1.4</span> Conventions</a><ul>
+<li><a href="#coding-conventions"><span class="toc-section-number">1.4.1</span> Coding conventions</a></li>
+<li><a href="#naming-conventions"><span class="toc-section-number">1.4.2</span> Naming conventions</a></li>
+</ul></li>
+<li><a href="#overview-concepts"><span class="toc-section-number">1.5</span> Overview &amp; concepts</a><ul>
+<li><a href="#model-and-managers"><span class="toc-section-number">1.5.1</span> Model and managers</a></li>
+<li><a href="#gui"><span class="toc-section-number">1.5.2</span> GUI</a></li>
+</ul></li>
+<li><a href="#application-lifecycle"><span class="toc-section-number">1.6</span> Application lifecycle</a><ul>
+<li><a href="#startup-sequence"><span class="toc-section-number">1.6.1</span> Startup sequence</a></li>
+<li><a href="#shutdown-sequence"><span class="toc-section-number">1.6.2</span> Shutdown sequence</a></li>
+<li><a href="#applicationcontext"><span class="toc-section-number">1.6.3</span> ApplicationContext</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#the-workspace"><span class="toc-section-number">2</span> The workspace</a><ul>
+<li><a href="#http-proxy"><span class="toc-section-number">2.1</span> HTTP Proxy</a></li>
+<li><a href="#artifacts"><span class="toc-section-number">2.2</span> Artifacts</a></li>
+<li><a href="#observing-the-workspace"><span class="toc-section-number">2.3</span> Observing the workspace</a><ul>
+<li><a href="#artifact-case"><span class="toc-section-number">2.3.1</span> Artifact case</a></li>
+<li><a href="#workspace-case"><span class="toc-section-number">2.3.2</span> Workspace case</a></li>
+<li><a href="#knowing-what-changed-on-the-observable"><span class="toc-section-number">2.3.3</span> Knowing what changed on the observable</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#managers"><span class="toc-section-number">3</span> Managers</a><ul>
+<li><a href="#preferences"><span class="toc-section-number">3.1</span> Preferences</a><ul>
+<li><a href="#transactions"><span class="toc-section-number">3.1.1</span> Transactions</a></li>
+<li><a href="#setting-initial-values"><span class="toc-section-number">3.1.2</span> Setting initial values</a></li>
+</ul></li>
+<li><a href="#states"><span class="toc-section-number">3.2</span> States</a><ul>
+<li><a href="#saving-state"><span class="toc-section-number">3.2.1</span> Saving state</a></li>
+<li><a href="#restoring-state"><span class="toc-section-number">3.2.2</span> Restoring state</a></li>
+<li><a href="#instances-identification"><span class="toc-section-number">3.2.3</span> Instances identification</a></li>
+</ul></li>
+<li><a href="#tasks"><span class="toc-section-number">3.3</span> Tasks</a><ul>
+<li><a href="#shared-taskmanager"><span class="toc-section-number">3.3.1</span> Shared TaskManager</a></li>
+<li><a href="#creating-a-taskmanager"><span class="toc-section-number">3.3.2</span> Creating a TaskManager</a></li>
+<li><a href="#creating-a-new-task"><span class="toc-section-number">3.3.3</span> Creating a new task</a></li>
+<li><a href="#listening-to-a-taskmanager"><span class="toc-section-number">3.3.4</span> Listening to a TaskManager</a></li>
+</ul></li>
+<li><a href="#plugins"><span class="toc-section-number">3.4</span> Plugins</a><ul>
+<li><a href="#plugins-loading"><span class="toc-section-number">3.4.1</span> Plugins loading</a></li>
+<li><a href="#groovy-dsl-declaration"><span class="toc-section-number">3.4.2</span> Groovy DSL (declaration)</a></li>
+<li><a href="#editors"><span class="toc-section-number">3.4.3</span> Editors</a></li>
+<li><a href="#project-wizards"><span class="toc-section-number">3.4.4</span> Project wizards</a></li>
+<li><a href="#previews"><span class="toc-section-number">3.4.5</span> Previews</a></li>
+</ul></li>
+<li><a href="#themes"><span class="toc-section-number">3.5</span> Themes</a></li>
+</ul></li>
+<li><a href="#user-interface"><span class="toc-section-number">4</span> User interface</a><ul>
+<li><a href="#abstractcontroller-and-abstractdialogcontroller"><span class="toc-section-number">4.1</span> AbstractController and AbstractDialogController</a></li>
+<li><a href="#main-window"><span class="toc-section-number">4.2</span> Main window</a><ul>
+<li><a href="#menu"><span class="toc-section-number">4.2.1</span> Menu</a></li>
+<li><a href="#project-navigator"><span class="toc-section-number">4.2.2</span> Project navigator</a></li>
+<li><a href="#editors-pane"><span class="toc-section-number">4.2.3</span> Editors pane</a></li>
+<li><a href="#status-bar"><span class="toc-section-number">4.2.4</span> Status bar</a></li>
+</ul></li>
+<li><a href="#validation"><span class="toc-section-number">4.3</span> Validation</a><ul>
+<li><a href="#compoundvalidator"><span class="toc-section-number">4.3.1</span> CompoundValidator</a></li>
+<li><a href="#validation-result"><span class="toc-section-number">4.3.2</span> Validation result</a></li>
+</ul></li>
+<li><a href="#custom-controls"><span class="toc-section-number">4.4</span> Custom controls</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="getting-started"><a href="#getting-started"><span class="header-section-number">1</span> Getting started</a></h1>
+<h2 id="required-skills"><a href="#required-skills"><span class="header-section-number">1.1</span> Required skills</a></h2>
+<p>The application is developped using Java and JavaFX, Maven is used for building.</p>
+<p>Thereby a good knowledge of Java and Object Oriented Programming is required, as well as Asynchronous Programmation.</p>
+<h2 id="technical-setup-and-tools"><a href="#technical-setup-and-tools"><span class="header-section-number">1.2</span> Technical setup and tools</a></h2>
+<h3 id="java"><a href="#java"><span class="header-section-number">1.2.1</span> Java</a></h3>
+<p>The required JDK version is 1.7 (a recent official Oracle version with JavaFX 2.2 included).</p>
+<p>However, due to some limitations with Java 1.7, Java 1.8 will be used as soon as it will be available.</p>
+<p>The current limitations on Java 1.7 are:</p>
+<ul>
+<li>High-density screens (such as MacBook Pro Retina) are not supported: this results in blurry windows on those screens.</li>
+<li>JavaFX <code>WebView</code> does not allow the change of the user agent: this could be a limitation for previewing HTML pages in the future.</li>
+</ul>
+<h3 id="maven"><a href="#maven"><span class="header-section-number">1.2.2</span> Maven</a></h3>
+<p>Maven 3 and the <a href="https://github.com/zonski/javafx-maven-plugin">javafx-maven-plugin</a> are used to run and package the application.</p>
+<h3 id="ide"><a href="#ide"><span class="header-section-number">1.2.3</span> IDE</a></h3>
+<p>Any IDE can be used for development, however Netbeans is recommended as it has the best JavaFX support at the moment.</p>
+<h2 id="building-from-sources"><a href="#building-from-sources"><span class="header-section-number">1.3</span> Building from sources</a></h2>
+<h3 id="running-the-application"><a href="#running-the-application"><span class="header-section-number">1.3.1</span> Running the application</a></h3>
+<p>In order to run the application use:</p>
+<pre><code>mvn jfx:run</code></pre>
+<h3 id="packaging-the-application"><a href="#packaging-the-application"><span class="header-section-number">1.3.2</span> Packaging the application</a></h3>
+<p>Packaging means : building the application and a native installer for it. The format depends on the operating system and additional tools may be installed prior to creating the package.</p>
+<p>Read <a href="http://zenjava.com/javafx/maven/native-bundle.html">Building a Native Installer</a> for more information.</p>
+<p>The command for packaging is:</p>
+<pre><code>mvn clean jfx:native</code></pre>
+<h2 id="conventions"><a href="#conventions"><span class="header-section-number">1.4</span> Conventions</a></h2>
+<h3 id="coding-conventions"><a href="#coding-conventions"><span class="header-section-number">1.4.1</span> Coding conventions</a></h3>
+<p>Generic Oracle Java conventions are used for the project: <a href="http://www.oracle.com/technetwork/java/javase/documentation/codeconvtoc-136057.html">Code Conventions for the Java TM Programming Language</a></p>
+<h3 id="naming-conventions"><a href="#naming-conventions"><span class="header-section-number">1.4.2</span> Naming conventions</a></h3>
+<h4 id="fxml"><a href="#fxml"><span class="header-section-number">1.4.2.1</span> FXML</a></h4>
+<p>FXML files are located into <code>fxml</code> resource package and named using the underscore convention.</p>
+<p>FXML file name must be the same as its controller class.</p>
+<p>For example, the FXML file name for <code>HTMLPreviewController</code>is <code>html_preview.fxml</code></p>
+<h4 id="css"><a href="#css"><span class="header-section-number">1.4.2.2</span> CSS</a></h4>
+<p>CSS class names must use dashes and ids use the CamelCase.</p>
+<p>Example:</p>
+<pre><code>#projectNavigator {
+    ...
+}
+
+.text-input .invalid {
+    ...
+}</code></pre>
+<h2 id="overview-concepts"><a href="#overview-concepts"><span class="header-section-number">1.5</span> Overview &amp; concepts</a></h2>
+<h3 id="model-and-managers"><a href="#model-and-managers"><span class="header-section-number">1.5.1</span> Model and managers</a></h3>
+<p>The application is built around code editor / IDE core concepts:</p>
+<ul>
+<li><strong>Workspace</strong>: the place where every artifact lives. An artifact can be any piece of data that can be edited or created from the application : a project is an artifact, a folder or a source file is also an artifact.</li>
+<li><strong>Preferences</strong>: a centralized way to manage application settings / preferences.</li>
+<li><strong>States</strong>: the ability to save and restore and object state upon application restart.</li>
+<li><strong>Tasks</strong>: task queue to mange asynchronous operations.</li>
+<li><strong>Plugins</strong>: to make the application extensible.</li>
+<li><strong>Themes</strong>: look and feel management.</li>
+</ul>
+<h3 id="gui"><a href="#gui"><span class="header-section-number">1.5.2</span> GUI</a></h3>
+<p>The user interface (GUI) is built upon (in a same main window):</p>
+<ul>
+<li><strong>Menu</strong>: application main menu.</li>
+<li><strong>Project navigator</strong>: tree navigation into the workspace and interactions with it.</li>
+<li><strong>Editors pane</strong>: holds tabs for documents opened into editors.</li>
+<li><strong>Status bar</strong>: gives information about task being performed, current document…</li>
+</ul>
+<p>Child windows can be opened from the main windows, such as : preview windows, wizard windows, new file / folder window…</p>
+<h2 id="application-lifecycle"><a href="#application-lifecycle"><span class="header-section-number">1.6</span> Application lifecycle</a></h2>
+<p>The application is started by the <code>com.backelite.shift.MainApp</code> class (<code>start(…)</code> method). When it is shuting down, the method <code>stop(…)</code>of the same class is called.</p>
+<h3 id="startup-sequence"><a href="#startup-sequence"><span class="header-section-number">1.6.1</span> Startup sequence</a></h3>
+<div class="figure">
+<img src="img/startup_diagram.png" alt="Startup sequence diagram" /><p class="caption">Startup sequence diagram</p>
+</div>
+<p>When starting, the application first initializes preferences: it checks if all required settings are set (and set them with a default value if they aren’t). See <a href="#preferences">Preferences</a> section for more information.</p>
+<p>After that it loads plugins. See <a href="#plugins">Plugins</a> section for more information.</p>
+<p>Then it restores the workspace state. See <a href="#states">States</a> section for more informations.</p>
+<p>And finally, it brings up the main window interface and restore its state as well.</p>
+<h3 id="shutdown-sequence"><a href="#shutdown-sequence"><span class="header-section-number">1.6.2</span> Shutdown sequence</a></h3>
+<div class="figure">
+<img src="img/shutdown_diagram.png" alt="Shutdown sequence diagram" /><p class="caption">Shutdown sequence diagram</p>
+</div>
+<p>At shutdown, the workspace state is saved, the main controller state is saved and the <code>ApplicationContext</code> is destroyed.</p>
+<h3 id="applicationcontext"><a href="#applicationcontext"><span class="header-section-number">1.6.3</span> ApplicationContext</a></h3>
+<p><code>com.backelite.shift.ApplicationContext</code> is the main entry point to access application centralized components.</p>
+<p>It acts as a holder for storing singleton instances of application components, such as the workspace, the plugin manager, …</p>
+<p>For example, it is possible to access the plugin manager like this from anywhere in the application:</p>
+<pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getPluginManager</span>();</code></pre>
+<h1 id="the-workspace"><a href="#the-workspace"><span class="header-section-number">2</span> The workspace</a></h1>
+<p>Classes related to the workspace are located in <code>com.backelite.shift.workspace</code>.</p>
+<p>The workspace is represented by the <code>Workspace</code> interface. The default workspace implementation is <code>LocalWorkspace</code>.</p>
+<p>This implementation manages artifacts from the local file system.</p>
+<p><code>Workspace</code> extends the <code>PersistableState</code> interface in order to be able to save / restore the current workspace on application exit / restart.</p>
+<p>The application only holds one workspace (singleton). It can be accessed using <code>com.backelite.shift.ApplicationContext</code> static method:</p>
+<pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getWorkspace</span>();</code></pre>
+<h2 id="http-proxy"><a href="#http-proxy"><span class="header-section-number">2.1</span> HTTP Proxy</a></h2>
+<p>When required (usually by previewers), the <code>HTTPWorkspaceProxyServer</code> (singleton) can be started in order to serve workspace artifacts on the HTTP protocol.</p>
+<p>The HTTP proxy can be accessed using <code>com.backelite.shift.ApplicationContext</code> static method:</p>
+<pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getHTTPWorkspaceProxyServer</span>();</code></pre>
+<p>It can be started like this (ignored if the server is already started):</p>
+<pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getHTTPWorkspaceProxyServer</span>().<span class="fu">start</span>();</code></pre>
+<p>It can be stopped with (automatically stopped at application shutdown):</p>
+<pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getHTTPWorkspaceProxyServer</span>().<span class="fu">stop</span>();</code></pre>
+<p>The port of the server is determined at runtime (on start) depending on port number availability (see <code>com.backelite.shift.util.NetworkUtil.findAvailablePort(…)</code> for more information).</p>
+<h2 id="artifacts"><a href="#artifacts"><span class="header-section-number">2.2</span> Artifacts</a></h2>
+<p>Classes related to workspace artifacts are located in <code>com.backelite.shift.workspace.artifact</code>.</p>
+<div class="figure">
+<img src="img/artifact_uml.jpg" alt="Artifact inheritance diagram" /><p class="caption">Artifact inheritance diagram</p>
+</div>
+<p><code>Artifact</code> interface is the most basic representation of a workspace item. An artifact can be (at the moment) a <code>Project</code>, a <code>Folder</code> or a <code>Document</code> (interfaces).</p>
+<p><code>Project</code> interface inherits the <code>Folder</code> interface: a project is a folder with extra attributes and features.</p>
+<p>Concrete implementations of those artifacts are <code>FileSystemProject</code>, <code>FileSystemFolder</code> and <code>FileSystemDocument</code>.</p>
+<blockquote>
+<p><em>Note: a file is referred as a <code>Document</code> artifact to avoid the confusion with <code>java.io.File</code>, in the GUI layer however it is designated as file to follow editors / IDE conventions.</em></p>
+</blockquote>
+<h2 id="observing-the-workspace"><a href="#observing-the-workspace"><span class="header-section-number">2.3</span> Observing the workspace</a></h2>
+<p>In order to make the GUI reflect workspace updates (new folder created, document modified…), every <code>Workspace</code> or <code>Artifact</code> implementation is observable which mean that they inherit <code>fr.grousset.util.WeakObservable</code> object.</p>
+<p><code>WeakObservable</code> is an enhanced implementation of the original <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Observable.html"><code>java.util.Observable</code></a> but that does not require to unregister observers as they are kept as weak references.</p>
+<p>For instance, when a GUI controller needs to be notified of an artifact update it only needs to implements the <code>java.util.Observer</code> interface and register itself as observer on the artifact:</p>
+<pre class="sourceCode java"><code class="sourceCode java">document.<span class="fu">addObserver</span>(<span class="kw">this</span>);</code></pre>
+<p>When implementing <code>java.util.Observer</code> interface, the following method needs to be defined in order to receive update notifications:</p>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">update</span>(Observable o, Object arg) {
+  <span class="co">// Handle change here</span>
+}</code></pre>
+<h3 id="artifact-case"><a href="#artifact-case"><span class="header-section-number">2.3.1</span> Artifact case</a></h3>
+<p>In the artifact case, the <code>Observable</code> object is the artifact that was updated (the source) and the arg <code>Object</code> (not always defined) is the original source.</p>
+<p>For example, the original source is set in case of a <code>Document</code> artifact : when it changes, it notifies its observers, but also triggers a notification from its parent folder.</p>
+<p>When a <code>Folder</code> receives a notification, it forwards the notification with the original source to its observers (at least its parent folder, a <code>Folder</code> always observes its children).</p>
+<p>Here are practical cases :</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Observed artifact</th>
+<th align="left">Modified artifact</th>
+<th align="left">Observable parameter received</th>
+<th align="left">arg Object parameter received</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Document</td>
+<td align="left">same Document</td>
+<td align="left">Document</td>
+<td align="left">null</td>
+</tr>
+<tr class="even">
+<td align="left">Folder / Project</td>
+<td align="left">same Folder / Project</td>
+<td align="left">Folder / Project</td>
+<td align="left">null</td>
+</tr>
+<tr class="odd">
+<td align="left">Folder / Project</td>
+<td align="left">child or grand-child Document</td>
+<td align="left">Folder / Project</td>
+<td align="left">child or grand-child Document</td>
+</tr>
+<tr class="even">
+<td align="left">Folder / Project</td>
+<td align="left">child or grand-child Folder</td>
+<td align="left">Folder / Project</td>
+<td align="left">child or grand-child Folder</td>
+</tr>
+</tbody>
+</table>
+<h3 id="workspace-case"><a href="#workspace-case"><span class="header-section-number">2.3.2</span> Workspace case</a></h3>
+<p>In the workspace case it is simplier: the <code>Observable</code> object is always the <code>Workspace</code> and the arg <code>Object</code> is always the <code>Project</code> that was modified.</p>
+<h3 id="knowing-what-changed-on-the-observable"><a href="#knowing-what-changed-on-the-observable"><span class="header-section-number">2.3.3</span> Knowing what changed on the observable</a></h3>
+<p>When <code>java.util.Observer.update(…)</code> method is called it is possible to know which artifact changed, but not directly what changed.</p>
+<p>To do so, here are some snippet to detect changes:</p>
+<ul>
+<li><code>Document</code> was modified</li>
+</ul>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">update</span>(Observable o, Object arg) {
+        
+        <span class="co">// A document was updated</span>
+        <span class="kw">if</span> (o <span class="kw">instanceof</span> Document) {
+            Document document = (Document)o;
+            <span class="kw">if</span> (document.<span class="fu">isModified</span>()) {
+                <span class="co">// Handle change here</span>
+            }
+        }
+}</code></pre>
+<ul>
+<li><code>Document</code> or <code>Folder</code> was deleted</li>
+</ul>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">update</span>(Observable o, Object arg) {
+        
+        <span class="co">// An artifact was updated</span>
+        <span class="kw">if</span> (o <span class="kw">instanceof</span> Artifact) {
+            Artifact artifact = (Artifact)o;
+            <span class="kw">if</span> (artifact.<span class="fu">isDeleted</span>()) {
+                <span class="co">// Handle change here</span>
+            }
+        }
+}</code></pre>
+<ul>
+<li><code>Project</code> was closed</li>
+</ul>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">update</span>(Observable o, Object arg) {
+        
+        <span class="co">// A project was updated</span>
+        <span class="kw">if</span> (o <span class="kw">instanceof</span> Workspace) {
+            Project project = (Project)arg;
+            <span class="kw">if</span> (!ApplicationContext.<span class="fu">getWorkspace</span>().<span class="fu">getProjects</span>().<span class="fu">contains</span>(project) {
+                <span class="co">// Handle change here</span>
+            }
+        }
+}</code></pre>
+<h1 id="managers"><a href="#managers"><span class="header-section-number">3</span> Managers</a></h1>
+<p>This part deals with services / managers common to the whole application.</p>
+<h2 id="preferences"><a href="#preferences"><span class="header-section-number">3.1</span> Preferences</a></h2>
+<p>Preferences are used to manage application settings across the application.</p>
+<p>Classes related to preferences are located inside <code>com.backelite.shift.preferences</code>.</p>
+<p>The heart of the preferences system is the <code>PreferencesManager</code>interface: it defines methods to store and retrieve preferences (<code>setValue(…)</code>, <code>getValue(…)</code>).</p>
+<p>The default (and unique) implementation of <code>PreferencesManager</code>, at the moment, is <code>LocalPreferencesManager</code>: this implementation is designed to store preferences as a JSON file <em>preferences.json</em> in a local directory.</p>
+<h3 id="transactions"><a href="#transactions"><span class="header-section-number">3.1.1</span> Transactions</a></h3>
+<p><code>PreferencesManager</code> is transactionnal, which means that the <code>commit()</code>method must be called to persist modifications. If modifications must be reverted to the last commit, the method <code>rollback()</code> can be used.</p>
+<p>A singleton <code>PreferencesManager</code>instance is used for the whole application and can be accessed from the <code>ApplicationContext</code>:</p>
+<pre class="sourceCode java"><code class="sourceCode java">PreferencesManager preferencesManager = ApplicationContext.<span class="fu">getPreferencesManager</span>();
+<span class="co">// Set an initial value</span>
+preferencesManager.<span class="fu">setInitialValue</span>(<span class="st">&quot;key&quot;</span>, <span class="st">&quot;value&quot;</span>);            
+<span class="co">// Set a value</span>
+preferencesManager.<span class="fu">setValue</span>(<span class="st">&quot;key2&quot;</span>, <span class="st">&quot;value2&quot;</span>);      
+preferencesManager.<span class="fu">commit</span>();
+
+<span class="co">// Read a value</span>
+String value = (String)preferencesManager.<span class="fu">getValue</span>(<span class="st">&quot;key3&quot;</span>);</code></pre>
+<h3 id="setting-initial-values"><a href="#setting-initial-values"><span class="header-section-number">3.1.2</span> Setting initial values</a></h3>
+<p>When the application (or a plugin) starts form the first time: it needs to set initial values into preferences, but must no erase existing values if they are already set.</p>
+<p>To do so, the <code>PreferencesManager</code> exposes the <code>setInitialValue(…)</code>(to set a single value) and <code>setInitialValues(…)</code> (to set several values at the same time).</p>
+<p>When the application starts it checks and initializes initial values with thoses methods. The code is located inside <code>com.backelite.shift.MainApp.initializePreferences()</code> and it is called from <code>com.backelite.shift.MainApp.start(…)</code>.</p>
+<p>See <a href="#application-lifecycle">Application lifecycle</a> for more informations about the application startup sequence.</p>
+<h2 id="states"><a href="#states"><span class="header-section-number">3.2</span> States</a></h2>
+<p>States are used to save and restore application components states between application restarts.</p>
+<p>Classes relating to states management are located inside <code>com.backelite.shift.state</code>.</p>
+<p>Any object of the application can be persisted, it just needs to implement the <code>PersistableState</code> interface.</p>
+<p><code>PersistableState</code> objects can then be handled by a <code>StateManager</code> (interface). The <code>StateManager</code>is in charge of serializing and deserializing states to a storage device.</p>
+<p>The default (and only one at the moment) concrete implementation of <code>StateManager</code> is the <code>LocalStateManager</code>: an implementation that stores states as JSON files into a directory.</p>
+<p>The default instance of the <code>StateManager</code> can be accessed from the <code>ApplicaitonContext</code>:</p>
+<pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getStateManager</span>();</code></pre>
+<h3 id="saving-state"><a href="#saving-state"><span class="header-section-number">3.2.1</span> Saving state</a></h3>
+<p>Saving a state consists of populating a <code>Map&lt;String, Object&gt;</code> object with all the values required to restore the current object state:</p>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">saveState</span>(Map&lt;String, Object&gt; state) <span class="kw">throws</span> StateException {
+
+        state.<span class="fu">put</span>(<span class="st">&quot;value1&quot;</span>, <span class="kw">this</span>.<span class="fu">value1</span>);
+        state.<span class="fu">put</span>(<span class="st">&quot;value2&quot;</span>, <span class="kw">this</span>.<span class="fu">value2</span>);
+        ...
+}</code></pre>
+<h3 id="restoring-state"><a href="#restoring-state"><span class="header-section-number">3.2.2</span> Restoring state</a></h3>
+<p>Restoring a state consists of reading a <code>Map&lt;String, Object&gt;</code> object in order to restore the current object state:</p>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">restoreState</span>(Map&lt;String, Object&gt; state) <span class="kw">throws</span> StateException {
+
+    String value1 = (String)state.<span class="fu">get</span>(<span class="st">&quot;value1&quot;</span>);
+    String value2 = (String)state.<span class="fu">get</span>(<span class="st">&quot;value2&quot;</span>);
+    ...
+}</code></pre>
+<h3 id="instances-identification"><a href="#instances-identification"><span class="header-section-number">3.2.3</span> Instances identification</a></h3>
+<p>The <code>PersistableState</code>interface provides a method named <code>getInstanceIdentifier()</code> and is used to identify a given object instance.</p>
+<p>If this method returns <code>null</code>, a single state is maintianed for all instances of the class. For example, with the <code>LocalStateManager</code> saving an object called <code>MyObject</code> without providing an identifier will result into a state file name <code>myobject.json</code>.</p>
+<p>However, if the <code>getInstanceIdentifier()</code> returns a value, a state will be maintaned for every instance of the class. In the case of the <code>LocalStateManager</code>the state file name for a given instance of <code>MyObject</code> will be named <code>myobjectMYID.json</code> (where <em>MYID</em> is the identifier returned by the instance).</p>
+<h2 id="tasks"><a href="#tasks"><span class="header-section-number">3.3</span> Tasks</a></h2>
+<p>Tasks are used in the application to handle asynchronous processing. They are commonly used to handle time consuming operations without blocking the user interface.</p>
+<p>Class relating to tasks and task management are located inside the <code>com.backelite.shift.task</code>.</p>
+<p>Tasks used are common <code>javafx.concurrent.Task</code> objects. There are processed by a <code>TaskManager</code>.</p>
+<p>The <code>TaskManager</code> holds a task queue where new tasks can be added. The sate of a <code>TaskManager</code>can be listened by adding a <code>TaskManagerListener</code> on it.</p>
+<p>The default concrete implementation of <code>TaskManager</code>is <code>LocalTaskManager</code>.</p>
+<h3 id="shared-taskmanager"><a href="#shared-taskmanager"><span class="header-section-number">3.3.1</span> Shared TaskManager</a></h3>
+<p>A shared <code>TaskManager</code> can be accessed using <code>com.backelite.shift.ApplicationContext</code> static method:</p>
+<pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getTaskManager</span>();</code></pre>
+<p>This <code>TaskManager</code>must be used as much as possible to run tasks: as the central <code>TaskManager</code>it is linked to the <a href="#status_bar">Status bar GUI element</a> and state (name and progress) of the current running task is displayed on it.</p>
+<h3 id="creating-a-taskmanager"><a href="#creating-a-taskmanager"><span class="header-section-number">3.3.2</span> Creating a TaskManager</a></h3>
+<p>If for some reasons, a task needs to run outside the sahre <code>TaskManager</code> (to run a background download without preventing the user to work), it is possible to create a <code>LocalTaskManager</code> like this (usually in a controller class):</p>
+<pre class="sourceCode java"><code class="sourceCode java">TaskManager taskManager = <span class="kw">new</span> <span class="fu">LocalTaskManager</span>();</code></pre>
+<h3 id="creating-a-new-task"><a href="#creating-a-new-task"><span class="header-section-number">3.3.3</span> Creating a new task</a></h3>
+<p>Adding a task to a <code>TaskManager</code> can be done like this:</p>
+<pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getTaskManager</span>().<span class="fu">addTask</span>(<span class="kw">new</span> <span class="fu">Task</span>() {
+    <span class="fu">@Override</span>
+    <span class="kw">protected</span> Object <span class="fu">call</span>() <span class="kw">throws</span> Exception {
+        <span class="co">// Set title</span>
+        <span class="fu">updateTitle</span>(<span class="st">&quot;task title&quot;</span>);
+        <span class="co">// Let&#39;s say the process iterates over an item array</span>
+        <span class="kw">try</span> {
+            <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; <span class="dv">10</span>; i++) {
+                
+                <span class="co">// Process item here…</span>
+                …
+                
+                <span class="co">// Update progress</span>
+                <span class="fu">updateProgress</span>(i + <span class="dv">1</span>, <span class="dv">10</span>);
+            }
+        } <span class="kw">catch</span>(Exception e) {
+            <span class="co">// Something went wrong: store the exception</span>
+            <span class="co">// and mark the task as failed</span>
+            <span class="fu">setException</span>(ex);
+            <span class="fu">failed</span>();
+        }
+        
+        <span class="co">// Return anything…</span>
+        <span class="kw">return</span> <span class="kw">true</span>;
+               
+    }
+});</code></pre>
+<p>The <code>updateTitle(…)</code> method can be called to give the task a name. If the shared <code>TaskManager</code>is used, this name will be displayed in the status bar while the task is running.</p>
+<p>The <code>updateProgress(…)</code> gives the ability to track the task progress. Once again: if the shared <code>TaskManager</code>is used, the progress will be displayed as a progress bar in tge status bar while the task is running.</p>
+<p>To notify the task failed, the <code>failed()</code>method can be used. It is also possible to set the exception explaining the failure with the <code>setException(…)</code> method.</p>
+<h3 id="listening-to-a-taskmanager"><a href="#listening-to-a-taskmanager"><span class="header-section-number">3.3.4</span> Listening to a TaskManager</a></h3>
+<p>A <code>TaskManager</code>can be listen to by implementening the <code>TaskManagerListener</code>, and registering the listener on the <code>TaskManager</code>.</p>
+<p>A <code>TaskManagerListener</code> gets notified when:</p>
+<ul>
+<li>A task is started</li>
+<li>A task succeeded</li>
+<li>A task failed</li>
+</ul>
+<p>Here is an example showing how to create a task and know when it has completed:</p>
+<p>First register the current class as listener with:</p>
+<pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getTaskManager</span>().<span class="fu">addListener</span>(<span class="kw">this</span>);</code></pre>
+<p>Then, create the task and add it to the manager (and keep it in a variable):</p>
+<pre class="sourceCode java"><code class="sourceCode java">Task myTask = <span class="kw">new</span> <span class="fu">Task</span>() {…};
+ApplicationContext.<span class="fu">getTaskManager</span>().<span class="fu">addTask</span>(myTask);</code></pre>
+<p>Finally in the <code>onTaskSucceeded(…)</code> method, intercept the task:</p>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">onTaskSucceeded</span>(Task task) {
+    <span class="kw">if</span> (task == myTask) {
+        <span class="co">// Do whatever you want here</span>
+        ...
+    }
+}</code></pre>
+<h2 id="plugins"><a href="#plugins"><span class="header-section-number">3.4</span> Plugins</a></h2>
+<p>As many code editors / IDE these days, many features of the application are provided by plugins.</p>
+<p>At the moment, a plugin can provide the following items:</p>
+<ul>
+<li><strong>Editors</strong>: editors are pieces of GUI that allow the display and modification of document artifact (source code, image or any other resource file).</li>
+<li><strong>Wizards</strong>: wizards are pieces of GUI used to control code / files generation. Example : a HTML project wizard provides GUI and code to generate an initial HTML project structure.</li>
+<li><strong>Previews</strong>: previews are pieces of GUI in charge of rendering a document or project.</li>
+</ul>
+<p>Classes related to plugins are located inside the <code>com.backelite.shift.plugin</code> package.</p>
+<p>Plugins (plugin declarations) are represented by the <code>Plugin</code> class. They are held into a <code>PluginRegistry</code>.</p>
+<p>At the moment, plugin declarations have to be written in <a href="http://groovy.codehaus.org/">Groovy</a> JVM language.</p>
+<p>The default implementation of <code>PluginRegistry</code> is <code>LocalPluginRegistry</code>. The <code>LocalPluginRegistry</code> loads plugin definitions from a local directory.</p>
+<div class="figure">
+<img src="img/plugin_registry_uml.jpg" alt="PluginRegistry inheritance diagram" /><p class="caption">PluginRegistry inheritance diagram</p>
+</div>
+<p><code>AbstractPluginRegistry</code> is the base implementation class. However, to leave the possibility to support other languages than Groovy for plugin declaration in the future, Groovy releated code is encapsulated inside the <code>AbstractGroovyPluginRegistry</code>.</p>
+<p>The singleton instance of the <code>PluginRegistry</code> can be accessed from the <code>com.backelite.shift.ApplicationContext</code> this way:</p>
+<pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getPluginRegistry</span>();</code></pre>
+<h3 id="plugins-loading"><a href="#plugins-loading"><span class="header-section-number">3.4.1</span> Plugins loading</a></h3>
+<p>Plugins are loaded at application startup as explained in <a href="#application-lifecycle">Application lifecycle</a>.</p>
+<p>Loading plugins involves:</p>
+<ul>
+<li>Loading the built-in plugin</li>
+<li>Loading external plugins</li>
+</ul>
+<p>The built-in plugin is a plugin embedded into the application to provide initial editors, wizards and previews. Its declaration file is <code>Builtin.groovy</code>, located at the root of the resources directory.</p>
+<blockquote>
+<p><em>Note: at the moment, the external plugin loading feature is not implemented and the <code>PluginManager</code> loads the built-in plugin only.</em></p>
+</blockquote>
+<h3 id="groovy-dsl-declaration"><a href="#groovy-dsl-declaration"><span class="header-section-number">3.4.2</span> Groovy DSL (declaration)</a></h3>
+<p>A plugin is declared using a Groovy file, and can define the following:</p>
+<ul>
+<li>Plugin general info: such as identifier, name, version…</li>
+<li>Lifecycle event listeners</li>
+<li>Editor factories</li>
+<li>Preview factories</li>
+<li>Project wizard factories</li>
+</ul>
+<p>A Groovy DSL (Domain Specific Language) is used for the declaration. The definition, validation and parsing of this DSL is perfomred by the <a href="http://docs.codehaus.org/display/GROOVY/MetaBuilder">MetaBuilder Groovy library</a>.</p>
+<p>The <em>MetaBuilder</em> works with a model declaration schema (like a XSD for an XML file) using a DSL itself. The schema file is located at the root of the resources directory and is named <code>PluginSchema.groovy</code>.</p>
+<p>Here is the file (this may evolve in time to support new features):</p>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">import</span> groovytools.builder.MetaBuilder
+
+def metaBuilder = <span class="kw">new</span> <span class="fu">MetaBuilder</span>(<span class="fu">getClass</span>().<span class="fu">getClassLoader</span>())
+            
+metaBuilder.<span class="fu">define</span> {
+    <span class="fu">plugin</span>(factory: com.<span class="fu">backelite</span>.<span class="fu">shift</span>.<span class="fu">plugin</span>.<span class="fu">Plugin</span>) {
+        properties {
+            <span class="fu">uid</span>(req: <span class="kw">true</span>)
+            <span class="fu">name</span>(req: <span class="kw">true</span>)
+            <span class="fu">description</span>(req: <span class="kw">false</span>)
+            <span class="fu">author</span>(req:<span class="kw">false</span>)
+            <span class="fu">versionCode</span>(req: <span class="kw">true</span>)
+            <span class="fu">versionName</span>(req: <span class="kw">true</span>)
+            <span class="fu">lifecycle</span>(req: <span class="kw">false</span>, schema: &#39;lifecycle&#39;)
+        }
+        collections {
+            editorFactories {
+                <span class="fu">editorFactory</span>(schema: &#39;editorFactory&#39;)
+            }
+            previewFactories {
+                <span class="fu">previewFactory</span>(schema: &#39;previewFactory&#39;)
+            }
+            projectWizardFactories {
+                <span class="fu">projectWizardFactory</span>(schema: &#39;projectWizardFactory&#39;)
+            }
+        }
+    }
+    
+    <span class="fu">editorFactory</span>(factory: com.<span class="fu">backelite</span>.<span class="fu">shift</span>.<span class="fu">plugin</span>.<span class="fu">GroovyEditorFactory</span>) {
+        properties {
+            <span class="fu">name</span>(req: <span class="kw">true</span>)
+            <span class="fu">description</span>(req: <span class="kw">true</span>)
+            <span class="fu">supportedExtensions</span>(req: <span class="kw">true</span>)
+            <span class="fu">code</span>(req: <span class="kw">true</span>)
+        }
+    }
+    
+    <span class="fu">previewFactory</span>(factory: com.<span class="fu">backelite</span>.<span class="fu">shift</span>.<span class="fu">plugin</span>.<span class="fu">GroovyPreviewFactory</span>) {
+        properties {
+            <span class="fu">name</span>(req: <span class="kw">true</span>)
+            <span class="fu">description</span>(req: <span class="kw">true</span>)
+            <span class="fu">supportedExtensions</span>(req: <span class="kw">true</span>)
+            <span class="fu">code</span>(req: <span class="kw">true</span>)
+        }
+    }
+    
+    <span class="fu">projectWizardFactory</span>(factory: com.<span class="fu">backelite</span>.<span class="fu">shift</span>.<span class="fu">plugin</span>.<span class="fu">GroovyProjectWizardFactory</span>) {
+        properties {
+            <span class="fu">name</span>(req: <span class="kw">true</span>)
+            <span class="fu">description</span>(req: <span class="kw">true</span>)
+            <span class="fu">code</span>(req: <span class="kw">true</span>)
+            <span class="fu">projectGenerator</span>(req: <span class="kw">true</span>, schema: &#39;projectGenerator&#39;)
+        }
+    }
+    
+    <span class="fu">projectGenerator</span>(factory: com.<span class="fu">backelite</span>.<span class="fu">shift</span>.<span class="fu">plugin</span>.<span class="fu">GroovyProjectGenerator</span>) {
+        properties {
+            <span class="fu">code</span>(req: <span class="kw">true</span>)
+        }
+    }
+    
+    <span class="fu">lifecycle</span>(factory: com.<span class="fu">backelite</span>.<span class="fu">shift</span>.<span class="fu">plugin</span>.<span class="fu">GroovyPluginLifecycle</span>) {
+        properties {
+            <span class="fu">onLoad</span>(req: <span class="kw">false</span>)
+        }
+    }
+}
+
+<span class="kw">return</span> metaBuilder</code></pre>
+<h3 id="editors"><a href="#editors"><span class="header-section-number">3.4.3</span> Editors</a></h3>
+<p>Editors are the corner stone of the application: they provide a UI component to view and edit workspace documents.</p>
+<p>To declare a new editor type in a plugin declaration file, a factory closure must be provided. Here is an example to declare a HTML editor (taken from <code>BuiltinPlugin.groovy</code>):</p>
+<pre class="sourceCode java"><code class="sourceCode java"> editorFactory {
+    name = <span class="st">&quot;HTML editor&quot;</span>
+    description = <span class="st">&quot;Builtin HTML editor&quot;</span>
+    supportedExtensions = [&#39;html&#39;]
+    code = {document, loader -&gt;   
+        Node node = (Node) loader.<span class="fu">load</span>(<span class="fu">getClass</span>().<span class="fu">getResourceAsStream</span>(<span class="st">&quot;/fxml/code_editor.fxml&quot;</span>))
+        CodeEditorController controller = (CodeEditorController) loader.<span class="fu">getController</span>()
+        controller.<span class="fu">setDocument</span>(document)
+        controller.<span class="fu">setMode</span>(CodeEditorController.<span class="fu">Mode</span>.<span class="fu">HTML</span>)
+        <span class="kw">return</span> node
+    }
+}</code></pre>
+<p>An editor factory must define 5 blocks:</p>
+<ol style="list-style-type: decimal">
+<li><em>name</em>: the name of the editor type</li>
+<li><em>description</em>: the description of the editor type</li>
+<li><em>supportedExtensions</em>: array containing file extensions the editor applies to</li>
+<li><em>code</em>: the factory code to build the editor given a context <code>com.backelite.shift.workspace.artifact.Document</code> instance and a <code>javafx.fxml.FXMLLoader</code>, it must return a <code>javafx.scene.Node</code>.</li>
+</ol>
+<p>The controller bound to the <code>javafx.scene.Node</code> built by the factory must implement the <code>EditorController</code> interface.</p>
+<p>The factory is called to build an editor when it is requested by the <code>EditorsPaneContoller.openDocument(…)</code>.</p>
+<p>The choice of the editor to build is made by the <code>PluginRegistry</code> in the <code>newEditor(…)</code> method: this method looks at the current document extension and finds the first matching editor in the registry.</p>
+<p>To make sure, an editor can be found even if the file extension is not supported, a basic text editor is declared into the built-in plugin and uses a wildcard in <em>supportedExtensions</em> array:</p>
+<pre class="sourceCode java"><code class="sourceCode java"> editorFactory {
+    name = <span class="st">&quot;Generic text editor&quot;</span>
+    description = <span class="st">&quot;Builtin Text editor&quot;</span>
+    supportedExtensions = [&#39;*&#39;]
+    code = {document, loader -&gt;   
+        Node node = (Node) loader.<span class="fu">load</span>(<span class="fu">getClass</span>().<span class="fu">getResourceAsStream</span>(<span class="st">&quot;/fxml/code_editor.fxml&quot;</span>))
+        CodeEditorController controller = (CodeEditorController) loader.<span class="fu">getController</span>()
+        controller.<span class="fu">setDocument</span>(document)
+        <span class="kw">return</span> node
+    }
+}</code></pre>
+<h3 id="project-wizards"><a href="#project-wizards"><span class="header-section-number">3.4.4</span> Project wizards</a></h3>
+<p>TODO</p>
+<h3 id="previews"><a href="#previews"><span class="header-section-number">3.4.5</span> Previews</a></h3>
+<p>TODO</p>
+<h2 id="themes"><a href="#themes"><span class="header-section-number">3.5</span> Themes</a></h2>
+<p>TODO</p>
+<h1 id="user-interface"><a href="#user-interface"><span class="header-section-number">4</span> User interface</a></h1>
+<p>TODO</p>
+<h2 id="abstractcontroller-and-abstractdialogcontroller"><a href="#abstractcontroller-and-abstractdialogcontroller"><span class="header-section-number">4.1</span> AbstractController and AbstractDialogController</a></h2>
+<p>TODO</p>
+<h2 id="main-window"><a href="#main-window"><span class="header-section-number">4.2</span> Main window</a></h2>
+<p>TODO</p>
+<h3 id="menu"><a href="#menu"><span class="header-section-number">4.2.1</span> Menu</a></h3>
+<p>TODO</p>
+<h3 id="project-navigator"><a href="#project-navigator"><span class="header-section-number">4.2.2</span> Project navigator</a></h3>
+<p>TODO</p>
+<h3 id="editors-pane"><a href="#editors-pane"><span class="header-section-number">4.2.3</span> Editors pane</a></h3>
+<p>TODO</p>
+<h3 id="status-bar"><a href="#status-bar"><span class="header-section-number">4.2.4</span> Status bar</a></h3>
+<p>TODO</p>
+<h2 id="validation"><a href="#validation"><span class="header-section-number">4.3</span> Validation</a></h2>
+<p>Unfortunately, JavaFX does not provide any input validation system at the time. That is why the application uses its own.</p>
+<p>Classes related to validation are located in <code>com.backelite.shift.gui.validation</code>.</p>
+<p>The validation mechanism is pretty basic: it exposes a <code>Validator</code> interface with a single <code>validate(…)</code> method and a set of implementations to perform common validations : not blank, filename…</p>
+<p>Validators are used in <a href="#custom-controls">Custom controls</a>.</p>
+<h3 id="compoundvalidator"><a href="#compoundvalidator"><span class="header-section-number">4.3.1</span> CompoundValidator</a></h3>
+<p>The <code>CompoundValidator</code> is a special validator that can run several validators at the same time. It can be built like this:</p>
+<pre class="sourceCode java"><code class="sourceCode java">Validator validator = <span class="kw">new</span> <span class="fu">CompoundValidator</span>(<span class="kw">new</span> <span class="fu">NotBlankValidator</span>(), 
+<span class="kw">new</span> <span class="fu">FilenameValidator</span>());</code></pre>
+<h3 id="validation-result"><a href="#validation-result"><span class="header-section-number">4.3.2</span> Validation result</a></h3>
+<p>The <code>validate(…)</code> method of <code>Validator</code>interface returns a <code>ValidatorResult</code> object. This object is composed of a <code>valid</code> attribute and a list of error messages (many messages can be returned with the <code>CompoundValidator</code>).</p>
+<p>Error messages are simple strings formatted as property key, so that it can be localized in a properties file. Example: the <code>NotBlankValidator</code> returns the following message: <em>validator.not.blank</em>.</p>
+<h2 id="custom-controls"><a href="#custom-controls"><span class="header-section-number">4.4</span> Custom controls</a></h2>
+<p>TODO</p>
+</body>
+</html>

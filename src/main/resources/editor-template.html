@@ -1,0 +1,65 @@
+<!--
+  #%L
+  editor-template.html - Shift - 2013
+  %%
+  Copyright (C) 2013 Gilles Grousset
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style type="text/css" media="screen">
+            [inline-styles]
+            
+            body {
+                margin: 0px; 
+                padding: 0px;
+            }
+            
+            html, body {height: 100%;}
+            .CodeMirror {border: 1px solid black; font-size:13px; height:99.5%;}
+            .CodeMirror-scroll {height: 100%;}
+            
+        </style>
+        <script>
+            [inline-scripts]
+            
+             window.onload = function() { window.cm = CodeMirror(document.body, {
+                    value: "",
+                    mode: "[mode]",
+                    matchBrackets: true,
+                    autoCloseBrackets : true,
+                    autoCloseTags : true,
+                    lineNumbers : true,
+                    theme : "ambiance"}
+                );
+                    
+                cm.on("change", function(cm, change) {
+                    bridge.changed();
+                });
+                
+                cm.on("cursorActivity", function(cm) {
+                    bridge.cursorActivity();
+                });
+             };
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
