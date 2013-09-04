@@ -58,6 +58,27 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
     }
 
     @Override
+    public void delete() throws IOException {
+        super.delete();
+        
+        // Delete
+        if (!file.delete()) {
+            throw new IOException(String.format("Failed to delete %s ", file.getAbsolutePath()));
+        }
+        
+        // Remove from parent
+        if (parentFolder != null) {
+            parentFolder.getDocuments().remove(this);
+        }
+        
+        // Notify
+        this.setChanged();
+        this.notifyObservers();
+    }
+    
+    
+
+    @Override
     public void notifyObservers() {
         super.notifyObservers();
 

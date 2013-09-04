@@ -139,6 +139,13 @@ public class MainController extends AbstractController {
             }
         });
 
+        // Register delete artifact action on project navigator
+        projectNavigatorController.setOnDeleteArtifact(new EventHandler<ProjectNavigatorController.DeleteArtifactEvent>() {
+            public void handle(ProjectNavigatorController.DeleteArtifactEvent t) {
+                handleDeleteArtifactMenuAction();
+            }
+        });
+
         // Register active document change listener on editor pane
         editorsPaneController.setOnActiveDocumentChanged(new EventHandler<EditorsPaneController.ActiveDocumentChangedEvent>() {
             public void handle(EditorsPaneController.ActiveDocumentChangedEvent t) {
@@ -170,7 +177,7 @@ public class MainController extends AbstractController {
         if (this.supportsApplicationWideMenu()) {
             AnchorPane.setTopAnchor(splitPane, 0.0);
         }
-        
+
     }
 
     /**
@@ -334,6 +341,7 @@ public class MainController extends AbstractController {
         });
         editMenu.getItems().add(redoMenuItem);
 
+
         // Window menu
         windowMenu = new Menu(this.getResourceBundle().getString("main.menu.window"));
         this.buildWindowMenu();
@@ -440,14 +448,11 @@ public class MainController extends AbstractController {
             @Override
             protected Object call() throws Exception {
                 if (document != null && document.isModified()) {
-                    try {
-                        updateTitle(String.format(getResourceBundle().getString("task.saving_file"), document.getName()));
-                        document.save();
-                        updateProgress(1, 1);
-                    } catch (IOException ex) {
-                        setException(ex);
-                        failed();
-                    }
+
+                    updateTitle(String.format(getResourceBundle().getString("task.saving_file"), document.getName()));
+                    document.save();
+                    updateProgress(1, 1);
+
                 }
                 return document;
             }
@@ -512,6 +517,56 @@ public class MainController extends AbstractController {
         }
     }
 
+    private void handleDeleteArtifactMenuAction() {
+        // For the moment the action is not bound to any menu item
+        // But in the future maybe...
+
+        final Artifact artifact = projectNavigatorController.getSelectedArtifact();
+
+        if (artifact != null) {
+
+            // Async deletion task
+            final Task asyncArtifactDelete = new Task() {
+                @Override
+                protected Object call() throws Exception {
+
+                    updateTitle(String.format(getResourceBundle().getString("task.deleting_artifact"), artifact.getName()));
+
+                    artifact.delete();
+
+                    // If project : remove from workspace as well
+                    if (artifact instanceof Project) {
+                        Project project = (Project) artifact;
+                        ApplicationContext.getWorkspace().closeProject(project);
+                    }
+
+                    updateProgress(1, 1);
+
+                    return true;
+                }
+            };
+
+            // Display confirm dialog
+            String message = "";
+            if (artifact instanceof Project) {
+                message = String.format(getResourceBundle().getString("dialog.confirm.delete_project.message"), artifact.getName());
+            } else if (artifact instanceof Folder) {
+                message = String.format(getResourceBundle().getString("dialog.confirm.delete_folder.message"), artifact.getName());
+            } else {
+                message = String.format(getResourceBundle().getString("dialog.confirm.delete_file.message"), artifact.getName());
+            }
+            displayConfirmDialog(getResourceBundle().getString("dialog.confirm.delete_artifact.title"), message, new EventHandler<ConfirmDialogController.ChoiceEvent>() {
+                public void handle(ConfirmDialogController.ChoiceEvent t) {
+
+                    if (t.getChoice() == ConfirmDialogController.Choice.POSITIVE) {
+                        // Trigger close
+                        ApplicationContext.getTaskManager().addTask(asyncArtifactDelete);
+                    }
+                }
+            });
+        }
+    }
+
     private void handleNewFolderMenuAction() {
         try {
             // Open dialog
@@ -563,14 +618,11 @@ public class MainController extends AbstractController {
                 @Override
                 protected Object call() throws Exception {
                     if (project != null) {
-                        try {
-                            updateTitle(String.format(getResourceBundle().getString("task.closing_project"), project.getName()));
-                            ApplicationContext.getWorkspace().closeProject(project);
-                            updateProgress(1, 1);
-                        } catch (IOException ex) {
-                            setException(ex);
-                            failed();
-                        }
+
+                        updateTitle(String.format(getResourceBundle().getString("task.closing_project"), project.getName()));
+                        ApplicationContext.getWorkspace().closeProject(project);
+                        updateProgress(1, 1);
+
                     }
                     return true;
                 }

@@ -64,6 +64,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
     private EventHandler<ProjectClosedEvent> onProjectClosed;
     private EventHandler<NewFileEvent> onNewFile;
     private EventHandler<NewFolderEvent> onNewFolder;
+    private EventHandler<DeleteArtifactEvent> onDeleteArtifact;
     /**
      * Maintains expanded state of each artifact of the treee
      */
@@ -135,6 +136,12 @@ public class ProjectNavigatorController extends AbstractController implements Ob
     public void newFolder(Folder parentFolder) {
         if (getOnNewFolder() != null) {
             getOnNewFolder().handle(new NewFolderEvent(new EventType<NewFolderEvent>(), parentFolder));
+        }
+    }
+    
+    public void deleteArtifact(Artifact artifact) {
+        if (getOnDeleteArtifact() != null) {
+            onDeleteArtifact.handle(new DeleteArtifactEvent(new EventType<DeleteArtifactEvent>(), artifact));
         }
     }
 
@@ -250,14 +257,15 @@ public class ProjectNavigatorController extends AbstractController implements Ob
             document = (Document) arg;
         }
         if (document != null) {
-            if (document.isModified()) {
+            
+            if (document.isModified() && !document.isDeleted()) {
                 canRefresh = false;
             }
             if (!document.isNew()) {
                 canSelect = false;
             }
         }
-
+        
         if (canRefresh) {
 
             // Refresh display
@@ -437,6 +445,20 @@ public class ProjectNavigatorController extends AbstractController implements Ob
         this.onOpenFile = onOpenFile;
     }
 
+    /**
+     * @return the onDeleteArtifact
+     */
+    public EventHandler<DeleteArtifactEvent> getOnDeleteArtifact() {
+        return onDeleteArtifact;
+    }
+
+    /**
+     * @param onDeleteArtifact the onDeleteArtifact to set
+     */
+    public void setOnDeleteArtifact(EventHandler<DeleteArtifactEvent> onDeleteArtifact) {
+        this.onDeleteArtifact = onDeleteArtifact;
+    }
+
     /*
      * Artifact selected event.
      */
@@ -506,6 +528,30 @@ public class ProjectNavigatorController extends AbstractController implements Ob
          */
         public Project getProject() {
             return project;
+        }
+    }
+    
+    /**
+     * Delete artifact event.
+     */
+    public class DeleteArtifactEvent extends Event {
+        
+        private Artifact artifact;
+        
+        protected DeleteArtifactEvent(EventType<? extends Event> et) {
+            super(et);
+        }
+
+        protected DeleteArtifactEvent(EventType<? extends Event> et, Artifact artifact) {
+            super(et);
+            this.artifact = artifact;
+        }
+
+        /**
+         * @return the artifact
+         */
+        public Artifact getArtifact() {
+            return artifact;
         }
     }
 

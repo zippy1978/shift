@@ -24,7 +24,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 07/26/13</d> Add confirm dialog when unsaved files before closing project  
 
-<t>✘</t> 'Delete' on all items  
+<d>✔ 09/04/13</d> 'Delete' on all items  
 
 <t>✘</t> 'Rename' on all items  
 

@@ -387,23 +387,18 @@ String value = (String)preferencesManager.<span class="fu">getValue</span>(<span
 <pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getTaskManager</span>().<span class="fu">addTask</span>(<span class="kw">new</span> <span class="fu">Task</span>() {
     <span class="fu">@Override</span>
     <span class="kw">protected</span> Object <span class="fu">call</span>() <span class="kw">throws</span> Exception {
+        
         <span class="co">// Set title</span>
         <span class="fu">updateTitle</span>(<span class="st">&quot;task title&quot;</span>);
+        
         <span class="co">// Let&#39;s say the process iterates over an item array</span>
-        <span class="kw">try</span> {
-            <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; <span class="dv">10</span>; i++) {
+        <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; <span class="dv">10</span>; i++) {
                 
-                <span class="co">// Process item here…</span>
-                …
+            <span class="co">// Process item here…</span>
+            …
                 
-                <span class="co">// Update progress</span>
-                <span class="fu">updateProgress</span>(i + <span class="dv">1</span>, <span class="dv">10</span>);
-            }
-        } <span class="kw">catch</span>(Exception e) {
-            <span class="co">// Something went wrong: store the exception</span>
-            <span class="co">// and mark the task as failed</span>
-            <span class="fu">setException</span>(ex);
-            <span class="fu">failed</span>();
+            <span class="co">// Update progress</span>
+            <span class="fu">updateProgress</span>(i + <span class="dv">1</span>, <span class="dv">10</span>);
         }
         
         <span class="co">// Return anything…</span>
@@ -413,7 +408,6 @@ String value = (String)preferencesManager.<span class="fu">getValue</span>(<span
 });</code></pre>
 <p>The <code>updateTitle(…)</code> method can be called to give the task a name. If the shared <code>TaskManager</code>is used, this name will be displayed in the status bar while the task is running.</p>
 <p>The <code>updateProgress(…)</code> gives the ability to track the task progress. Once again: if the shared <code>TaskManager</code>is used, the progress will be displayed as a progress bar in tge status bar while the task is running.</p>
-<p>To notify the task failed, the <code>failed()</code>method can be used. It is also possible to set the exception explaining the failure with the <code>setException(…)</code> method.</p>
 <h3 id="listening-to-a-taskmanager"><a href="#listening-to-a-taskmanager"><span class="header-section-number">3.3.4</span> Listening to a TaskManager</a></h3>
 <p>A <code>TaskManager</code>can be listen to by implementening the <code>TaskManagerListener</code>, and registering the listener on the <code>TaskManager</code>.</p>
 <p>A <code>TaskManagerListener</code> gets notified when:</p>

@@ -22,6 +22,7 @@ package com.backelite.shift.workspace.artifact;
  * #L%
  */
 
+import com.backelite.shift.util.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -149,6 +150,25 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
         }
         
         loaded = true;
+    }
+    
+    @Override
+    public void delete() throws IOException {
+        super.delete();
+        
+        // Delete
+        if (!FileUtils.deleteFolder(file)) {
+            throw new IOException(String.format("Failed to delete %s ", file.getAbsolutePath()));
+        }
+        
+        // Remove from parent
+        if (parentFolder != null) {
+            parentFolder.getSubFolders().remove(this);
+        }
+        
+        // Notify
+        this.setChanged();
+        this.notifyObservers();
     }
 
     public Folder getParentFolder() {

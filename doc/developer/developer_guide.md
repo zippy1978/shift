@@ -428,24 +428,19 @@ Adding a task to a `TaskManager` can be done like this:
 ApplicationContext.getTaskManager().addTask(new Task() {
 	@Override
     protected Object call() throws Exception {
+    	
     	// Set title
         updateTitle("task title");
+        
         // Let's say the process iterates over an item array
-        try {
-        	for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
            		
-           		// Process item here…
-           		…
+        	// Process item here…
+           	…
            		
-            	// Update progress
-   	       		updateProgress(i + 1, 10);
-       	    }
-    	} catch(Exception e) {
-      		// Something went wrong: store the exception
-           	// and mark the task as failed
-           	setException(ex);
-            failed();
-   		}
+            // Update progress
+   	       	updateProgress(i + 1, 10);
+       	}
    		
         // Return anything…
         return true;
@@ -457,8 +452,6 @@ ApplicationContext.getTaskManager().addTask(new Task() {
 The `updateTitle(…)` method can be called to give the task a name. If the shared `TaskManager`is used, this name will be displayed in the status bar while the task is running.
 
 The `updateProgress(…)` gives the ability to track the task progress. Once again: if the shared `TaskManager`is used, the progress will be displayed as a progress bar in tge status bar while the task is running.
-
-To notify the task failed, the `failed()`method can be used. It is also possible to set the exception explaining the failure with the `setException(…)` method.
 
 ### Listening to a TaskManager
 

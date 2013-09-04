@@ -24,7 +24,6 @@ package com.backelite.shift.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,7 +52,7 @@ public class FileUtils {
 
         return content;
     }
-    
+
     public static void saveContentToFile(byte[] content, File file) throws IOException {
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(content);
@@ -84,9 +83,9 @@ public class FileUtils {
 
         return builder.toString();
     }
-    
+
     public static String getFileExtension(String filename) {
-        
+
         String[] parts = filename.split("\\.");
         if (parts.length > 1) {
             return parts[parts.length - 1].toLowerCase();
@@ -94,5 +93,22 @@ public class FileUtils {
             // No extension found
             return "";
         }
+    }
+
+    public static boolean deleteFolder(File folder) {
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                if (f.isDirectory()) {
+                    boolean deleted = deleteFolder(f);
+                    if (!deleted) {
+                        return false;
+                    }
+                } else {
+                    f.delete();
+                }
+            }
+        }
+        return folder.delete();
     }
 }

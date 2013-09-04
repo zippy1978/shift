@@ -215,6 +215,7 @@ public class EditorsPaneController extends AbstractController implements Observe
         if (observable instanceof Document) {
 
             ObservableList<Tab> tabs = tabPane.getTabs();
+            List<Tab> tabsToRemove = new ArrayList<Tab>();
             for (Tab tab : tabs) {
 
                 EditorController controller = (EditorController) tab.getUserData();
@@ -236,16 +237,23 @@ public class EditorsPaneController extends AbstractController implements Observe
                         EditorController editorController = (EditorController) tab.getUserData();
                         editorController.clearHistory();
 
+                        // If document is deleted : mark tab to removal
+                        if (document.isDeleted()) {
+                            tabsToRemove.add(tab);
+                        }
                     }
                 }
             }
+            
+            // Remove tabs
+            tabPane.getTabs().removeAll(tabsToRemove);
 
             // Notify change on active document
             if (onActiveDocumentChanged != null) {
                 onActiveDocumentChanged.handle(new ActiveDocumentChangedEvent(new EventType<ActiveDocumentChangedEvent>(), (Document) observable));
             }
 
-            // Workspace was updated
+        // Workspace was updated
         } else if (observable instanceof Workspace) {
 
             if (arg != null && arg instanceof Project) {

@@ -86,17 +86,9 @@ public abstract class AbstractFileSystemArtifact extends WeakObservable implemen
 
     public void delete() throws IOException {
 
-        // Delete
-        if (!file.delete()) {
-            throw new IOException(String.format("Failed to delete %s ", file.getAbsolutePath()));
-        }
-
         // Mark as deleted
         deleted = true;
         
-        // Notify
-        this.setChanged();
-        this.notifyObservers();
     }
 
     public void moveTo(Artifact newParent) throws IOException {
