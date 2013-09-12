@@ -50,6 +50,21 @@ public interface EditorController {
     
     public void redo();
     
+    /**
+     * Cut editor selection.
+     */
+    public void cut();
+    
+    /**
+     * Copy editor selection to clipboard.
+     */
+    public void copy();
+    
+    /**
+     * Paste clipboard content into the editor.
+     */
+    public void paste();
+    
     public void selectAll();
     
     public void clearHistory();

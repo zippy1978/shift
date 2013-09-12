@@ -166,12 +166,24 @@ public class CodeEditorController extends AbstractController implements EditorCo
         codeEditor.redo();
     }
 
+    public void cut() {
+        codeEditor.cut();
+    }
+    
+    public void copy() {
+        codeEditor.copy();
+    }
+
+    public void paste() {
+        codeEditor.paste();
+    }
+    
+    
+    
     public void selectAll() {
        codeEditor.selectAll();
     }
     
-    
-
     public void clearHistory() {
         codeEditor.clearHistory();
     }

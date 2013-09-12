@@ -31,6 +31,11 @@ import javafx.concurrent.Worker.State;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
@@ -55,7 +60,6 @@ public class CodeEditor extends AnchorPane {
     private Mode mode = Mode.NONE;
     private WebView webView;
     private String initialContent;
-    
     private EventHandler<ContentChangedEvent> onContentChanged;
     private EventHandler<CursorChangedEvent> onCursorChanged;
 
@@ -87,6 +91,17 @@ public class CodeEditor extends AnchorPane {
             }
         });
 
+        // Consume default clipboard shortcuts to prevent double call
+        this.webView.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+
+                if ((keyEvent.getCode() == KeyCode.V || keyEvent.getCode() == KeyCode.C || keyEvent.getCode() == KeyCode.X) && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
+                    keyEvent.consume();
+                }
+            }
+        });
+
         this.refresh();
 
     }
@@ -95,12 +110,15 @@ public class CodeEditor extends AnchorPane {
 
         StringBuilder inlineScripts = new StringBuilder();
 
+        inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/hint/show-hint.js"));
+        
         switch (mode) {
             case HTML_MIXED:
                 inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/mode/xml/xml.js"));
                 inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/mode/javascript/javascript.js"));
                 inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/mode/css/css.js"));
                 inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/mode/htmlmixed/htmlmixed.js"));
+                inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/hint/html-hint.js"));
                 break;
             case JAVASCRIPT:
                 inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/mode/javascript/javascript.js"));
@@ -134,6 +152,7 @@ public class CodeEditor extends AnchorPane {
         StringBuilder inlineStyles = new StringBuilder();
         inlineStyles.append(getFileContent(WEB_RESOURCES_PATH + "/lib/codemirror.css"));
         inlineStyles.append(getFileContent(WEB_RESOURCES_PATH + "/theme/ambiance.css"));
+        inlineStyles.append(getFileContent(WEB_RESOURCES_PATH + "/addon/hint/show-hint.css"));
 
         // Scripts
         StringBuilder inlineScripts = new StringBuilder();
@@ -221,7 +240,7 @@ public class CodeEditor extends AnchorPane {
 
         this.refresh();
     }
-    
+
     /**
      * @return the onContentChanged
      */
@@ -235,7 +254,7 @@ public class CodeEditor extends AnchorPane {
     public void setOnContentChanged(EventHandler<ContentChangedEvent> onContentChanged) {
         this.onContentChanged = onContentChanged;
     }
-    
+
     /**
      * @return the onCursorChanged
      */
@@ -264,7 +283,7 @@ public class CodeEditor extends AnchorPane {
         JSObject cmInstance = this.getCodeMirrorJSInstance();
         if (cmInstance != null) {
             cmInstance.call("setValue", content);
-            JSObject document =  (JSObject)cmInstance.call("getDoc");
+            JSObject document = (JSObject) cmInstance.call("getDoc");
             document.call("clearHistory");
             initialContent = null;
         } else {
@@ -272,92 +291,137 @@ public class CodeEditor extends AnchorPane {
             initialContent = content;
         }
     }
-    
+
     public String getContent() {
-        
+
         String content = "";
-        
+
         JSObject cmInstance = this.getCodeMirrorJSInstance();
         if (cmInstance != null) {
             content = (String) cmInstance.call("getValue");
         }
-        
+
         return content;
     }
-    
-    public void selectAll() {
-        
+
+    public void cut() {
+
+        // First copy
+        this.copy();
+
+        // Then remove
         JSObject cmInstance = this.getCodeMirrorJSInstance();
         if (cmInstance != null) {
-            JSObject document =  (JSObject)cmInstance.call("getDoc");
-            Integer lastLine = (Integer)document.call("lastLine");
-            Integer lastLineLength = ((String)document.call("getLine", lastLine)).length();
-            JSObject startPos = (JSObject)webView.getEngine().executeScript("startPos = {ch: 0, line: 0}");
-            JSObject endPos = (JSObject)webView.getEngine().executeScript(String.format("endPos = {ch: %d, line: %d}", lastLineLength, lastLine));
-            document.call("setSelection", startPos, endPos);
-            
+            JSObject document = (JSObject) cmInstance.call("getDoc");
+            document.call("replaceSelection", "");
         }
-        
     }
-    
-    public void undo() {
-        
+
+    public void copy() {
+
         JSObject cmInstance = this.getCodeMirrorJSInstance();
         if (cmInstance != null) {
-            JSObject document =  (JSObject)cmInstance.call("getDoc");
+            JSObject document = (JSObject) cmInstance.call("getDoc");
+            Boolean selected = (Boolean) document.call("somethingSelected");
+            if (selected) {
+                String selection = (String) document.call("getSelection");
+                Clipboard clipboard = Clipboard.getSystemClipboard();
+                ClipboardContent content = new ClipboardContent();
+                content.putString(selection);
+                clipboard.setContent(content);
+            }
+        }
+    }
+
+    public void paste() {
+
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        String content = (String) clipboard.getContent(DataFormat.PLAIN_TEXT);
+        if (content != null) {
+            JSObject cmInstance = this.getCodeMirrorJSInstance();
+            if (cmInstance != null) {
+                JSObject document = (JSObject) cmInstance.call("getDoc");
+                CursorPosition cursorPosition = this.getCursorPosition();
+                JSObject position = (JSObject) webView.getEngine().executeScript(String.format("endPos = {ch: %d, line: %d}", cursorPosition.getCh() - 1, cursorPosition.getLine() - 1));
+                document.call("replaceRange", content, position);
+            }
+        }
+    }
+
+    public void selectAll() {
+
+        JSObject cmInstance = this.getCodeMirrorJSInstance();
+        if (cmInstance != null) {
+            JSObject document = (JSObject) cmInstance.call("getDoc");
+            Integer lastLine = (Integer) document.call("lastLine");
+            Integer lastLineLength = ((String) document.call("getLine", lastLine)).length();
+            JSObject startPos = (JSObject) webView.getEngine().executeScript("startPos = {ch: 0, line: 0}");
+            JSObject endPos = (JSObject) webView.getEngine().executeScript(String.format("endPos = {ch: %d, line: %d}", lastLineLength, lastLine));
+            document.call("setSelection", startPos, endPos);
+
+        }
+
+    }
+
+    public void undo() {
+
+        JSObject cmInstance = this.getCodeMirrorJSInstance();
+        if (cmInstance != null) {
+            JSObject document = (JSObject) cmInstance.call("getDoc");
             document.call("undo");
         }
     }
-    
+
     public void redo() {
-        
+
         JSObject cmInstance = this.getCodeMirrorJSInstance();
         if (cmInstance != null) {
-            JSObject document =  (JSObject)cmInstance.call("getDoc");
+            JSObject document = (JSObject) cmInstance.call("getDoc");
             document.call("redo");
         }
     }
-    
+
     public void clearHistory() {
-        
+
         JSObject cmInstance = this.getCodeMirrorJSInstance();
         if (cmInstance != null) {
-            JSObject document =  (JSObject)cmInstance.call("getDoc");
+            JSObject document = (JSObject) cmInstance.call("getDoc");
             document.call("clearHistory");
         }
     }
-    
+
     public HistorySize getHistorySize() {
         HistorySize result = new HistorySize();
-        
+
         JSObject cmInstance = this.getCodeMirrorJSInstance();
         if (cmInstance != null) {
-            JSObject document =  (JSObject)cmInstance.call("getDoc");
-            JSObject historySize = (JSObject)document.call("historySize");
-            result.setUndo((Integer)historySize.getMember("undo"));
-            result.setRedo((Integer)historySize.getMember("redo"));
+            JSObject document = (JSObject) cmInstance.call("getDoc");
+            JSObject historySize = (JSObject) document.call("historySize");
+            result.setUndo((Integer) historySize.getMember("undo"));
+            result.setRedo((Integer) historySize.getMember("redo"));
         }
-        
+
         return result;
     }
-    
+
     public CursorPosition getCursorPosition() {
-        
+
         CursorPosition result = new CursorPosition();
-        
+
         JSObject cmInstance = this.getCodeMirrorJSInstance();
         if (cmInstance != null) {
-            JSObject document =  (JSObject)cmInstance.call("getDoc");
-            JSObject cursor = (JSObject)document.call("getCursor");
+            JSObject document = (JSObject) cmInstance.call("getDoc");
+            JSObject cursor = (JSObject) document.call("getCursor");
             // Code mirror returns first line as 0 = must add 1
-            result.setLine((Integer)cursor.getMember("line") + 1);
-            result.setCh((Integer)cursor.getMember("ch") + 1);
+            result.setLine((Integer) cursor.getMember("line") + 1);
+            result.setCh((Integer) cursor.getMember("ch") + 1);
         }
-        
+
         return result;
     }
-    
+
     public class HistorySize {
+
         private int redo;
         private int undo;
 
@@ -389,11 +453,12 @@ public class CodeEditor extends AnchorPane {
             this.undo = undo;
         }
     }
-    
+
     /**
      * Cursor position
      */
     public class CursorPosition {
+
         private long line = 1;
         private long ch = 1;
 
@@ -432,35 +497,34 @@ public class CodeEditor extends AnchorPane {
     public class JSBridge {
 
         public void changed() {
-            
+
             // Notify content changed event
             if (CodeEditor.this.getOnContentChanged() != null) {
                 CodeEditor.this.getOnContentChanged().handle(new ContentChangedEvent(new EventType<ContentChangedEvent>()));
             }
         }
-        
+
         public void cursorActivity() {
-            
+
             // Notify cursor changed event
             if (CodeEditor.this.getOnCursorChanged() != null) {
                 CodeEditor.this.getOnCursorChanged().handle(new CursorChangedEvent(new EventType<CursorChangedEvent>()));
             }
         }
     }
-    
+
     /**
      * Content changed event.
      */
     public class ContentChangedEvent extends Event {
-        
+
         protected ContentChangedEvent(EventType<? extends Event> et) {
             super(et);
         }
-        
     }
-    
+
     public class CursorChangedEvent extends Event {
-        
+
         protected CursorChangedEvent(EventType<? extends Event> et) {
             super(et);
         }

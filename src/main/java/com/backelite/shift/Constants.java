@@ -38,6 +38,9 @@ public interface Constants {
     public static final String SHORTCUT_SAVE = "save";
     public static final String SHORTCUT_UNDO = "undo";
     public static final String SHORTCUT_REDO = "redo";
+    public static final String SHORTCUT_CUT = "cut";
+    public static final String SHORTCUT_COPY = "copy";
+    public static final String SHORTCUT_PASTE = "paste";
     public static final String SHORTCUT_SELECT_ALL = "select_all";
     public static final String SHORTCUT_NEW_PREVIEW = "new_preview";
     

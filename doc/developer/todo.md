@@ -1,5 +1,5 @@
 
-# shift - TODO list
+# Shift - TODO list
 
 <t>✘</t> To do
 
@@ -73,29 +73,29 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 08/16/13</d> 'Redo' in 'Edit' menu  
 
-<t>✘</t> 'Copy' in 'Edit' menu  
+<d>✔ 09/12/13</d> 'Copy' in 'Edit' menu  
 
-<t>✘</t> 'Cut' in 'Edit' menu  
+<d>✔ 09/12/13</d> 'Cut' in 'Edit' menu  
 
-<t>✘</t> 'Paste' in 'Edit' menu  
+<d>✔ 09/12/13</d> 'Paste' in 'Edit' menu  
 
-<t>✘</t> 'Select All' in 'Edit' menu  
+<d>✔ 09/12/13</d> 'Select All' in 'Edit' menu  
 
 <t>✘</t> 'Search' in 'Edit' menu  
-
-### Preferences
-
-<t>✘</t> Preferences window (with tree navigation)
 
 ### Packaging
 
 <t>✘</t> About window  
 
-<t>✘</t> Icon
+<d>✔ 09/12/13</d> Icon
 
 ## Release 0.2
 
 Better code editing with advanced features and WOPE tight integration.
+
+### Preferences
+
+<t>✘</t> Preferences window (with tree navigation)
 
 ### Code editors
 

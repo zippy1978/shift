@@ -91,6 +91,9 @@ public class MainController extends AbstractController {
     Menu editMenu;
     MenuItem undoMenuItem;
     MenuItem redoMenuItem;
+    MenuItem cutMenuItem;
+    MenuItem copyMenuItem;
+    MenuItem pasteMenuItem;
     MenuItem selectAllMenuItem;
     Menu windowMenu;
     MenuItem newPreviewMenuItem;
@@ -234,10 +237,16 @@ public class MainController extends AbstractController {
             undoMenuItem.setDisable(!editorController.canUndo());
             redoMenuItem.setDisable(!editorController.canRedo());
             selectAllMenuItem.setDisable(false);
+            copyMenuItem.setDisable(false);
+            pasteMenuItem.setDisable(false);
+            cutMenuItem.setDisable(false);
         } else {
             undoMenuItem.setDisable(true);
             redoMenuItem.setDisable(true);
             selectAllMenuItem.setDisable(true);
+            copyMenuItem.setDisable(true);
+            pasteMenuItem.setDisable(true);
+            cutMenuItem.setDisable(true);
         }
     }
 
@@ -346,6 +355,39 @@ public class MainController extends AbstractController {
         
         // Edit > -
         editMenu.getItems().add(new SeparatorMenuItem());
+        
+        // Edit > Cut
+        cutMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.cut"));
+        cutMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_CUT));
+        cutMenuItem.setDisable(true);
+        cutMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                handleCutMenuAction();
+            }
+        });
+        editMenu.getItems().add(cutMenuItem);
+        
+        // Edit > Copy
+        copyMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.copy"));
+        copyMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_COPY));
+        copyMenuItem.setDisable(true);
+        copyMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                handleCopyMenuAction();
+            }
+        });
+        editMenu.getItems().add(copyMenuItem);
+        
+        // Edit > Paste
+        pasteMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.paste"));
+        pasteMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_PASTE));
+        pasteMenuItem.setDisable(true);
+        pasteMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                handlePasteMenuAction();
+            }
+        });
+        editMenu.getItems().add(pasteMenuItem);
         
         // Edit > Select all
         selectAllMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.select_all"));
@@ -515,6 +557,30 @@ public class MainController extends AbstractController {
         EditorController editorController = editorsPaneController.getActiveEditorController();
         if (editorController != null) {
             editorController.redo();
+        }
+    }
+    
+    private void handleCutMenuAction() {
+        
+        EditorController editorController = editorsPaneController.getActiveEditorController();
+        if (editorController != null) {
+            editorController.cut();
+        }
+    }
+    
+    private void handleCopyMenuAction() {
+        
+        EditorController editorController = editorsPaneController.getActiveEditorController();
+        if (editorController != null) {
+            editorController.copy();
+        }
+    }
+    
+    private void handlePasteMenuAction() {
+        
+        EditorController editorController = editorsPaneController.getActiveEditorController();
+        if (editorController != null) {
+            editorController.paste();
         }
     }
     
