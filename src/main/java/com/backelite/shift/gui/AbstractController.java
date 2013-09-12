@@ -27,7 +27,6 @@ import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.state.PersistableState;
 import com.backelite.shift.state.StateException;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +41,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -49,6 +50,8 @@ import javafx.stage.WindowEvent;
  */
 public abstract class AbstractController implements Initializable, PersistableState {
 
+    private static final Logger log = LoggerFactory.getLogger(AbstractController.class);
+    
     private ResourceBundle resourceBundle;
     
     private List<Stage> childrenWindows = new ArrayList<Stage>();
@@ -70,6 +73,8 @@ public abstract class AbstractController implements Initializable, PersistableSt
     }
 
     public void displayErrorDialog(String title, String message, Throwable e) {
+    
+        log.error(title, e);
         
         try {
             FXMLLoader loader = FXMLLoaderFactory.newInstance();
@@ -89,6 +94,7 @@ public abstract class AbstractController implements Initializable, PersistableSt
     }
 
     public void displayErrorDialog(Throwable e) {
+        
         this.displayErrorDialog(null, e.getMessage(), e);
     }
 

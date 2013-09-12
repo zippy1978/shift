@@ -42,7 +42,8 @@ public class CodeEditorController extends AbstractController implements EditorCo
         JAVASCRIPT,
         CSS,
         MARKDOWN,
-        GROOVY
+        GROOVY,
+        XML
     };
     
     private Document document;
@@ -133,6 +134,9 @@ public class CodeEditorController extends AbstractController implements EditorCo
             case GROOVY:
                 codeEditor.setMode(CodeEditor.Mode.GROOVY);
                 break;
+            case XML:
+                codeEditor.setMode(CodeEditor.Mode.XML);
+                break;
             default:
                 codeEditor.setMode(CodeEditor.Mode.NONE);
         }
@@ -178,11 +182,19 @@ public class CodeEditorController extends AbstractController implements EditorCo
         codeEditor.paste();
     }
     
-    
-    
     public void selectAll() {
        codeEditor.selectAll();
     }
+    
+    public void contentAssist() {
+        codeEditor.contentAssist();
+    }
+
+    public boolean canContentAssist() {
+        return codeEditor.canContentAssist();
+    }
+    
+    
     
     public void clearHistory() {
         codeEditor.clearHistory();

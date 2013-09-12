@@ -95,6 +95,7 @@ public class MainController extends AbstractController {
     MenuItem copyMenuItem;
     MenuItem pasteMenuItem;
     MenuItem selectAllMenuItem;
+    MenuItem contentAssistMenuItem;
     Menu windowMenu;
     MenuItem newPreviewMenuItem;
 
@@ -240,6 +241,7 @@ public class MainController extends AbstractController {
             copyMenuItem.setDisable(false);
             pasteMenuItem.setDisable(false);
             cutMenuItem.setDisable(false);
+            contentAssistMenuItem.setDisable(!editorController.canContentAssist());
         } else {
             undoMenuItem.setDisable(true);
             redoMenuItem.setDisable(true);
@@ -247,6 +249,7 @@ public class MainController extends AbstractController {
             copyMenuItem.setDisable(true);
             pasteMenuItem.setDisable(true);
             cutMenuItem.setDisable(true);
+            contentAssistMenuItem.setDisable(true);
         }
     }
 
@@ -399,6 +402,20 @@ public class MainController extends AbstractController {
             }
         });
         editMenu.getItems().add(selectAllMenuItem);
+        
+        // Edit > -
+        editMenu.getItems().add(new SeparatorMenuItem());
+        
+        // Edit > Content Assist
+        contentAssistMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.content_assist"));
+        contentAssistMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_CONTENT_ASSIST));
+        contentAssistMenuItem.setDisable(true);
+        contentAssistMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                handleContentAssistMenuAction();
+            }
+        });
+        editMenu.getItems().add(contentAssistMenuItem);
 
         // Window menu
         windowMenu = new Menu(this.getResourceBundle().getString("main.menu.window"));
@@ -585,9 +602,18 @@ public class MainController extends AbstractController {
     }
     
     private void handleSelectAllMenuAction() {
+        
         EditorController editorController = editorsPaneController.getActiveEditorController();
         if (editorController != null) {
             editorController.selectAll();
+        }
+    }
+    
+    private void handleContentAssistMenuAction() {
+        
+        EditorController editorController = editorsPaneController.getActiveEditorController();
+        if (editorController != null && editorController.canContentAssist()) {
+            editorController.contentAssist();
         }
     }
 

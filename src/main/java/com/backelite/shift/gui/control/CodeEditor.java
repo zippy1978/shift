@@ -31,6 +31,7 @@ import javafx.concurrent.Worker.State;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.scene.CacheHint;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -53,7 +54,8 @@ public class CodeEditor extends AnchorPane {
         JAVASCRIPT,
         CSS,
         MARKDOWN,
-        GROOVY
+        GROOVY,
+        XML
     };
     private static final String HTML_TEMPLATE_NAME = "/editor-template.html";
     private static final String WEB_RESOURCES_PATH = "/codemirror";
@@ -62,6 +64,7 @@ public class CodeEditor extends AnchorPane {
     private String initialContent;
     private EventHandler<ContentChangedEvent> onContentChanged;
     private EventHandler<CursorChangedEvent> onCursorChanged;
+    private String contentAssistFunction = null;
 
     public CodeEditor() {
         super();
@@ -101,7 +104,7 @@ public class CodeEditor extends AnchorPane {
                 }
             }
         });
-
+        
         this.refresh();
 
     }
@@ -109,8 +112,8 @@ public class CodeEditor extends AnchorPane {
     private String buildInlineScriptsForMode() {
 
         StringBuilder inlineScripts = new StringBuilder();
-
-        inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/hint/show-hint.js"));
+        
+        contentAssistFunction = null;
         
         switch (mode) {
             case HTML_MIXED:
@@ -119,9 +122,13 @@ public class CodeEditor extends AnchorPane {
                 inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/mode/css/css.js"));
                 inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/mode/htmlmixed/htmlmixed.js"));
                 inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/hint/html-hint.js"));
+                inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/hint/javascript-hint.js"));
+                contentAssistFunction = "CodeMirror.showHint(cm, CodeMirror.htmlHint);";
                 break;
             case JAVASCRIPT:
                 inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/mode/javascript/javascript.js"));
+                inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/hint/javascript-hint.js"));
+                contentAssistFunction = "CodeMirror.showHint(cm, CodeMirror.javascriptHint);";
                 break;
             case CSS:
                 inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/mode/css/css.js"));
@@ -132,8 +139,12 @@ public class CodeEditor extends AnchorPane {
             case GROOVY:
                 inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/mode/groovy/groovy.js"));
                 break;
+            case XML:
+                inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/mode/xml/xml.js"));
+                 inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/hint/xml-hint.js"));
+                contentAssistFunction = "CodeMirror.showHint(cm, CodeMirror.xmlHint);";
+                break;
         }
-
 
         return inlineScripts.toString();
 
@@ -157,6 +168,7 @@ public class CodeEditor extends AnchorPane {
         // Scripts
         StringBuilder inlineScripts = new StringBuilder();
         inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/lib/codemirror.js"));
+        inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/hint/show-hint.js"));
         inlineScripts.append(buildInlineScriptsForMode());
 
         inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/edit/closebrackets.js"));
@@ -181,6 +193,8 @@ public class CodeEditor extends AnchorPane {
                 break;
             case GROOVY:
                 editorMode = "groovy";
+            case XML:
+                editorMode = "xml";
         }
 
         return template.replace("[mode]", editorMode).replace("[inline-styles]", inlineStyles.toString()).replace("[inline-scripts]", inlineScripts.toString());
@@ -361,6 +375,18 @@ public class CodeEditor extends AnchorPane {
 
         }
 
+    }
+    
+    public boolean canContentAssist() {
+        return (contentAssistFunction != null);
+    }
+    
+    public void contentAssist() {
+        
+        JSObject cmInstance = this.getCodeMirrorJSInstance();
+        if (cmInstance != null) {
+            webView.getEngine().executeScript(contentAssistFunction);
+        }
     }
 
     public void undo() {

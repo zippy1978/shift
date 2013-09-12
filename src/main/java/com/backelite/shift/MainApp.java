@@ -161,6 +161,7 @@ public class MainApp extends Application {
             shortcuts.put(Constants.SHORTCUT_COPY, new KeyCodeCombination(KeyCode.C, KeyCombination.SHORTCUT_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_PASTE, new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_SELECT_ALL, new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN).getName());
+            shortcuts.put(Constants.SHORTCUT_CONTENT_ASSIST, new KeyCodeCombination(KeyCode.SPACE, KeyCombination.CONTROL_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_NEW_PREVIEW, new KeyCodeCombination(KeyCode.P, KeyCombination.SHORTCUT_DOWN).getName());
             preferencesManager.setInitialValue(Constants.PREFERENCES_KEY_SHORTCUTS, shortcuts);
             preferencesManager.commit();

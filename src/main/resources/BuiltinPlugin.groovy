@@ -139,7 +139,7 @@ plugin {
             }
         }
         
-        // Markdown editor
+        // Groovy editor
         editorFactory {
             name = "Groovy editor"
             description = "Builtin Groovy editor"
@@ -149,6 +149,20 @@ plugin {
                 CodeEditorController controller = (CodeEditorController) loader.getController()
                 controller.setDocument(document)
                 controller.setMode(CodeEditorController.Mode.GROOVY)
+                return node
+            }
+        }
+        
+        // XML editor
+        editorFactory {
+            name = "XML editor"
+            description = "Builtin XML editor"
+            supportedExtensions = ['xml']
+            code = {document, loader ->   
+                Node node = (Node) loader.load(getClass().getResourceAsStream("/fxml/code_editor.fxml"))
+                CodeEditorController controller = (CodeEditorController) loader.getController()
+                controller.setDocument(document)
+                controller.setMode(CodeEditorController.Mode.XML)
                 return node
             }
         }

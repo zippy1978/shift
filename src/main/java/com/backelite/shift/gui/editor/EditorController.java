@@ -67,6 +67,14 @@ public interface EditorController {
     
     public void selectAll();
     
+    /**
+     * Check if the editor supports content assist
+     * @return 
+     */
+    public boolean canContentAssist();
+    
+    public void contentAssist();
+    
     public void clearHistory();
     
     public CursorPosition getCursorPosition();
