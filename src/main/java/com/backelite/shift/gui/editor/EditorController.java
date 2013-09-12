@@ -50,6 +50,8 @@ public interface EditorController {
     
     public void redo();
     
+    public void selectAll();
+    
     public void clearHistory();
     
     public CursorPosition getCursorPosition();

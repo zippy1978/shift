@@ -91,6 +91,7 @@ public class MainController extends AbstractController {
     Menu editMenu;
     MenuItem undoMenuItem;
     MenuItem redoMenuItem;
+    MenuItem selectAllMenuItem;
     Menu windowMenu;
     MenuItem newPreviewMenuItem;
 
@@ -189,7 +190,7 @@ public class MainController extends AbstractController {
     private KeyCombination getShortcut(String name) {
         KeyCombination result = null;
         Map<String, String> shortcuts = (Map<String, String>) ApplicationContext.getPreferencesManager().getValue(Constants.PREFERENCES_KEY_SHORTCUTS);
-        if (shortcuts != null) {
+        if (shortcuts != null && shortcuts.get(name) != null) {
             result = KeyCodeCombination.keyCombination(shortcuts.get(name));
         }
         return result;
@@ -232,9 +233,11 @@ public class MainController extends AbstractController {
         if (editorController != null) {
             undoMenuItem.setDisable(!editorController.canUndo());
             redoMenuItem.setDisable(!editorController.canRedo());
+            selectAllMenuItem.setDisable(false);
         } else {
             undoMenuItem.setDisable(true);
             redoMenuItem.setDisable(true);
+            selectAllMenuItem.setDisable(true);
         }
     }
 
@@ -340,7 +343,20 @@ public class MainController extends AbstractController {
             }
         });
         editMenu.getItems().add(redoMenuItem);
-
+        
+        // Edit > -
+        editMenu.getItems().add(new SeparatorMenuItem());
+        
+        // Edit > Select all
+        selectAllMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.select_all"));
+        selectAllMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_SELECT_ALL));
+        selectAllMenuItem.setDisable(true);
+        selectAllMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                handleSelectAllMenuAction();
+            }
+        });
+        editMenu.getItems().add(selectAllMenuItem);
 
         // Window menu
         windowMenu = new Menu(this.getResourceBundle().getString("main.menu.window"));
@@ -499,6 +515,13 @@ public class MainController extends AbstractController {
         EditorController editorController = editorsPaneController.getActiveEditorController();
         if (editorController != null) {
             editorController.redo();
+        }
+    }
+    
+    private void handleSelectAllMenuAction() {
+        EditorController editorController = editorsPaneController.getActiveEditorController();
+        if (editorController != null) {
+            editorController.selectAll();
         }
     }
 

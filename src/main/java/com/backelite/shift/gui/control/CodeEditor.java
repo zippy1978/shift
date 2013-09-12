@@ -285,6 +285,21 @@ public class CodeEditor extends AnchorPane {
         return content;
     }
     
+    public void selectAll() {
+        
+        JSObject cmInstance = this.getCodeMirrorJSInstance();
+        if (cmInstance != null) {
+            JSObject document =  (JSObject)cmInstance.call("getDoc");
+            Integer lastLine = (Integer)document.call("lastLine");
+            Integer lastLineLength = ((String)document.call("getLine", lastLine)).length();
+            JSObject startPos = (JSObject)webView.getEngine().executeScript("startPos = {ch: 0, line: 0}");
+            JSObject endPos = (JSObject)webView.getEngine().executeScript(String.format("endPos = {ch: %d, line: %d}", lastLineLength, lastLine));
+            document.call("setSelection", startPos, endPos);
+            
+        }
+        
+    }
+    
     public void undo() {
         
         JSObject cmInstance = this.getCodeMirrorJSInstance();
