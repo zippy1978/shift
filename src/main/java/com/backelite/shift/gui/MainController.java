@@ -354,6 +354,8 @@ public class MainController extends AbstractController {
 
         // Refresh states
         this.refreshFileMenu();
+        this.refreshEditMenu();
+        this.refreshWindowMenu();
     }
 
     /**

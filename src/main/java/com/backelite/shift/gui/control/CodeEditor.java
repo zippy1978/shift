@@ -47,7 +47,8 @@ public class CodeEditor extends AnchorPane {
         HTML_MIXED,
         JAVASCRIPT,
         CSS,
-        MARKDOWN
+        MARKDOWN,
+        GROOVY
     };
     private static final String HTML_TEMPLATE_NAME = "/editor-template.html";
     private static final String WEB_RESOURCES_PATH = "/codemirror";
@@ -110,6 +111,9 @@ public class CodeEditor extends AnchorPane {
             case MARKDOWN:
                 inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/mode/markdown/markdown.js"));
                 break;
+            case GROOVY:
+                inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/mode/groovy/groovy.js"));
+                break;
         }
 
 
@@ -156,6 +160,8 @@ public class CodeEditor extends AnchorPane {
             case MARKDOWN:
                 editorMode = "markdown";
                 break;
+            case GROOVY:
+                editorMode = "groovy";
         }
 
         return template.replace("[mode]", editorMode).replace("[inline-styles]", inlineStyles.toString()).replace("[inline-scripts]", inlineScripts.toString());

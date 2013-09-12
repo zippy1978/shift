@@ -41,7 +41,8 @@ public class CodeEditorController extends AbstractController implements EditorCo
         HTML,
         JAVASCRIPT,
         CSS,
-        MARKDOWN
+        MARKDOWN,
+        GROOVY
     };
     
     private Document document;
@@ -128,6 +129,9 @@ public class CodeEditorController extends AbstractController implements EditorCo
                 break;
             case MARKDOWN:
                 codeEditor.setMode(CodeEditor.Mode.MARKDOWN);
+                break;
+            case GROOVY:
+                codeEditor.setMode(CodeEditor.Mode.GROOVY);
                 break;
             default:
                 codeEditor.setMode(CodeEditor.Mode.NONE);
