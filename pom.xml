@@ -12,7 +12,7 @@
         <versionCode>1</versionCode>
         <versionName>0.1</versionName>
     </properties>
-    
+   
     <packaging>jar</packaging>
     <version>0.1-SNAPSHOT</version>
     

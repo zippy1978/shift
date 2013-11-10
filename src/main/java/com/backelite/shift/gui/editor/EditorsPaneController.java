@@ -77,7 +77,7 @@ public class EditorsPaneController extends AbstractController implements Observe
             public void changed(ObservableValue<? extends Tab> tab, Tab oldTab, Tab newTab) {
                 if (onActiveDocumentChanged != null && newTab != null) {
                     EditorController controller = (EditorController) newTab.getUserData();
-                    onActiveDocumentChanged.handle(new ActiveDocumentChangedEvent(new EventType<ActiveDocumentChangedEvent>(), controller.getDocument()));
+                    onActiveDocumentChanged.handle(new ActiveDocumentChangedEvent(EventType.ROOT, controller.getDocument()));
                 }
             }
         });
@@ -135,7 +135,7 @@ public class EditorsPaneController extends AbstractController implements Observe
                                         // Notify document changed
                                         if (tabPane.getTabs().size() == 0) {
                                             if (onActiveDocumentChanged != null) {
-                                                onActiveDocumentChanged.handle(new ActiveDocumentChangedEvent(new EventType<ActiveDocumentChangedEvent>(), null));
+                                                onActiveDocumentChanged.handle(new ActiveDocumentChangedEvent(EventType.ROOT, null));
                                             }
                                         }
                                     }
@@ -149,7 +149,7 @@ public class EditorsPaneController extends AbstractController implements Observe
                             // Notify document changed
                             if (tabPane.getTabs().size() == 0) {
                                 if (onActiveDocumentChanged != null) {
-                                    onActiveDocumentChanged.handle(new ActiveDocumentChangedEvent(new EventType<ActiveDocumentChangedEvent>(), null));
+                                    onActiveDocumentChanged.handle(new ActiveDocumentChangedEvent(EventType.ROOT, null));
                                 }
                             }
                         }
@@ -250,7 +250,7 @@ public class EditorsPaneController extends AbstractController implements Observe
 
             // Notify change on active document
             if (onActiveDocumentChanged != null) {
-                onActiveDocumentChanged.handle(new ActiveDocumentChangedEvent(new EventType<ActiveDocumentChangedEvent>(), (Document) observable));
+                onActiveDocumentChanged.handle(new ActiveDocumentChangedEvent(EventType.ROOT, (Document) observable));
             }
 
         // Workspace was updated

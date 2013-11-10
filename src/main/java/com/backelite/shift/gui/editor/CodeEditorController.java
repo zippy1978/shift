@@ -79,7 +79,7 @@ public class CodeEditorController extends AbstractController implements EditorCo
 
             public void handle(CodeEditor.CursorChangedEvent t) {
                 if (getOnCursorChanged() != null) {
-                    getOnCursorChanged().handle(new CursorChangedEvent(new EventType<CursorChangedEvent>()));
+                    getOnCursorChanged().handle(new CursorChangedEvent(EventType.ROOT));
                 }
             }
         });

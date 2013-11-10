@@ -526,7 +526,7 @@ public class CodeEditor extends AnchorPane {
 
             // Notify content changed event
             if (CodeEditor.this.getOnContentChanged() != null) {
-                CodeEditor.this.getOnContentChanged().handle(new ContentChangedEvent(new EventType<ContentChangedEvent>()));
+                CodeEditor.this.getOnContentChanged().handle(new ContentChangedEvent(EventType.ROOT));
             }
         }
 
@@ -534,7 +534,7 @@ public class CodeEditor extends AnchorPane {
 
             // Notify cursor changed event
             if (CodeEditor.this.getOnCursorChanged() != null) {
-                CodeEditor.this.getOnCursorChanged().handle(new CursorChangedEvent(new EventType<CursorChangedEvent>()));
+                CodeEditor.this.getOnCursorChanged().handle(new CursorChangedEvent(EventType.ROOT));
             }
         }
     }

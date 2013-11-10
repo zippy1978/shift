@@ -104,7 +104,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
                     Artifact artifact = (Artifact) t1.getValue();
                     lastSelectedArtifact = artifact;
                     if (getOnArtifactSelected() != null) {
-                        getOnArtifactSelected().handle(new ArtifactSelectedEvent(new EventType<ArtifactSelectedEvent>(), artifact));
+                        getOnArtifactSelected().handle(new ArtifactSelectedEvent(EventType.ROOT, artifact));
                     }
                 } else {
                     lastSelectedArtifact = null;
@@ -123,25 +123,25 @@ public class ProjectNavigatorController extends AbstractController implements Ob
      */
     protected void closeProject(final Project project) {
         if (onProjectClosed != null) {
-            onProjectClosed.handle(new ProjectClosedEvent(new EventType<ProjectClosedEvent>(), project));
+            onProjectClosed.handle(new ProjectClosedEvent(EventType.ROOT, project));
         }
     }
 
     public void newFile(Folder parentFolder) {
         if (onNewFile != null) {
-            onNewFile.handle(new NewFileEvent(new EventType<NewFileEvent>(), parentFolder));
+            onNewFile.handle(new NewFileEvent(EventType.ROOT, parentFolder));
         }
     }
     
     public void newFolder(Folder parentFolder) {
         if (getOnNewFolder() != null) {
-            getOnNewFolder().handle(new NewFolderEvent(new EventType<NewFolderEvent>(), parentFolder));
+            getOnNewFolder().handle(new NewFolderEvent(EventType.ROOT, parentFolder));
         }
     }
     
     public void deleteArtifact(Artifact artifact) {
         if (getOnDeleteArtifact() != null) {
-            onDeleteArtifact.handle(new DeleteArtifactEvent(new EventType<DeleteArtifactEvent>(), artifact));
+            onDeleteArtifact.handle(new DeleteArtifactEvent(EventType.ROOT, artifact));
         }
     }
 
@@ -335,7 +335,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
                 // Double click
                 if (event.getClickCount() == 2 && event.getButton().equals(MouseButton.PRIMARY)) {
                     if (onOpenFile != null) {
-                        onOpenFile.handle(new OpenFileEvent(new EventType<OpenFileEvent>(), document));
+                        onOpenFile.handle(new OpenFileEvent(EventType.ROOT, document));
                     }
                 }
             }

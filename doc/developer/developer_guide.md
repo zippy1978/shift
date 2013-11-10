@@ -15,7 +15,7 @@ Thereby a good knowledge of Java and Object Oriented Programming is required, as
 
 ### Java
 
-The required JDK version is 1.7 (a recent official Oracle version with JavaFX 2.2 included). 
+The required JDK version is 1.7 (a recent official Oracle version with JavaFX 2.2 included but not higher than update 21, because JavaFX has a [bug](https://javafx-jira.kenai.com/browse/RT-32415)). 
 
 However, due to some limitations with Java 1.7, Java 1.8 will be used as soon as it will be available.
 
@@ -27,6 +27,13 @@ The current limitations on Java 1.7 are:
 ### Maven
 
 Maven 3 and the [javafx-maven-plugin](https://github.com/zonski/javafx-maven-plugin) are used to run and package the application.
+
+When using the plugin form the first time, remember to fix your current JRE classpath with the folling command:
+
+```
+mvn jfx:fix-classpath
+```
+
 
 ### IDE
 
