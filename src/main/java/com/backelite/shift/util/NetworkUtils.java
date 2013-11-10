@@ -25,6 +25,9 @@ package com.backelite.shift.util;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -97,5 +100,18 @@ public class NetworkUtils {
         }
 
         throw new IOException("Timeout waiting for port " + port + " to listen");
+    }
+    
+    /**
+     * Return the current machine IP address.
+     * If not found or error : returns 127.0.0.1
+     * @return 
+     */
+    public static String getHostIPAddress() {
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException ex) {
+            return "127.0.0.1";
+        }
     }
 }

@@ -88,7 +88,7 @@ public class HTTPWorkspaceProxyServer {
                 server.stop();
                 server = null;
             } catch (Exception ex) {
-                log.error(ex.getMessage());
+                log.error(ex.getMessage(), ex);
             }
         }
     }

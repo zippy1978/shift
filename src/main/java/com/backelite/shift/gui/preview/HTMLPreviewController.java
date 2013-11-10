@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
-public class HTMLPreviewController extends AbstractPreviewController implements Observer {
+public class HTMLPreviewController extends AbstractPreviewController {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(HTMLPreviewController.class);
     /**
@@ -60,19 +60,14 @@ public class HTMLPreviewController extends AbstractPreviewController implements 
      * HTML server port : starts at 9000 until a free port is found.
      */
     private static int HTML_SERVER_PORT = 9000;
-    
-    @FXML 
+    @FXML
     private AnchorPane rootPane;
-    
     @FXML
     private WebView webView;
-    
     @FXML
     private Button orientationButton;
-    
     @FXML
     private ComboBox<String> presetCombo;
-    
     List<Map<String, Object>> presets;
 
     public HTMLPreviewController() {
@@ -86,24 +81,22 @@ public class HTMLPreviewController extends AbstractPreviewController implements 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
-        
+
         // Disable caching
         webView.setCache(false);
-        
+
         // Populate preset combo
         this.populatePresetCombo();
         presetCombo.valueProperty().addListener(new ChangeListener<String>() {
-
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
-                
+
                 // Apply new preset
                 applyPreset(presets.get(presetCombo.getSelectionModel().getSelectedIndex()));
             }
         });
-        
+
         // Handle orientation change
         orientationButton.setOnAction(new EventHandler<ActionEvent>() {
-
             public void handle(ActionEvent t) {
 
                 // Reverse view
@@ -113,73 +106,55 @@ public class HTMLPreviewController extends AbstractPreviewController implements 
                 getParentStage().setHeight(width);
             }
         });
-        
+
         // Later ...
         Platform.runLater(new Runnable() {
-
             public void run() {
-                
+
                 // Title
                 parentStage.setTitle(getResourceBundle().getString("builtin.plugin.preview.html.title"));
             }
         });
-        
+
     }
 
     @Override
-    public void setDocument(Document document) {
+    protected void refresh() {
 
-        super.setDocument(document);
-        document.getProject().addObserver(this);
+        synchronized (document) {
 
-        this.refresh();
+            // Update webview
+            webView.getEngine().load("http://localhost:" + ApplicationContext.getHTTPWorkspaceProxyServer().getPort() + document.getWorkspacePath());
+        }
     }
 
-    private void refresh() {
-
-       synchronized(document) {
-             
-        // Update webview
-        webView.getEngine().load("http://localhost:" + ApplicationContext.getHTTPWorkspaceProxyServer().getPort() + document.getWorkspacePath());
-       }
-    }
-
-    public void update(Observable o, Object arg) {
-
-        // Something in the project was updated
-        // Refresh view
-        this.refresh();
-        
-    }
-    
     private void populatePresetCombo() {
-     
-        presets = (List<Map<String, Object>>)ApplicationContext.getPreferencesManager().getValue("preview.html.presets");
-        
+
+        presets = (List<Map<String, Object>>) ApplicationContext.getPreferencesManager().getValue("preview.html.presets");
+
         presetCombo.getItems().clear();
         for (Map<String, Object> preset : presets) {
-            presetCombo.getItems().add((String)preset.get("name"));
+            presetCombo.getItems().add((String) preset.get("name"));
         }
-        
+
     }
-    
+
     /**
      * Apply preset settings to the preview.
-     * @param preset 
+     *
+     * @param preset
      */
     private void applyPreset(Map<String, Object> preset) {
-        
-        this.getParentStage().setWidth((Integer)preset.get("width"));
-        this.getParentStage().setHeight((Integer)preset.get("height"));
+
+        this.getParentStage().setWidth((Integer) preset.get("width"));
+        this.getParentStage().setHeight((Integer) preset.get("height"));
     }
 
     @Override
     public void setParentStage(Stage parentStage) {
         super.setParentStage(parentStage);
-        
+
         // Apply first preset
         presetCombo.getSelectionModel().select(0);
     }
-    
-    
 }

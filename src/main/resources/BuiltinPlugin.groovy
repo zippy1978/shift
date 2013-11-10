@@ -171,12 +171,23 @@ plugin {
     previewFactories {
         
         // HTML preview
-        previewFactory {
+        /*previewFactory {
             name = "HTML Preview"
             description = "Builtin HTML preview"
             supportedExtensions = ['html']
             code = {loader ->   
                 Node node = (Node) loader.load(getClass().getResourceAsStream("/fxml/html_preview.fxml"))
+                return node
+            }
+        }*/
+        
+        // Remote HTML preview
+        previewFactory {
+            name = "Remote HTML Preview"
+            description = "Builtin Remote HTML preview"
+            supportedExtensions = ['html']
+            code = {loader ->   
+                Node node = (Node) loader.load(getClass().getResourceAsStream("/fxml/remote_html_preview.fxml"))
                 return node
             }
         }

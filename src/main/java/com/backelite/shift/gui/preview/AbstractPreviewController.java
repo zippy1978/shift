@@ -21,21 +21,22 @@ package com.backelite.shift.gui.preview;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-
 import com.backelite.shift.gui.AbstractController;
 import com.backelite.shift.workspace.artifact.Document;
 import java.net.URL;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 import javafx.stage.Stage;
 
 /**
  * Abstract base implementaiton of PreviewController.
+ *
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
-public abstract class AbstractPreviewController extends AbstractController implements PreviewController {
+public abstract class AbstractPreviewController extends AbstractController implements PreviewController, Observer {
 
     protected Document document;
-    
     protected Stage parentStage;
 
     @Override
@@ -43,7 +44,25 @@ public abstract class AbstractPreviewController extends AbstractController imple
         super.initialize(url, rb); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
+    /**
+     * Called to refresh preview. Implement to render preview.
+     */
+    protected abstract void refresh();
+
+    /**
+     * Track document updates.
+     *
+     * @param o
+     * @param arg
+     */
+    public void update(Observable o, Object arg) {
+
+        // Something in the project was updated
+        // Refresh view
+        this.refresh();
+
+    }
+
     /**
      * @return the document
      */
@@ -56,9 +75,14 @@ public abstract class AbstractPreviewController extends AbstractController imple
      */
     public void setDocument(Document document) {
         this.document = document;
+
+        if (this.document != null) {
+            this.document.getProject().addObserver(this);
+            this.refresh();
+        }
     }
-    
-        /**
+
+    /**
      * @return the parentStage
      */
     public Stage getParentStage() {
