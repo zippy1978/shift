@@ -59,6 +59,10 @@ public class MainApp extends Application {
     }
 
     public void start(Stage stage) throws Exception {
+        
+        // Force usage of CASPIAN theme
+        // TODO : use MORDERNA instead when JFX 8 is released
+        setUserAgentStylesheet(STYLESHEET_CASPIAN);
 
         // *** This section should be asynced and moved to splash screen
         // Initialize preferences

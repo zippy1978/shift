@@ -23,7 +23,7 @@
 /* Application wide styles */
 
 .root{
-    -fx-font-size: 14pt;
+    -fx-font-size: 110%;
     /*-fx-font-family: "Source Code Pro";*/
     -fx-font-family: "Helvetica";
     -fx-background-color: rgb(246, 246, 246);
@@ -75,7 +75,7 @@
 
 .error-label {
     -fx-text-fill: -fx-error-color;
-    -fx-font-size: 12pt;
+    -fx-font-size: 100%;
 }
 
 /* Dialogs */
