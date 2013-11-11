@@ -26,7 +26,6 @@ import com.backelite.shift.util.FileUtils;
 import com.backelite.shift.util.NetworkUtils;
 import com.backelite.shift.workspace.HTTPWorkspaceProxyServer;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.EventHandler;
@@ -117,6 +116,17 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
             workspaceContext.setContextPath(WORKSPACE_CONTEXT);
             workspaceContext.setHandler(new ProxyHTTPHandler());
             handlers.addHandler(workspaceContext);
+            
+            // Root (force redirect to current document)
+            ContextHandler rootContext = new ContextHandler();
+            rootContext.setContextPath("/");
+            rootContext.setHandler(new AbstractHandler() {
+
+                public void handle(String tagret, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+                    response.sendRedirect(String.format("%s%s", WORKSPACE_CONTEXT, document.getWorkspacePath()));
+                }
+            });
+            handlers.addHandler(rootContext);
 
             server = new Server(port);
             server.setHandler(handlers);
@@ -143,7 +153,7 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
     protected void refresh() {
         
         String url = String.format("http://%s:%d%s%s", NetworkUtils.getHostIPAddress(), port, WORKSPACE_CONTEXT, document.getWorkspacePath());
-        RemoteHTMLPreviewWebSocket.broadcastTest(url);
+        RemoteHTMLPreviewWebSocket.broadcastRefresh(url);
     }
 
     /**

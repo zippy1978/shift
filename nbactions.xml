@@ -9,6 +9,7 @@
             <properties>
                 <exec.args>-classpath %classpath com.backelite.shift.MainApp</exec.args>
                 <exec.executable>java</exec.executable>
+                <file.encoding>UTF-8</file.encoding>
             </properties>
         </action>
         <action>

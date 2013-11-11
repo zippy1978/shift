@@ -27,6 +27,7 @@ import com.backelite.shift.gui.FXMLLoaderFactory;
 import com.backelite.shift.gui.MainController;
 import com.backelite.shift.preferences.PreferencesManager;
 import com.backelite.shift.workspace.artifact.Project;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,15 +55,25 @@ public class MainApp extends Application {
         log.debug(String.format("JavaFX version: %s", VersionInfo.getVersion()));
         log.debug(String.format("JavaFX runtime version: %s", VersionInfo.getRuntimeVersion()));
         log.debug(String.format("JavaFX release milestone: %s", VersionInfo.getReleaseMilestone()));
+        log.debug(String.format("File encoding is %s", System.getProperty("file.encoding")));
 
         launch(args);
     }
 
     public void start(Stage stage) throws Exception {
-        
-        // Force usage of CASPIAN theme
-        // TODO : use MORDERNA instead when JFX 8 is released
-        setUserAgentStylesheet(STYLESHEET_CASPIAN);
+
+        // Force usage of CASPIAN theme (only if method exists)
+        // TODO : use MODERNA instead when JFX 8 is released
+        //setUserAgentStylesheet(STYLESHEET_CASPIAN);·
+        try {
+            Method userAgentStylesheetMethod = this.getClass().getMethod("setUserAgentStylesheet", new Class[]{String.class});
+            if (userAgentStylesheetMethod != null) {
+                userAgentStylesheetMethod.invoke(this, "CASPIAN");
+                //setUserAgentStylesheet(STYLESHEET_CASPIAN);
+            }
+        } catch (Exception ex) {
+            // Nothing
+        }
 
         // *** This section should be asynced and moved to splash screen
         // Initialize preferences
