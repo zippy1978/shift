@@ -31,6 +31,8 @@ import java.io.IOException;
  */
 public class FileSystemDocument extends AbstractFileSystemArtifact implements Document {
 
+    private static final String ENCODING = "UTF-8";
+    
     private Folder parentFolder;
     private Project project;
     private byte[] content;
@@ -60,23 +62,21 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
     @Override
     public void delete() throws IOException {
         super.delete();
-        
+
         // Delete
         if (!file.delete()) {
             throw new IOException(String.format("Failed to delete %s ", file.getAbsolutePath()));
         }
-        
+
         // Remove from parent
         if (parentFolder != null) {
             parentFolder.getDocuments().remove(this);
         }
-        
+
         // Notify
         this.setChanged();
         this.notifyObservers();
     }
-    
-    
 
     @Override
     public void notifyObservers() {
@@ -132,7 +132,11 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
 
     public String getContentAsString() {
         if (opened) {
-            return new String(content);
+            try {
+                return new String(content, ENCODING);
+            } catch (Exception ex) {
+                return null;
+            }
         } else {
             return null;
         }
@@ -144,27 +148,31 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
 
     public synchronized void setContentAsString(String newContent) {
 
-        byte[] newContentBytes = newContent.getBytes();
+        try {
+            byte[] newContentBytes = newContent.getBytes(ENCODING);
 
-        // Track content modification : first with length, then with string comparaison
-        if (content != null) {
-            newDocument = false;
-            modified = (content.length != newContentBytes.length);
-            if (!modified) {
-                if (!new String(content).equals(newContent)) {
-                    modified = true;
+            // Track content modification : first with length, then with string comparaison
+            if (content != null) {
+                newDocument = false;
+                modified = (content.length != newContentBytes.length);
+                if (!modified) {
+                    if (!new String(content, ENCODING).equals(new String(newContentBytes, ENCODING))) {
+                        modified = true;
+                    }
                 }
+            } else {
+                modified = true;
+                newDocument = true;
             }
-        } else {
-            modified = true;
-            newDocument = true;
-        }
 
-        // Update content and notify document changed
-        if (modified) {
-            content = newContentBytes;
-            this.setChanged();
-            this.notifyObservers();
+            // Update content and notify document changed
+            if (modified) {
+                content = newContentBytes;
+                this.setChanged();
+                this.notifyObservers();
+            }
+
+        } catch (Exception ex) {
         }
     }
 
@@ -199,6 +207,4 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
     public boolean isNew() {
         return newDocument;
     }
-    
-    
 }

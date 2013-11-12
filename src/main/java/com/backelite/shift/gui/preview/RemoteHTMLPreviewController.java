@@ -223,8 +223,8 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
                 // If content is HTML : try to inject remote-control.js
                 Header contentTypeHeader = method.getResponseHeader("Content-Type");
                 if (contentTypeHeader != null && contentTypeHeader.getValue().contains("html")) {
-                    String body = method.getResponseBodyAsString();
-                    response.getOutputStream().write(injectRemoteControlScript(body).getBytes());
+                    String body = new String(method.getResponseBody(), "UTF-8");
+                    response.getOutputStream().write(injectRemoteControlScript(body).getBytes("UTF-8"));
                 } else {
                     response.getOutputStream().write(method.getResponseBody());
                 }

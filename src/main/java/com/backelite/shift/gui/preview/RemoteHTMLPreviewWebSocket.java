@@ -74,6 +74,8 @@ public class RemoteHTMLPreviewWebSocket {
                         String jsonMessage = OBJECT_MAPPER.writeValueAsString(sessionInfo);
                         session.getRemote().sendStringByFuture(jsonMessage);
                     }
+                    
+                    log.debug(String.format("New browser connected %s", browserInfo.getUserAgent()));
 
                 }
 
@@ -90,12 +92,14 @@ public class RemoteHTMLPreviewWebSocket {
 
     @OnWebSocketConnect
     public void onConnect(Session session) {
+        
         this.session = session;
         BROADCAST.add(this);
     }
 
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
+        
         BROADCAST.remove(this);
     }
 
