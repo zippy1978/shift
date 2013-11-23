@@ -61,11 +61,24 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <t>✘</t> Reset button (reload document and reset navigation)  
 
+#### Remote Preview
+
+<t>✘</t> Prevent launching more than one instance
+
+<t>✘</t> Display remote URL
+
+<t>✘</t> Display list of connected Browser
+
+<t>✘</t> Mesure rendering time per browser
+
+
 ### Dialogs
 
 <d>✔ 07/26/13</d> Error message dialog  
 
 <d>✔ 07/26/13</d> Confirm (yes / no) dialog  
+
+<t>✘</t> Picker dialog : pick a value in a choice list (for preview selection, when multiple choices)
 
 ### Menu
 
