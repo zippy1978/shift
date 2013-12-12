@@ -24,6 +24,7 @@ package com.backelite.shift.gui;
 import com.backelite.shift.gui.dialog.ConfirmDialogController;
 import com.backelite.shift.gui.dialog.ErrorDialogController;
 import com.backelite.shift.ApplicationContext;
+import com.backelite.shift.gui.dialog.PickerDialogController;
 import com.backelite.shift.state.PersistableState;
 import com.backelite.shift.state.StateException;
 import java.io.IOException;
@@ -96,6 +97,23 @@ public abstract class AbstractController implements Initializable, PersistableSt
     public void displayErrorDialog(Throwable e) {
         
         this.displayErrorDialog(null, e.getMessage(), e);
+    }
+    
+    public void displayPickerDialog(String title, String message, List<String> options, EventHandler<PickerDialogController.SelectionEvent> onSelection) {
+        try {
+            FXMLLoader loader = FXMLLoaderFactory.newInstance();
+            Stage stage = newModalWindow(title, (Parent) loader.load(getClass().getResourceAsStream("/fxml/picker_dialog.fxml")));
+            PickerDialogController controller = (PickerDialogController) loader.getController();
+            controller.setParentStage(stage);
+            controller.setOnSelection(onSelection);
+            controller.setOptions(options);
+            controller.setMessage(message);
+            stage.setResizable(false);
+            stage.setFullScreen(false);
+            stage.showAndWait();
+        } catch (IOException ex) {
+            this.displayErrorDialog(ex);
+        }
     }
 
     public void displayConfirmDialog(String title, String message, EventHandler<ConfirmDialogController.ChoiceEvent> onChoice) {

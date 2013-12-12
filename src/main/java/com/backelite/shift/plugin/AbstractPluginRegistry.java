@@ -89,6 +89,23 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
         }
         
     }
+
+    public List<PreviewFactory> getAvailablePreviewFactories(Document document) {
+        
+        List<PreviewFactory> result = new ArrayList<PreviewFactory>();
+        
+        // Look for matching preview factory
+        Set<PreviewFactory> matchingFactories = previewExtensions.get(FileUtils.getFileExtension(document.getName()));
+
+        if (matchingFactories != null) {
+            result.addAll(matchingFactories);
+        }
+        
+        return result;
+        
+    }
+    
+    
     
     public Node newPreview(Document document, FXMLLoader loader) throws PluginException {
         

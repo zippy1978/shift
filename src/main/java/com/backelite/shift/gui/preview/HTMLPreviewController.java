@@ -22,12 +22,9 @@ package com.backelite.shift.gui.preview;
  * #L%
  */
 import com.backelite.shift.ApplicationContext;
-import com.backelite.shift.workspace.artifact.Document;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;

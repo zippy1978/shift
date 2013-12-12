@@ -72,6 +72,13 @@ public interface PluginRegistry {
     public boolean canPreview(Document document);
     
     /**
+     * Return a list of available preview factories for a given document.
+     * @param document Document
+     * @return List of PreviewFactory objects
+     */
+    public List<PreviewFactory> getAvailablePreviewFactories(Document document);
+    
+    /**
      * Create a new project wizard.
      * @param factory
      * @param loader FXML loader

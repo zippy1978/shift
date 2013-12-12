@@ -78,7 +78,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 07/26/13</d> Confirm (yes / no) dialog  
 
-<t>✘</t> Picker dialog : pick a value in a choice list (for preview selection, when multiple choices)
+<d>✔ 12/12/13</d> Picker dialog : pick a value in a choice list (for preview selection, when multiple choices)
 
 ### Menu
 

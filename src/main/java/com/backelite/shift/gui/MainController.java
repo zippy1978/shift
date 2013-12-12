@@ -30,11 +30,13 @@ import com.backelite.shift.workspace.artifact.FileSystemProject;
 import com.backelite.shift.workspace.artifact.Project;
 import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.Constants;
+import com.backelite.shift.gui.dialog.PickerDialogController;
 import com.backelite.shift.gui.editor.EditorController;
 import com.backelite.shift.gui.preview.PreviewController;
 import com.backelite.shift.gui.projectwizard.ProjectWizardController;
 import com.backelite.shift.gui.statusbar.StatusBarController;
 import com.backelite.shift.plugin.PluginException;
+import com.backelite.shift.plugin.PreviewFactory;
 import com.backelite.shift.plugin.ProjectWizardFactory;
 import com.backelite.shift.state.StateException;
 import com.backelite.shift.workspace.artifact.Artifact;
@@ -42,6 +44,7 @@ import com.backelite.shift.workspace.artifact.Folder;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -355,10 +358,10 @@ public class MainController extends AbstractController {
             }
         });
         editMenu.getItems().add(redoMenuItem);
-        
+
         // Edit > -
         editMenu.getItems().add(new SeparatorMenuItem());
-        
+
         // Edit > Cut
         cutMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.cut"));
         cutMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_CUT));
@@ -369,7 +372,7 @@ public class MainController extends AbstractController {
             }
         });
         editMenu.getItems().add(cutMenuItem);
-        
+
         // Edit > Copy
         copyMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.copy"));
         copyMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_COPY));
@@ -380,7 +383,7 @@ public class MainController extends AbstractController {
             }
         });
         editMenu.getItems().add(copyMenuItem);
-        
+
         // Edit > Paste
         pasteMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.paste"));
         pasteMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_PASTE));
@@ -391,7 +394,7 @@ public class MainController extends AbstractController {
             }
         });
         editMenu.getItems().add(pasteMenuItem);
-        
+
         // Edit > Select all
         selectAllMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.select_all"));
         selectAllMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_SELECT_ALL));
@@ -402,10 +405,10 @@ public class MainController extends AbstractController {
             }
         });
         editMenu.getItems().add(selectAllMenuItem);
-        
+
         // Edit > -
         editMenu.getItems().add(new SeparatorMenuItem());
-        
+
         // Edit > Content Assist
         contentAssistMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.content_assist"));
         contentAssistMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_CONTENT_ASSIST));
@@ -540,21 +543,61 @@ public class MainController extends AbstractController {
     private void handleNewPreviewMenuAction() {
 
         // Open new preview
-        FXMLLoader loader = FXMLLoaderFactory.newInstance();
+        final FXMLLoader loader = FXMLLoaderFactory.newInstance();
 
         try {
 
-            Stage stage = newUtilityWindow("", (Parent) ApplicationContext.getPluginRegistry().newPreview(editorsPaneController.getActiveDocument(), loader));
-
             // Preview active document (if any)
-            Document activeDocument = editorsPaneController.getActiveDocument();
+            final Document activeDocument = editorsPaneController.getActiveDocument();
             if (activeDocument != null) {
-                PreviewController previewController = (PreviewController) loader.getController();
-                previewController.setDocument(activeDocument);
-                previewController.setParentStage(stage);
+
+                // Get available preview factories for the active document
+                final List<PreviewFactory> availableFactories = ApplicationContext.getPluginRegistry().getAvailablePreviewFactories(editorsPaneController.getActiveDocument());
+
+                // More than on preview available : display picker
+                if (availableFactories.size() > 1) {
+
+                    // Option list
+                    List<String> options = new ArrayList<String>();
+                    for (PreviewFactory factory : availableFactories) {
+                        options.add(factory.getName());
+                    }
+
+                    // Display picker
+                    displayPickerDialog(getResourceBundle().getString("main.preview_picker.title"), getResourceBundle().getString("main.preview_picker.text"), options, new EventHandler<PickerDialogController.SelectionEvent>() {
+                        public void handle(PickerDialogController.SelectionEvent t) {
+
+                            // If selection : create new preview
+                            if (t.getPosition() > -1) {
+                                PreviewFactory selection = availableFactories.get(t.getPosition());
+
+                                try {
+                                    Stage stage = newUtilityWindow("", (Parent) ApplicationContext.getPluginRegistry().newPreview(selection, loader));
+                                    PreviewController previewController = (PreviewController) loader.getController();
+                                    previewController.setDocument(activeDocument);
+                                    previewController.setParentStage(stage);
+
+                                    stage.show();
+                                } catch (Exception ex) {
+                                    displayErrorDialog(ex);
+                                }
+                            }
+                        }
+                    });
+
+                    // Only one preview available ...
+                } else {
+                    Stage stage = newUtilityWindow("", (Parent) ApplicationContext.getPluginRegistry().newPreview(editorsPaneController.getActiveDocument(), loader));
+                    PreviewController previewController = (PreviewController) loader.getController();
+                    previewController.setDocument(activeDocument);
+                    previewController.setParentStage(stage);
+
+                    stage.show();
+                }
+
             }
 
-            stage.show();
+
 
         } catch (Exception ex) {
             this.displayErrorDialog(ex);
@@ -576,41 +619,41 @@ public class MainController extends AbstractController {
             editorController.redo();
         }
     }
-    
+
     private void handleCutMenuAction() {
-        
+
         EditorController editorController = editorsPaneController.getActiveEditorController();
         if (editorController != null) {
             editorController.cut();
         }
     }
-    
+
     private void handleCopyMenuAction() {
-        
+
         EditorController editorController = editorsPaneController.getActiveEditorController();
         if (editorController != null) {
             editorController.copy();
         }
     }
-    
+
     private void handlePasteMenuAction() {
-        
+
         EditorController editorController = editorsPaneController.getActiveEditorController();
         if (editorController != null) {
             editorController.paste();
         }
     }
-    
+
     private void handleSelectAllMenuAction() {
-        
+
         EditorController editorController = editorsPaneController.getActiveEditorController();
         if (editorController != null) {
             editorController.selectAll();
         }
     }
-    
+
     private void handleContentAssistMenuAction() {
-        
+
         EditorController editorController = editorsPaneController.getActiveEditorController();
         if (editorController != null && editorController.canContentAssist()) {
             editorController.contentAssist();
