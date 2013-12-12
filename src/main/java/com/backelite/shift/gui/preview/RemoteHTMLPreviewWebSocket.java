@@ -21,8 +21,9 @@ package com.backelite.shift.gui.preview;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-import java.lang.String;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -50,7 +51,20 @@ public class RemoteHTMLPreviewWebSocket {
     private static final String COMMAND_ACTION = "REFRESH";
     protected Session session;
     protected BrowserInfo browserInfo;
+    
+    /**
+     * Static listener.
+     */
+    private static RemoteHTMLPreviewWebSocketListener listener;
+    
+    public interface RemoteHTMLPreviewWebSocketListener {
+        
+        public void onConnectionAdded(RemoteHTMLPreviewWebSocket connection);
+        public void onConnectionRemoved(RemoteHTMLPreviewWebSocket connection);
+    }
 
+    
+    
     @OnWebSocketMessage
     public void onMessage(Session session, String message) {
 
@@ -95,12 +109,22 @@ public class RemoteHTMLPreviewWebSocket {
         
         this.session = session;
         BROADCAST.add(this);
+        
+        // Notify
+        if (listener != null) {
+            listener.onConnectionAdded(this);
+        }
     }
 
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
         
         BROADCAST.remove(this);
+        
+        // Notify
+        if (listener != null) {
+            listener.onConnectionRemoved(this);
+        }
     }
 
     /**
@@ -278,5 +302,13 @@ public class RemoteHTMLPreviewWebSocket {
         public void setType(String type) {
             this.type = type;
         }
+    }
+    
+    public static void setListener(RemoteHTMLPreviewWebSocketListener uniqueListener) {
+        listener = uniqueListener;
+    }
+    
+    public static List<RemoteHTMLPreviewWebSocket> getConnections() {
+        return new ArrayList<RemoteHTMLPreviewWebSocket>(BROADCAST);
     }
 }

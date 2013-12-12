@@ -29,8 +29,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.fxml.FXML;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.servlet.ServletException;
@@ -55,12 +60,21 @@ import org.slf4j.LoggerFactory;
  *
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
-public class RemoteHTMLPreviewController extends AbstractPreviewController {
+public class RemoteHTMLPreviewController extends AbstractPreviewController implements RemoteHTMLPreviewWebSocket.RemoteHTMLPreviewWebSocketListener {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(RemoteHTMLPreviewController.class);
     private static final String REMOTE_CONTROL_SCRIPT_NAME = "remote-control.js";
     private static final String REMOTE_CONTROL_WEB_SOCKET_CONTEXT = "/remote-control";
     private static final String WORKSPACE_CONTEXT = "/workspace";
+    
+    @FXML
+    private Label instructionsLabel;
+    
+    @FXML
+    private Hyperlink urlLink;
+    
+    @FXML
+    private TableView connectionTable;
     
     /**
      * Indicate if remote preview is already running.
@@ -89,8 +103,10 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
             
             
         } else {
+            
             // Start server
             startServer();
+            
         }
         
 
@@ -109,14 +125,6 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
     @Override
     public void setParentStage(Stage parentStage) {
         super.setParentStage(parentStage);
-
-        
-        // Register stage close listener to stop server
-        /*this.getParentStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent t) {
-                stopServer();
-            }
-        });*/
         
         this.getParentStage().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
 
@@ -130,6 +138,9 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
     private void startServer() {
         
         started = true;
+        
+        // Lusten to client browser connections
+        RemoteHTMLPreviewWebSocket.setListener(this);
 
         // Start Workspace HTTP server (if not done yet)
         HTTPWorkspaceProxyServer workspaceServer = ApplicationContext.getHTTPWorkspaceProxyServer();
@@ -186,6 +197,9 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
         
         log.debug("Stopping remote HTTP preview server");
         
+        // Clear listener
+        RemoteHTMLPreviewWebSocket.setListener(null);
+        
         started = false;
         
         if (server != null) {
@@ -203,6 +217,8 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
         
         String url = String.format("http://%s:%d%s%s", NetworkUtils.getHostIPAddress(), port, WORKSPACE_CONTEXT, document.getWorkspacePath());
         RemoteHTMLPreviewWebSocket.broadcastRefresh(url);
+        
+        urlLink.setText(url);
     }
 
     /**
@@ -286,4 +302,14 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
 
         }
     }
+
+    public void onConnectionAdded(RemoteHTMLPreviewWebSocket connection) {
+        System.out.println(">>>>>>>>>>> new connection");
+    }
+
+    public void onConnectionRemoved(RemoteHTMLPreviewWebSocket connection) {
+        System.out.println(">>>>>>>>>>>> removed connection");
+    }
+    
+    
 }

@@ -65,6 +65,14 @@
     -fx-padding: 5;
 }
 
+/* Hyper links */
+.hyperlink {
+    -fx-text-fill: -fx-accent;
+    -fx-font-size: 100%;
+    -fx-border-color:  transparent;
+    -fx-font-weight: bold;
+}
+
 /* Form controls */
 
 .text-input:focused .invalid {
