@@ -24,6 +24,7 @@ package com.backelite.shift.gui;
 import com.backelite.shift.gui.dialog.ConfirmDialogController;
 import com.backelite.shift.gui.dialog.ErrorDialogController;
 import com.backelite.shift.ApplicationContext;
+import com.backelite.shift.gui.dialog.InfoDialogController;
 import com.backelite.shift.gui.dialog.PickerDialogController;
 import com.backelite.shift.state.PersistableState;
 import com.backelite.shift.state.StateException;
@@ -71,6 +72,25 @@ public abstract class AbstractController implements Initializable, PersistableSt
 
         // Only Mac OS supports menu outside window
         return System.getProperty("os.name").toLowerCase().contains("mac");
+    }
+    
+    public void displayInfoDialog(String title, String message) {
+        
+        try {
+            FXMLLoader loader = FXMLLoaderFactory.newInstance();
+            if (title == null) {
+                title = getResourceBundle().getString("dialog.info.default.title");
+            }
+            Stage stage = newModalWindow(title, (Parent) loader.load(getClass().getResourceAsStream("/fxml/info_dialog.fxml")));
+            InfoDialogController controller = (InfoDialogController) loader.getController();
+            controller.setParentStage(stage);
+            controller.setMessage(message);
+            stage.setResizable(false);
+            stage.setFullScreen(false);
+            stage.showAndWait();
+        } catch (IOException ex) {
+            this.displayErrorDialog(ex);
+        }
     }
 
     public void displayErrorDialog(String title, String message, Throwable e) {

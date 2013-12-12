@@ -28,6 +28,7 @@ import com.backelite.shift.workspace.HTTPWorkspaceProxyServer;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -58,6 +59,13 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
     private static final String REMOTE_CONTROL_SCRIPT_NAME = "remote-control.js";
     private static final String REMOTE_CONTROL_WEB_SOCKET_CONTEXT = "/remote-control";
     private static final String WORKSPACE_CONTEXT = "/workspace";
+    
+    /**
+     * Indicate if remote preview is already running.
+     * Only one remote preview is allowed at the time.
+     */
+    private static boolean started = false;
+    
     private Server server;
     /**
      * Server port.
@@ -67,11 +75,35 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
+        
+        if (started) {
+            displayInfoDialog(getResourceBundle().getString("builtin.plugin.preview.remote_html.title"), getResourceBundle().getString("builtin.plugin.preview.remote_html.already_running.text"));
+            Platform.runLater(new Runnable() {
 
-        // Start server
-        startServer();
+                public void run() {
+                    close();
+                }
+            });
+            
+            
+        } else {
+            // Start server
+            started = true;
+            startServer();
+        }
+        
 
+        
+        // Later ...
+        Platform.runLater(new Runnable() {
+            public void run() {
+
+                // Title
+                parentStage.setTitle(getResourceBundle().getString("builtin.plugin.preview.remote_html.title"));
+            }
+        });
     }
+    
 
     @Override
     public void setParentStage(Stage parentStage) {
@@ -80,6 +112,7 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
         // Register stage close listener to stop server
         this.getParentStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent t) {
+                started = false;
                 stopServer();
             }
         });

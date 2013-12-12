@@ -63,7 +63,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 #### Remote Preview
 
-<t>✘</t> Prevent launching more than one instance
+<d>✔ 12/12/13</d> Prevent launching more than one instance
 
 <t>✘</t> Display remote URL
 

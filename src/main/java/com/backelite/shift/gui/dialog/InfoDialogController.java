@@ -1,12 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.backelite.shift.gui.preview;
+package com.backelite.shift.gui.dialog;
 
 /*
  * #%L
- * PreviewController.java - shift - 2013
+ * InfoDialogController.java - Shift - 2013
  * %%
  * Copyright (C) 2013 Gilles Grousset
  * %%
@@ -25,27 +21,11 @@ package com.backelite.shift.gui.preview;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-import com.backelite.shift.workspace.artifact.Document;
-import javafx.stage.Stage;
 
 /**
- * Preview controller interface. All preview controllers must implement this
- * interface.
  *
- * @author ggrousset
+ * @author Gilles Grousset (gi.grousset@gmail.com)
  */
-public interface PreviewController {
+public class InfoDialogController extends SimpleDialogController {
 
-    public void setDocument(Document document);
-
-    public Document getDocument();
-
-    public Stage getParentStage();
-
-    public void setParentStage(Stage parentStage);
-    
-    /**
-     * Close the current window.
-     */
-    public void close();
 }

@@ -22,42 +22,11 @@ package com.backelite.shift.gui.dialog;
  * #L%
  */
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-
 /**
  * Error dialog.
  *
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
-public class ErrorDialogController extends AbstractDialogController {
+public class ErrorDialogController extends SimpleDialogController {
 
-    @FXML
-    private Label messageLabel;
-    @FXML
-    private Button closeButton;
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        super.initialize(url, rb);
-        
-        // Close dialog on close button click
-        closeButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            public void handle(ActionEvent t) {
-                close();
-            }
-        });
-    }
-    
-    
-    
-    public void setMessage(String message) {
-        this.messageLabel.setText(message);
-    }
 }

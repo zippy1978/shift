@@ -95,4 +95,11 @@ public abstract class AbstractPreviewController extends AbstractController imple
     public void setParentStage(Stage parentStage) {
         this.parentStage = parentStage;
     }
+    
+    @Override
+    public void close() {
+        if (getParentStage() != null) {
+            getParentStage().close();
+        }
+    }
 }
