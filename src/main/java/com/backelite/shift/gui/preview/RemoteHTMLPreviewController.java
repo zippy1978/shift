@@ -30,11 +30,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.stream.EventFilter;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
@@ -88,7 +90,6 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
             
         } else {
             // Start server
-            started = true;
             startServer();
         }
         
@@ -109,16 +110,26 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
     public void setParentStage(Stage parentStage) {
         super.setParentStage(parentStage);
 
+        
         // Register stage close listener to stop server
-        this.getParentStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
+        /*this.getParentStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent t) {
-                started = false;
                 stopServer();
             }
+        });*/
+        
+        this.getParentStage().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
+
+            public void handle(WindowEvent t) {
+                stopServer();
+            }
+        
         });
     }
 
     private void startServer() {
+        
+        started = true;
 
         // Start Workspace HTTP server (if not done yet)
         HTTPWorkspaceProxyServer workspaceServer = ApplicationContext.getHTTPWorkspaceProxyServer();
@@ -172,6 +183,11 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController {
     }
 
     private void stopServer() {
+        
+        log.debug("Stopping remote HTTP preview server");
+        
+        started = false;
+        
         if (server != null) {
             try {
                 server.stop();
