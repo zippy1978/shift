@@ -86,6 +86,11 @@
     -fx-font-size: 100%;
 }
 
+.title-label {
+    -fx-font-size: 110%;
+    -fx-font-weight: bold;
+}
+
 /* Dialogs */
 
 .dialog-symbol {
@@ -96,10 +101,30 @@
 }
 
 .dialog-error-symbol {
-       -fx-font-size: 24pt;
+    -fx-font-size: 24pt;
     -fx-text-fill: white;
     -fx-background-color: -fx-error-color;
     -fx-background-radius: 50;
+}
+
+/* Tables */
+
+.table-view {
+    -fx-font-size: 100%;
+}
+
+.table-view .column-header-background, .table-view .column-header, .table-view .filler {
+    -fx-background-color: -fx-accent;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 100%;
+    -fx-text-fill: white;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-accent;
 }
 
 /* Main */

@@ -65,11 +65,13 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 12/12/13</d> Prevent launching more than one instance
 
-<t>✘</t> Display remote URL
+<d>✔ 12/13/13</d> Display remote URL
 
-<t>✘</t> Display list of connected Browser
+<t>✘WIP✘</t> Display list of connected Browser
 
-<t>✘</t> Mesure rendering time per browser
+<t>✘WIP✘</t> Mesure rendering time per browser
+
+<t>✘</t> Ping feature to know which browser it is.
 
 
 ### Dialogs

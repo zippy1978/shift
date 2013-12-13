@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import javafx.application.HostServices;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,8 @@ public class ApplicationContext {
     private static TaskManager TASK_MANAGER_INSTANCE;
     private static ThemeManager THEME_MANAGER_INSTANCE;
     private static Properties PROPERTIES_INSTANCE;
+    private static HostServices HOST_SERVICES;
+    
     /**
      * Holds the main stage.
      */
@@ -138,6 +141,7 @@ public class ApplicationContext {
         STATE_MANAGER_INSTANCE = null;
         PREFERENCES_MANAGER_INSTANCE = null;
         THEME_MANAGER_INSTANCE = null;
+        HOST_SERVICES = null;
 
         if (TASK_MANAGER_INSTANCE != null) {
             TASK_MANAGER_INSTANCE.shutdown();
@@ -165,6 +169,14 @@ public class ApplicationContext {
      */
     protected static void setMainStage(Stage aMainStage) {
         MAIN_STAGE = aMainStage;
+    }
+    
+    public static HostServices getHostServices() {
+        return HOST_SERVICES;
+    }
+    
+    protected static void setHostServices(HostServices hostServices) {
+        HOST_SERVICES = hostServices;
     }
 
     /**

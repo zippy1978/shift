@@ -10,6 +10,8 @@ Shift.remoteControl = {
             
     start: function() {
         
+        this._startMonitor();
+        
         caller = this;
 
         ws = new WebSocket("ws://" + REMOTE_ADDRESS + ":" + REMOTE_PORT + "/remote-control/");
@@ -46,6 +48,26 @@ Shift.remoteControl = {
         ws.onclose = function(event) {
             
         };
+    },
+            
+    _startMonitor: function() {
+
+        var startTime = new Date().getTime();
+
+        // TODO : should be better to compute rendering time with JS execution in it !
+        window.onload = function() {
+            
+            // Compute and send rendering time
+            endTime = new Date().getTime();
+            renderingTime = endTime - startTime;
+            
+            ws.send(JSON.stringify({
+              type: 'RENDERING_TIME',
+              value: renderingTime
+            }));
+            
+        };
+
     },
             
     _handleSessionInfo: function(sessionInfo) {

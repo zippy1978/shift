@@ -47,24 +47,26 @@ public class RemoteHTMLPreviewWebSocket {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String MESSAGE_TYPE_BROWSER_INFO = "BROWSER_INFO";
     private static final String MESSAGE_TYPE_SESSION_INFO = "SESSION_INFO";
+    private static final String MESSAGE_TYPE_RENDERING_TIME = "RENDERING_TIME";
     private static final String MESSAGE_TYPE_COMMAND = "COMMAND";
     private static final String COMMAND_ACTION = "REFRESH";
     protected Session session;
     protected BrowserInfo browserInfo;
-    
+    protected MonitoringInfo monitoringInfo = new MonitoringInfo();
     /**
      * Static listener.
      */
     private static RemoteHTMLPreviewWebSocketListener listener;
-    
+
     public interface RemoteHTMLPreviewWebSocketListener {
-        
+
         public void onConnectionAdded(RemoteHTMLPreviewWebSocket connection);
+
         public void onConnectionRemoved(RemoteHTMLPreviewWebSocket connection);
+     
+        public void onConnectionDataUpdated(RemoteHTMLPreviewWebSocket connection);
     }
 
-    
-    
     @OnWebSocketMessage
     public void onMessage(Session session, String message) {
 
@@ -88,14 +90,27 @@ public class RemoteHTMLPreviewWebSocket {
                         String jsonMessage = OBJECT_MAPPER.writeValueAsString(sessionInfo);
                         session.getRemote().sendStringByFuture(jsonMessage);
                     }
-                    
+
                     log.debug(String.format("New browser connected %s", browserInfo.getUserAgent()));
 
-                }
+                // Rendering time
+                } else if (MESSAGE_TYPE_RENDERING_TIME.equals(messageType)) {
 
-            } else {
-                log.error("Unrecognized message received");
+                    Map<String, Object> messageMap = OBJECT_MAPPER.readValue(message, Map.class);
+
+                    this.monitoringInfo.setRenderingTime((Integer) messageMap.get("value"));
+
+                } else {
+                    log.error("Unrecognized message received");
+                }
+                
+                // Notify
+                if (listener != null) {
+                    listener.onConnectionDataUpdated(this);
+                }
+                
             }
+            
 
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
@@ -106,10 +121,10 @@ public class RemoteHTMLPreviewWebSocket {
 
     @OnWebSocketConnect
     public void onConnect(Session session) {
-        
+
         this.session = session;
         BROADCAST.add(this);
-        
+
         // Notify
         if (listener != null) {
             listener.onConnectionAdded(this);
@@ -118,9 +133,9 @@ public class RemoteHTMLPreviewWebSocket {
 
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
-        
+
         BROADCAST.remove(this);
-        
+
         // Notify
         if (listener != null) {
             listener.onConnectionRemoved(this);
@@ -157,10 +172,34 @@ public class RemoteHTMLPreviewWebSocket {
             for (RemoteHTMLPreviewWebSocket sock : BROADCAST) {
                 sock.session.getRemote().sendStringByFuture(jsonMessage);
             }
-            
+
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }
+    }
+
+    public static void setListener(RemoteHTMLPreviewWebSocketListener uniqueListener) {
+        listener = uniqueListener;
+    }
+
+    public static List<RemoteHTMLPreviewWebSocket> getConnections() {
+        return new ArrayList<RemoteHTMLPreviewWebSocket>(BROADCAST);
+    }
+
+    public String getUserAgent() {
+        if (this.browserInfo != null) {
+            return this.browserInfo.getUserAgent();
+        } else {
+            return "";
+        }
+    }
+
+    public String getRemoteAddress() {
+        return this.session.getRemoteAddress().getHostString();
+    }
+
+    public int getRenderingTime() {
+        return this.monitoringInfo.getRenderingTime();
     }
 
     /**
@@ -253,6 +292,31 @@ public class RemoteHTMLPreviewWebSocket {
     }
 
     /**
+     * Holds monitoring information.
+     */
+    public static class MonitoringInfo {
+
+        /**
+         * Page rendering time in ms.
+         */
+        private int renderingTime;
+
+        /**
+         * @return the renderingTime
+         */
+        public int getRenderingTime() {
+            return renderingTime;
+        }
+
+        /**
+         * @param renderingTime the renderingTime to set
+         */
+        public void setRenderingTime(int renderingTime) {
+            this.renderingTime = renderingTime;
+        }
+    }
+
+    /**
      * Command object. Used to send remote command to browser.
      */
     public static class Command {
@@ -302,13 +366,5 @@ public class RemoteHTMLPreviewWebSocket {
         public void setType(String type) {
             this.type = type;
         }
-    }
-    
-    public static void setListener(RemoteHTMLPreviewWebSocketListener uniqueListener) {
-        listener = uniqueListener;
-    }
-    
-    public static List<RemoteHTMLPreviewWebSocket> getConnections() {
-        return new ArrayList<RemoteHTMLPreviewWebSocket>(BROADCAST);
     }
 }

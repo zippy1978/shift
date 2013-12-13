@@ -109,6 +109,7 @@ public class MainApp extends Application {
         this.registerCloseRequestHandler(stage);
 
         ApplicationContext.setMainStage(stage);
+        ApplicationContext.setHostServices(this.getHostServices());
     }
 
     @Override
@@ -163,7 +164,6 @@ public class MainApp extends Application {
      * Initialize preferences.
      */
     private void initializePreferences() {
-
         try {
             PreferencesManager preferencesManager = ApplicationContext.getPreferencesManager();
             Map<String, String> shortcuts = new HashMap<String, String>();

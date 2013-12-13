@@ -9,15 +9,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
 
-<AnchorPane prefHeight="415.0" prefWidth="423.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.preview.RemoteHTMLPreviewController">
+<AnchorPane prefHeight="329.0" prefWidth="526.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.preview.RemoteHTMLPreviewController">
   <children>
     <Label id="inscrutionsLabel" fx:id="instructionsLabel" prefHeight="41.0" prefWidth="395.0" text="%builtin.plugin.preview.remote_html.instructions.text" wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
     <Hyperlink fx:id="urlLink" alignment="CENTER" prefWidth="395.0" text="Hyperlink" underline="true" wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="55.0" />
-    <TableView fx:id="connectionTable" prefHeight="311.0" prefWidth="395.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="16.0">
-      <columns>
-        <TableColumn prefWidth="75.0" text="Column X" />
-        <TableColumn prefWidth="75.0" text="Column X" />
-      </columns>
-    </TableView>
+    <TableView fx:id="connectionTable" prefHeight="140.0" prefWidth="506.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="122.0" />
+    <Label layoutY="91.0" prefHeight="31.0" prefWidth="395.0" styleClass="title-label" text="%builtin.plugin.preview.remote_html.active_connections" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="16.0" />
   </children>
 </AnchorPane>

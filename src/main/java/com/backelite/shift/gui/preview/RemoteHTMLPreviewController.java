@@ -27,21 +27,24 @@ import com.backelite.shift.util.NetworkUtils;
 import com.backelite.shift.workspace.HTTPWorkspaceProxyServer;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.stream.EventFilter;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
@@ -76,6 +79,8 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
     @FXML
     private TableView connectionTable;
     
+    private ObservableList<RemoteHTMLPreviewWebSocket> tableModel = FXCollections.observableArrayList();
+    
     /**
      * Indicate if remote preview is already running.
      * Only one remote preview is allowed at the time.
@@ -107,6 +112,16 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
             // Start server
             startServer();
             
+            // URL click
+            urlLink.setOnAction(new EventHandler<ActionEvent>() {
+
+                public void handle(ActionEvent t) {
+                    ApplicationContext.getHostServices().showDocument(urlLink.getText());
+                }
+            });
+            
+            // Table view setup
+            this.connectionTableSetup();
         }
         
 
@@ -119,6 +134,32 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
                 parentStage.setTitle(getResourceBundle().getString("builtin.plugin.preview.remote_html.title"));
             }
         });
+    }
+    
+    
+    private void connectionTableSetup() {
+        
+        // Remote address
+        TableColumn remoteAddressCol = new TableColumn(getResourceBundle().getString("builtin.plugin.preview.remote_html.remote_address"));
+        remoteAddressCol.setMinWidth(100);
+        remoteAddressCol.setCellValueFactory(new PropertyValueFactory<RemoteHTMLPreviewWebSocket, String>("remoteAddress"));
+        connectionTable.getColumns().add(remoteAddressCol);
+        
+        // User agent
+        TableColumn userAgentCol = new TableColumn(getResourceBundle().getString("builtin.plugin.preview.remote_html.user_agent"));
+        userAgentCol.setMinWidth(200);
+        userAgentCol.setCellValueFactory(new PropertyValueFactory<RemoteHTMLPreviewWebSocket, String>("userAgent"));
+        connectionTable.getColumns().add(userAgentCol);
+        
+        // Rendering time
+        TableColumn renderingTimeCol = new TableColumn(getResourceBundle().getString("builtin.plugin.preview.remote_html.rendering_time"));
+        renderingTimeCol.setMinWidth(200);
+        renderingTimeCol.setCellValueFactory(new PropertyValueFactory<RemoteHTMLPreviewWebSocket, Integer>("renderingTime"));
+        connectionTable.getColumns().add(renderingTimeCol);
+        
+        connectionTable.setPlaceholder(new Label(getResourceBundle().getString("builtin.plugin.preview.remote_html.no_connection")));
+        
+        connectionTable.setItems(tableModel);
     }
     
 
@@ -215,7 +256,7 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
     @Override
     protected void refresh() {
         
-        String url = String.format("http://%s:%d%s%s", NetworkUtils.getHostIPAddress(), port, WORKSPACE_CONTEXT, document.getWorkspacePath());
+        String url = String.format("http://%s:%d", NetworkUtils.getHostIPAddress(), port);
         RemoteHTMLPreviewWebSocket.broadcastRefresh(url);
         
         urlLink.setText(url);
@@ -304,12 +345,30 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
     }
 
     public void onConnectionAdded(RemoteHTMLPreviewWebSocket connection) {
-        System.out.println(">>>>>>>>>>> new connection");
+        
+        tableModel.add(connection);
     }
 
     public void onConnectionRemoved(RemoteHTMLPreviewWebSocket connection) {
-        System.out.println(">>>>>>>>>>>> removed connection");
+        
+        tableModel.remove(connection);
     }
+
+    public void onConnectionDataUpdated(RemoteHTMLPreviewWebSocket connection) {
+        
+        ObservableList<RemoteHTMLPreviewWebSocket> newModel = FXCollections.observableArrayList(tableModel);
+        
+        // Refresh table
+        // This refresh is ugly (flickering, but it seems there is no better support for that at the moment)
+        tableModel.removeAll(tableModel);
+        tableModel.addAll(newModel);        
+        
+        
+        
+    }
+
+    
+    
     
     
 }
