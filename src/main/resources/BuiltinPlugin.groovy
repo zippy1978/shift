@@ -25,6 +25,9 @@ import com.backelite.shift.gui.editor.CodeEditorController
 import com.backelite.shift.gui.preview.HTMLPreviewController
 import com.backelite.shift.preferences.PreferencesManager
 import com.backelite.shift.workspace.artifact.FileSystemProject
+import com.backelite.shift.workspace.artifact.Project
+import com.backelite.shift.workspace.artifact.Document
+import com.backelite.shift.workspace.artifact.Folder
 
 plugin {
     uid = "com.backelite.shift.plugin.builtin"
@@ -205,23 +208,34 @@ plugin {
             }
             projectGenerator{
                 code = {name, attributes ->   
-                    // Project folder
-                    File projectFolder = new File(attributes.location, name)
-                    projectFolder.mkdirs();
+                    
+                    // Project
+                    Project project = ApplicationContext.getWorkspace().createProject(attributes.location, name)
+                    
                     
                     // index.html
-                    File indexHtml = new File(projectFolder, "index.html")
-                    indexHtml << "<html>"
-                    indexHtml << "  <head>"
-                    indexHtml << "      <title>$name</title>"
-                    indexHtml << "  </head>"
-                    indexHtml << "  <body>"
-                    indexHtml << "      <p>Hello World !</p>"
-                    indexHtml << "  </body>"
-                    indexHtml << "</html>"
-
-                    // Return project
-                    return new FileSystemProject(projectFolder)
+                    Document indexDocument = project.createDocument("index.html")
+                    indexDocument.setContentAsString("""\
+<html>
+    <head>
+        <title>$name</title>
+    </head>
+    <body>
+        <p>Hello World !</p>
+    </body>
+</html>
+""")
+                    indexDocument.save()
+                    
+                    // css folder
+                    Folder cssFolder = project.createSubFolder("css")
+                    cssFolder.save()
+                    
+                    // img folder
+                    Folder imgFolder = project.createSubFolder("img")
+                    imgFolder.save()
+                    
+                    return project
                 }
             }
         }

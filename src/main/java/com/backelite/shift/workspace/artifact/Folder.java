@@ -52,16 +52,18 @@ public interface Folder extends Artifact {
     /**
      * Create a new document into the folder.
      * @param name Name of the document.
+     * @return Created document
      * @throws IOException 
      */
-    public void createDocument(String name) throws IOException;
+    public Document createDocument(String name) throws IOException;
     
     /**
      * Create a new subfolder folder into the folder.
      * @param name Name of the folder.
+     * @return Created folder
      * @throws IOException 
      */
-    public void createSubFolder(String name) throws IOException;
+    public Folder createSubFolder(String name) throws IOException;
     
     /**
      * Get Project to which the folder belongs.

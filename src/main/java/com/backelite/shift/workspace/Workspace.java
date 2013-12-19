@@ -45,6 +45,8 @@ public interface Workspace extends PersistableState {
     
     public void openProject(Project project) throws IOException;
     
+    public Project createProject(String location, String name) throws IOException;
+    
     public void closeProject(Project project) throws IOException;
     
     public boolean isProjectOpened(String path);

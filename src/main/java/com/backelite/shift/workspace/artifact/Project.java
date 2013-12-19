@@ -4,8 +4,6 @@
  */
 package com.backelite.shift.workspace.artifact;
 
-import com.backelite.shift.workspace.artifact.Folder;
-
 /*
  * #%L
  * Project.java - shift - Gilles Grousset - 2013

@@ -121,6 +121,9 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
         
         super.load();
         
+        subFolders.clear();
+        documents.clear();
+        
         // Test if file exists
         if (!file.exists()) {
             throw new IOException(String.format("Directory %s not found", file.getAbsolutePath()));
@@ -198,7 +201,7 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
         return project;
     }
     
-    public void createDocument(String name) throws IOException {
+    public Document createDocument(String name) throws IOException {
         Document newDocument = new FileSystemDocument(this, new File(file, name));
         this.getDocuments().add(newDocument);
         newDocument.addObserver(this);
@@ -206,15 +209,19 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
         newDocument.setContentAsString("");
         newDocument.save();
         newDocument.load();
+        
+        return newDocument;
  
     }
 
-    public void createSubFolder(String name) throws IOException {
+    public Folder createSubFolder(String name) throws IOException {
         Folder newFolder = new FileSystemFolder(this, new File(file, name));
         this.getSubFolders().add(newFolder);
         newFolder.addObserver(this);
         newFolder.save();
         newFolder.load();
+        
+        return newFolder;
     }
     
     

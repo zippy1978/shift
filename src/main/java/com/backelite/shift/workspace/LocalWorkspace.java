@@ -98,6 +98,23 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Create a new project. The new project is not automatically added to the workspace.
+     * @param location Project location. At the moment only file system path is supported.
+     * @param name Name of the project
+     * @return The new project.
+     * @throws IOException 
+     */
+    public Project createProject(String location, String name) throws IOException {
+        
+        Project newProject = new FileSystemProject(new File(location, name));
+        newProject.save();
+        
+        return newProject;
+    }
+    
+    
+
     public void openProject(Project project) throws IOException {
 
         if (!this.isProjectOpened(project.getPath())) {
