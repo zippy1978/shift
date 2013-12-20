@@ -102,7 +102,10 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <t>✘</t> About window  
 
+<t>✘</t> Welcome window display on application update as well
+
 <d>✔ 09/12/13</d> Icon
+
 
 ## Release 0.2
 

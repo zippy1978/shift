@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.backelite.shift.gui.control.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+
+<AnchorPane minWidth="624.0" prefHeight="445.0" prefWidth="732.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.WelcomeController">
+  <children>
+    <WebView fx:id="webView" prefHeight="404.0" prefWidth="732.0" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+    <AnchorPane minHeight="22.0" prefHeight="41.0" prefWidth="800.0" styleClass="bottom-tool-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <children>
+        <Button fx:id="closeButton" alignment="CENTER" contentDisplay="CENTER" defaultButton="true" layoutY="10.0" mnemonicParsing="false" prefWidth="67.0" text="%close" textAlignment="CENTER" AnchorPane.rightAnchor="14.0" />
+      </children>
+    </AnchorPane>
+  </children>
+</AnchorPane>

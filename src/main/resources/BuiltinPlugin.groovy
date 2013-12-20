@@ -216,6 +216,7 @@ plugin {
                     // index.html
                     Document indexDocument = project.createDocument("index.html")
                     indexDocument.setContentAsString("""\
+<!DOCTYPE html>
 <html>
     <head>
       <meta charset="utf-8">

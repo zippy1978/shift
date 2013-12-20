@@ -49,7 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
+import java.util.logging.Level;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -66,6 +66,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -186,6 +187,23 @@ public class MainController extends AbstractController {
             AnchorPane.setTopAnchor(splitPane, 0.0);
         }
 
+        // Open welcome dialog if first start or upgraded version
+        if (ApplicationContext.isFirstLaunch()) {
+            this.openWelcomeWindow();
+        }
+    }
+    
+    private void openWelcomeWindow() {
+        
+        FXMLLoader loader = FXMLLoaderFactory.newInstance();
+        try {
+            Stage stage = this.newWindow(getResourceBundle().getString("welcome.title"), (Parent)loader.load(getClass().getResourceAsStream("/fxml/welcome.fxml")), StageStyle.DECORATED);
+            DialogController controller = (DialogController)loader.getController();
+            controller.setParentStage(stage);
+            stage.showAndWait();
+        } catch (IOException ex) {
+            this.displayErrorDialog(ex);
+        }
     }
 
     /**
