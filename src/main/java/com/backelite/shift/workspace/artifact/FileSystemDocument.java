@@ -24,6 +24,9 @@ package com.backelite.shift.workspace.artifact;
 import com.backelite.shift.util.FileUtils;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -130,26 +133,9 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
         return project;
     }
 
-    public String getContentAsString() {
-        if (opened) {
-            try {
-                return new String(content, ENCODING);
-            } catch (Exception ex) {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    public byte[] getContent() {
-        return this.content;
-    }
-
-    public synchronized void setContentAsString(String newContent) {
-
+    public void setContent(byte[] newContentBytes) {
+        
         try {
-            byte[] newContentBytes = newContent.getBytes(ENCODING);
 
             // Track content modification : first with length, then with string comparaison
             if (content != null) {
@@ -173,6 +159,32 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
             }
 
         } catch (Exception ex) {
+            // Nothing
+        }
+        
+    }
+
+    public String getContentAsString() {
+        if (opened) {
+            try {
+                return new String(content, ENCODING);
+            } catch (Exception ex) {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public byte[] getContent() {
+        return this.content;
+    }
+
+    public synchronized void setContentAsString(String newContent) {
+        try {
+            this.setContent(newContent.getBytes(ENCODING));
+        } catch (UnsupportedEncodingException ex) {
+            // Nothing
         }
     }
 

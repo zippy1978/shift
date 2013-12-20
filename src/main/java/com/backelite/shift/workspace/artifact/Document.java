@@ -46,6 +46,7 @@ public interface Document extends Artifact {
     public void setContentAsString(String newContent);
     
     public byte[] getContent();
+    public void setContent(byte[] content);
     
     public void open() throws IOException;
     public void close();

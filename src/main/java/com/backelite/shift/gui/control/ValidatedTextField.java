@@ -66,7 +66,7 @@ public class ValidatedTextField extends TextField {
         });
 
     }
-
+    
     private void updateValid() {
         
         if (validator != null) {

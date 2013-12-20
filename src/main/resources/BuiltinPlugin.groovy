@@ -218,10 +218,26 @@ plugin {
                     indexDocument.setContentAsString("""\
 <html>
     <head>
-        <title>$name</title>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>$name</title>
+      <meta name="description" content="">
+      <meta name="viewport" content="width=device-width">
+      <link rel="stylesheet" href="css/main.css">
     </head>
     <body>
-        <p>Hello World !</p>
+      <h1>index.html</h1>
+      <p>
+        <img class="logo" src="img/logo.png"/>
+      </p>
+      <p>
+        This is the index page of project <b>$name</b>. 
+        A simple page to help you get started with your new project.
+      </p>
+      <p>
+        For a more advanced project template consider using the Initializr Wizard.
+      </p>
+      <p class="bottom-line">Have fun !</p>
     </body>
 </html>
 """)
@@ -231,9 +247,46 @@ plugin {
                     Folder cssFolder = project.createSubFolder("css")
                     cssFolder.save()
                     
+                    // css/main.css
+                    Document mainCSSDocument = cssFolder.createDocument("main.css")
+                    mainCSSDocument.setContentAsString("""\
+html {
+  font-family: 'Helvetica';
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+h1 {
+  font-size: 150%;
+  text-align: center;
+}
+
+p {
+    text-align: center;
+}
+
+.logo {
+    width: 128px;
+    height: 128px;
+}
+
+.bottom-line {
+    font-weight: bold;
+}
+""")
+                    mainCSSDocument.save()
+                    
                     // img folder
                     Folder imgFolder = project.createSubFolder("img")
                     imgFolder.save()
+                    
+                    // img/logo.png
+                    Document logoImage = imgFolder.createDocument('logo.png')
+                    ByteArrayOutputStream os = new ByteArrayOutputStream()
+                    os << ApplicationContext.class.getResourceAsStream('/images/icon_512x512.png')
+                    logoImage.setContent(os.toByteArray())
+                    logoImage.save()
                     
                     return project
                 }

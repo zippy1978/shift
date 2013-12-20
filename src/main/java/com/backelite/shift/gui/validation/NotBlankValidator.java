@@ -30,7 +30,7 @@ package com.backelite.shift.gui.validation;
 public class NotBlankValidator implements Validator{
 
     public ValidatorResult validate(Object input) {
-        
+                
         ValidatorResult result = new ValidatorResult();
         
         if (input != null && input instanceof String) {

@@ -45,7 +45,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 #### Wizards
 
-<t>✘</t> Finish HTML5 project wizard  
+<d>✔ 12/20/13</d> Finish HTML5 project wizard  
 
 <t>✘</t> Add an [Initializr](http://www.initializr.com/) project wizard
 

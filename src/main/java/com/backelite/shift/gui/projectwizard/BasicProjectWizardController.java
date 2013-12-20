@@ -22,6 +22,10 @@ package com.backelite.shift.gui.projectwizard;
  * #L%
  */
 import com.backelite.shift.ApplicationContext;
+import com.backelite.shift.gui.control.ValidatedTextField;
+import com.backelite.shift.gui.validation.CompoundValidator;
+import com.backelite.shift.gui.validation.FilenameValidator;
+import com.backelite.shift.gui.validation.NotBlankValidator;
 import com.backelite.shift.workspace.artifact.Project;
 import java.io.File;
 import java.io.IOException;
@@ -29,11 +33,14 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.stage.DirectoryChooser;
 
 /**
@@ -43,19 +50,62 @@ import javafx.stage.DirectoryChooser;
 public class BasicProjectWizardController extends AbstractProjectWizardController {
 
     @FXML
-    private TextField nameTextField;
+    protected ValidatedTextField nameTextField;
     @FXML
-    private TextField locationTextField;
+    protected ValidatedTextField locationTextField;
     @FXML
-    private Button browseButton;
+    protected Button browseButton;
     @FXML
-    private Button okButton;
+    protected Button okButton;
     @FXML
-    private Button cancelButton;
+    protected Button cancelButton;
+    @FXML
+    protected Label nameErrorLabel;
+    @FXML
+    protected Label locationErrorLabel;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
+        
+        // Set validators on text field
+        nameTextField.setValidator(new CompoundValidator(new NotBlankValidator(), new FilenameValidator()));
+        locationTextField.setValidator(new NotBlankValidator());
+        
+        // Listen to input validity
+        okButton.setDisable(!nameTextField.isValid() || !locationTextField.isValid());
+        
+        nameErrorLabel.setVisible(false);
+        nameTextField.validProperty().addListener(new ChangeListener<Boolean>() {
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
+
+                okButton.setDisable(!nameTextField.isValid() || !locationTextField.isValid());
+                
+                if (nameTextField.isValid()) {
+                    nameErrorLabel.setVisible(false);
+                } else {
+                    nameErrorLabel.setVisible(true);
+                    nameErrorLabel.setText(getResourceBundle().getString(nameTextField.getLastValidatorResult().getErrorMessages().get(0)));
+                }
+
+            }
+        });
+        
+        locationErrorLabel.setVisible(false);
+        locationTextField.validProperty().addListener(new ChangeListener<Boolean>() {
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
+
+                okButton.setDisable(!nameTextField.isValid() || !locationTextField.isValid());
+                
+                if (locationTextField.isValid()) {
+                    locationErrorLabel.setVisible(false);
+                } else {
+                    locationErrorLabel.setVisible(true);
+                    locationErrorLabel.setText(getResourceBundle().getString(locationTextField.getLastValidatorResult().getErrorMessages().get(0)));
+                }
+
+            }
+        });
 
         // Browse button click
         browseButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -78,9 +128,9 @@ public class BasicProjectWizardController extends AbstractProjectWizardControlle
                 handleOKButtonAction();
             }
         });
-
+       
     }
-
+    
     private void handleCancelButtonAction() {
         this.close();
     }
@@ -97,9 +147,7 @@ public class BasicProjectWizardController extends AbstractProjectWizardControlle
     }
 
     private void handleOKButtonAction() {
-
-        // TODO : validate fields
-
+        
         // Create project and import into workspace
         Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("location", locationTextField.getText());
