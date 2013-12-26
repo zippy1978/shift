@@ -31,6 +31,7 @@ Shift.remoteControl = {
             
             // Send browser info
             ws.send(JSON.stringify(browserInfo));
+            
         };
         ws.onmessage = function(event) {
             
@@ -54,17 +55,20 @@ Shift.remoteControl = {
 
         var startTime = new Date().getTime();
 
-        // TODO : should be better to compute rendering time with JS execution in it !
         window.onload = function() {
             
             // Compute and send rendering time
             endTime = new Date().getTime();
             renderingTime = endTime - startTime;
             
-            ws.send(JSON.stringify({
-              type: 'RENDERING_TIME',
-              value: renderingTime
-            }));
+            // Result is sent after a delay to prevent 
+            // sending data while socket is not opened yet
+            setTimeout(function() {
+                ws.send(JSON.stringify({
+                  type: 'RENDERING_TIME',
+                  value: renderingTime
+                }));
+            }, 300);
             
         };
 
