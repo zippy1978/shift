@@ -3,8 +3,6 @@
 
 <t>✘</t> To do
 
-<c>R</c> Reported to next release
-
 <d>✔</d> Completed
 
 ## Release 0.1
@@ -59,9 +57,9 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 12/13/13</d> Display remote URL
 
-<t>✘WIP✘</t> Display list of connected Browser
+<t>✔ 12/26/13</t> Display list of connected Browser
 
-<t>✘WIP✘</t> Mesure rendering time per browser
+<d>✔ 12/26/13</d> Mesure rendering time per browser
 
 <t>✘</t> Ping feature to know which browser it is.
 

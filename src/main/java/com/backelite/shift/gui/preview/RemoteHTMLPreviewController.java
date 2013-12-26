@@ -346,11 +346,13 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
 
     public void onConnectionAdded(RemoteHTMLPreviewWebSocket connection) {
         
+        log.debug("Adding connection");
         tableModel.add(connection);
     }
 
     public void onConnectionRemoved(RemoteHTMLPreviewWebSocket connection) {
         
+        log.debug("Removing connection");
         tableModel.remove(connection);
     }
 
@@ -360,8 +362,10 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
         
         // Refresh table
         // This refresh is ugly (flickering, but it seems there is no better support for that at the moment)
-        tableModel.removeAll(tableModel);
-        tableModel.addAll(newModel);        
+        synchronized(tableModel) {
+            tableModel.removeAll(tableModel);
+            tableModel.addAll(newModel);        
+        }
         
         
         

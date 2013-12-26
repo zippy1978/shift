@@ -31,6 +31,7 @@
     -fx-accent: rgb(170, 196, 0);
     -fx-focus-color: rgb(170, 196, 0);
     -fx-error-color: red;
+    -fx-selection-bar: rgb(170, 196, 0);
 }
 
 /* Context menus */
@@ -126,6 +127,15 @@
 .table-view:focused .table-row-cell:filled:focused:selected {
     -fx-background-color: -fx-accent;
 }
+
+.table-view:row-selection .table-row-cell:filled:focused {
+    -fx-background-color: -fx-accent;
+}
+
+.table-view:row-selection .table-row-cell:filled:hover {
+    -fx-background-color: -fx-accent;
+}
+
 
 /* Main */
 
