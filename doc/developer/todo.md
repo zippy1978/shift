@@ -26,9 +26,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 09/04/13</d> 'Delete' on all items  
 
-<t>✘</t> 'Rename' on all items  
-
-<t>✘</t> Drag n drop to move file and folders (from within the same project)  
+<t>✘</t> 'Rename' on all items    
 
 <t>✘</t> 'Refresh' on all items
 
@@ -53,13 +51,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <t>✘</t> Device presets with name, dimensions, screen density  
 
-<t>✘</t> Add WebKit console  
-
 <t>✘</t> Track active document  
-
-<t>✘</t> Animated loader  
-
-<t>✘</t> Reset button (reload document and reset navigation)  
 
 #### Remote Preview
 
@@ -72,6 +64,8 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 <t>✘WIP✘</t> Mesure rendering time per browser
 
 <t>✘</t> Ping feature to know which browser it is.
+
+<t>✘</t> Track active document 
 
 
 ### Dialogs
@@ -102,14 +96,12 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <t>✘</t> About window  
 
-<t>✘</t> Welcome window display on application update as well
+<t>✘</t> Welcome window display must display version and build numbers + warning message when snapshot release.
 
 <d>✔ 09/12/13</d> Icon
 
 
-## Release 0.2
-
-Better code editing with advanced features and WOPE tight integration.
+## Backlog
 
 ### Preferences
 
@@ -137,9 +129,11 @@ Better code editing with advanced features and WOPE tight integration.
 
 <t>✘</t> External plugin packaging (mvn artifact ? gradle ?)
 
-## Backlog
+### Project Navigator
 
-### Preoprocessor
+<t>✘</t> Drag n drop to move file and folders (from within the same project)
+
+### Preprocessor
 
 <t>✘</t> Preprocessor mechanism: enhance / modify documents before they are served or built.
 
@@ -149,6 +143,16 @@ Better code editing with advanced features and WOPE tight integration.
 
 <t>✘</t> CSS preprocessor to support CSS preview (check rendition of elements with a given style - use CSS comment and Groovy DSL).
 
+### Remote Preview
+
+<t>✘</t> Screenshot feature
+
+<t>✘</t> Replace basic table with more visual widget (grid or slider with screenshots)
+
+### HTML Preview
+
+<t>✘</t> Add WebKit console  
+
 ### Tools
 
-<t>✘</t> Tool to maange .PSD slicing and multi density resizing.
+<t>✘</t> Tool to manage .PSD slicing and multi density resizing.

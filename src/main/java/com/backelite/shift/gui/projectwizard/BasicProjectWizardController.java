@@ -36,6 +36,7 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -149,15 +150,21 @@ public class BasicProjectWizardController extends AbstractProjectWizardControlle
     private void handleOKButtonAction() {
         
         // Create project and import into workspace
-        Map<String, Object> attributes = new HashMap<String, Object>();
+        final Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("location", locationTextField.getText());
-        Project project = this.getProjectGenerator().generate(nameTextField.getText(), attributes);
-        try {
-            ApplicationContext.getWorkspace().openProject(project);
-        } catch (IOException ex) {
-            this.displayErrorDialog(ex);
-        }
+        ApplicationContext.getTaskManager().addTask(new Task() {
 
+            @Override
+            protected Object call() throws Exception {
+                Project project = getProjectGenerator().generate(nameTextField.getText(), attributes);
+                ApplicationContext.getWorkspace().openProject(project);
+                
+                return true;
+            }
+            
+            
+        });
+        
         // Close Window
         this.close();
     }
