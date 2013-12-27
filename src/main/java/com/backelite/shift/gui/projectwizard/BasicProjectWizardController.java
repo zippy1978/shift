@@ -156,8 +156,11 @@ public class BasicProjectWizardController extends AbstractProjectWizardControlle
 
             @Override
             protected Object call() throws Exception {
+                
+                updateTitle(String.format(getResourceBundle().getString("task.generating_project"), nameTextField.getText()));
                 Project project = getProjectGenerator().generate(nameTextField.getText(), attributes);
                 ApplicationContext.getWorkspace().openProject(project);
+                updateProgress(1, 1);
                 
                 return true;
             }

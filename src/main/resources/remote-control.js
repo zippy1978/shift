@@ -96,6 +96,9 @@ Shift.remoteControl = {
             case 'REFRESH':
                 window.location.href = command.parameters.url;
                 break;
+            case 'PING' :
+                alert("Hello, is it me you're looking for ? ♬");
+                break;
         }
     },
             

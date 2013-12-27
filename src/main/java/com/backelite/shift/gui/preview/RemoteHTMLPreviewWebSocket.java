@@ -49,7 +49,8 @@ public class RemoteHTMLPreviewWebSocket {
     private static final String MESSAGE_TYPE_SESSION_INFO = "SESSION_INFO";
     private static final String MESSAGE_TYPE_RENDERING_TIME = "RENDERING_TIME";
     private static final String MESSAGE_TYPE_COMMAND = "COMMAND";
-    private static final String COMMAND_ACTION = "REFRESH";
+    private static final String COMMAND_REFRESH = "REFRESH";
+    private static final String COMMAND_PING = "PING";
     protected Session session;
     protected BrowserInfo browserInfo;
     protected MonitoringInfo monitoringInfo = new MonitoringInfo();
@@ -63,7 +64,7 @@ public class RemoteHTMLPreviewWebSocket {
         public void onConnectionAdded(RemoteHTMLPreviewWebSocket connection);
 
         public void onConnectionRemoved(RemoteHTMLPreviewWebSocket connection);
-     
+
         public void onConnectionDataUpdated(RemoteHTMLPreviewWebSocket connection);
     }
 
@@ -93,7 +94,7 @@ public class RemoteHTMLPreviewWebSocket {
 
                     log.debug(String.format("New browser connected %s", browserInfo.getUserAgent()));
 
-                // Rendering time
+                    // Rendering time
                 } else if (MESSAGE_TYPE_RENDERING_TIME.equals(messageType)) {
 
                     Map<String, Object> messageMap = OBJECT_MAPPER.readValue(message, Map.class);
@@ -103,14 +104,14 @@ public class RemoteHTMLPreviewWebSocket {
                 } else {
                     log.error("Unrecognized message received");
                 }
-                
+
                 // Notify
                 if (listener != null) {
                     listener.onConnectionDataUpdated(this);
                 }
-                
+
             }
-            
+
 
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
@@ -165,7 +166,7 @@ public class RemoteHTMLPreviewWebSocket {
 
         try {
             Command command = new Command();
-            command.setName(COMMAND_ACTION);
+            command.setName(COMMAND_REFRESH);
             command.getParameters().put("url", url);
             String jsonMessage = OBJECT_MAPPER.writeValueAsString(command);
 
@@ -184,6 +185,23 @@ public class RemoteHTMLPreviewWebSocket {
 
     public static List<RemoteHTMLPreviewWebSocket> getConnections() {
         return new ArrayList<RemoteHTMLPreviewWebSocket>(BROADCAST);
+    }
+
+    /**
+     * Request ping to remote browser.
+     */
+    public void ping() {
+
+        try {
+            Command command = new Command();
+            command.setName(COMMAND_PING);
+            String jsonMessage = OBJECT_MAPPER.writeValueAsString(command);
+
+            this.session.getRemote().sendStringByFuture(jsonMessage);
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
+
     }
 
     public String getUserAgent() {

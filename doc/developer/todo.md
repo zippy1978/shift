@@ -57,11 +57,11 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 12/13/13</d> Display remote URL
 
-<t>✔ 12/26/13</t> Display list of connected Browser
+<d>✔ 12/26/13</d> Display list of connected Browser
 
 <d>✔ 12/26/13</d> Mesure rendering time per browser
 
-<t>✘</t> Ping feature to know which browser it is.
+<d>✔ 12/27/13</d> Ping feature to know which browser it is.
 
 <t>✘</t> Track active document 
 

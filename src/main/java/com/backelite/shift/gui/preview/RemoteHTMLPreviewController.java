@@ -27,21 +27,25 @@ import com.backelite.shift.util.NetworkUtils;
 import com.backelite.shift.workspace.HTTPWorkspaceProxyServer;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Callback;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -121,7 +125,7 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
             });
             
             // Table view setup
-            this.connectionTableSetup();
+            this.setupConnectionTable();
         }
         
 
@@ -137,29 +141,55 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
     }
     
     
-    private void connectionTableSetup() {
+    private void setupConnectionTable() {
+        
+        // Cell factory
+        Callback<TableColumn, TableCell> cellFactory =
+                new Callback<TableColumn, TableCell>() {
+            @Override
+            public TableCell call(TableColumn p) {
+                TextFieldTableCell cell = new TextFieldTableCell();
+                cell.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+                    public void handle(MouseEvent t) {
+                        TableCell c = (TableCell) t.getSource();
+                        int index = c.getIndex();
+                        
+                        // Send ping request on double click
+                        if (t.getClickCount() == 2) {
+                            tableModel.get(index).ping();
+                        }
+                    }
+                });
+                return cell;
+            }
+        };
         
         // Remote address
         TableColumn remoteAddressCol = new TableColumn(getResourceBundle().getString("builtin.plugin.preview.remote_html.remote_address"));
         remoteAddressCol.setMinWidth(100);
         remoteAddressCol.setCellValueFactory(new PropertyValueFactory<RemoteHTMLPreviewWebSocket, String>("remoteAddress"));
+        remoteAddressCol.setCellFactory(cellFactory);
         connectionTable.getColumns().add(remoteAddressCol);
         
         // User agent
         TableColumn userAgentCol = new TableColumn(getResourceBundle().getString("builtin.plugin.preview.remote_html.user_agent"));
         userAgentCol.setMinWidth(200);
         userAgentCol.setCellValueFactory(new PropertyValueFactory<RemoteHTMLPreviewWebSocket, String>("userAgent"));
+        userAgentCol.setCellFactory(cellFactory);
         connectionTable.getColumns().add(userAgentCol);
         
         // Rendering time
         TableColumn renderingTimeCol = new TableColumn(getResourceBundle().getString("builtin.plugin.preview.remote_html.rendering_time"));
         renderingTimeCol.setMinWidth(200);
         renderingTimeCol.setCellValueFactory(new PropertyValueFactory<RemoteHTMLPreviewWebSocket, Integer>("renderingTime"));
+        renderingTimeCol.setCellFactory(cellFactory);
         connectionTable.getColumns().add(renderingTimeCol);
         
         connectionTable.setPlaceholder(new Label(getResourceBundle().getString("builtin.plugin.preview.remote_html.no_connection")));
         
         connectionTable.setItems(tableModel);
+        
     }
     
 
