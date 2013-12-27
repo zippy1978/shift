@@ -15,7 +15,7 @@
     <AnchorPane minHeight="22.0" prefHeight="41.0" prefWidth="360.0" styleClass="bottom-tool-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
       <children>
         <Button fx:id="okButton" alignment="CENTER" contentDisplay="CENTER" defaultButton="true" layoutY="10.0" mnemonicParsing="false" prefWidth="73.0" text="%ok" textAlignment="CENTER" AnchorPane.rightAnchor="97.0" />
-        <Button fx:id="cancelButton" alignment="CENTER" cancelButton="true" contentDisplay="CENTER" layoutY="10.0" mnemonicParsing="false" text="%cancel" textAlignment="CENTER" AnchorPane.rightAnchor="14.0" />
+        <Button fx:id="cancelButton" alignment="CENTER" cancelButton="true" contentDisplay="CENTER" layoutY="10.0" mnemonicParsing="false" prefWidth="73.0" text="%cancel" textAlignment="CENTER" AnchorPane.rightAnchor="14.0" />
       </children>
     </AnchorPane>
     <ValidatedTextField fx:id="nameTextField" prefWidth="246.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="13.0" />

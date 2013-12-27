@@ -60,11 +60,18 @@
 
 /* Buttons */
 
-.button {
+.button, .toggle-button {
+    -fx-background-color: -fx-body-color;
+    -fx-border-color:  transparent;
     -fx-background-radius: 5;
     -fx-text-fill: white;
-    -fx-padding: 5;
+    -fx-padding: 3;
 }
+
+.toggle-button:selected {
+    -fx-background-color: -fx-accent;
+}
+
 
 /* Hyper links */
 .hyperlink {

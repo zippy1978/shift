@@ -50,6 +50,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -156,8 +158,8 @@ public class MainController extends AbstractController {
         });
 
         // Register active document change listener on editor pane
-        editorsPaneController.setOnActiveDocumentChanged(new EventHandler<EditorsPaneController.ActiveDocumentChangedEvent>() {
-            public void handle(EditorsPaneController.ActiveDocumentChangedEvent t) {
+        editorsPaneController.setOnActiveDocumentUpdated(new EventHandler<EditorsPaneController.ActiveDocumentUpdatedEvent>() {
+            public void handle(EditorsPaneController.ActiveDocumentUpdatedEvent t) {
 
                 // Refresh file menu
                 refreshFileMenu();
@@ -168,7 +170,7 @@ public class MainController extends AbstractController {
 
                 EditorController editorController = editorsPaneController.getActiveEditorController();
                 if (editorController != null) {
-                    // Set initial cursor positon on status bar
+                    // Set initial cursor position on status bar
                     statusBarController.setCursorPosition(editorController.getCursorPosition());
                     // Register handler to track cursor change (only if not already registered
                     if (editorController.getOnCursorChanged() == null) {
@@ -179,6 +181,7 @@ public class MainController extends AbstractController {
                         });
                     }
                 }
+
             }
         });
 
@@ -192,13 +195,13 @@ public class MainController extends AbstractController {
             this.openWelcomeWindow();
         }
     }
-    
+
     private void openWelcomeWindow() {
-        
+
         FXMLLoader loader = FXMLLoaderFactory.newInstance();
         try {
-            Stage stage = this.newWindow(getResourceBundle().getString("welcome.title"), (Parent)loader.load(getClass().getResourceAsStream("/fxml/welcome.fxml")), StageStyle.DECORATED);
-            DialogController controller = (DialogController)loader.getController();
+            Stage stage = this.newWindow(getResourceBundle().getString("welcome.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/welcome.fxml")), StageStyle.DECORATED);
+            DialogController controller = (DialogController) loader.getController();
             controller.setParentStage(stage);
             stage.showAndWait();
         } catch (IOException ex) {
@@ -590,10 +593,14 @@ public class MainController extends AbstractController {
                                 PreviewFactory selection = availableFactories.get(t.getPosition());
 
                                 try {
-                                    Stage stage = newUtilityWindow("", (Parent) ApplicationContext.getPluginRegistry().newPreview(selection, loader));
+                                    Stage stage = newDecoratedWindow("", (Parent) ApplicationContext.getPluginRegistry().newPreview(selection, loader));
                                     PreviewController previewController = (PreviewController) loader.getController();
                                     previewController.setDocument(activeDocument);
                                     previewController.setParentStage(stage);
+                                    ChangeListener<EditorController> changeListener = previewController.getActiveEditorChangeListener();
+                                    if (changeListener != null) {
+                                        editorsPaneController.activeEditorControllerProperty.addListener(changeListener);
+                                    }
 
                                     stage.show();
                                 } catch (Exception ex) {
@@ -605,10 +612,14 @@ public class MainController extends AbstractController {
 
                     // Only one preview available ...
                 } else {
-                    Stage stage = newUtilityWindow("", (Parent) ApplicationContext.getPluginRegistry().newPreview(editorsPaneController.getActiveDocument(), loader));
+                    Stage stage = newDecoratedWindow("", (Parent) ApplicationContext.getPluginRegistry().newPreview(editorsPaneController.getActiveDocument(), loader));
                     PreviewController previewController = (PreviewController) loader.getController();
                     previewController.setDocument(activeDocument);
                     previewController.setParentStage(stage);
+                    ChangeListener<EditorController> changeListener = previewController.getActiveEditorChangeListener();
+                    if (changeListener != null) {
+                        editorsPaneController.activeEditorControllerProperty.addListener(changeListener);
+                    }
 
                     stage.show();
                 }

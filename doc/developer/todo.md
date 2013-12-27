@@ -63,7 +63,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 12/27/13</d> Ping feature to know which browser it is.
 
-<t>✘</t> Track active document 
+<d>✔ 12/27/13</d> Track active document 
 
 
 ### Dialogs
@@ -97,6 +97,8 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 <t>✘</t> Welcome window display must display version and build numbers + warning message when snapshot release.
 
 <d>✔ 09/12/13</d> Icon
+
+<t>✘</t> Styling : button, toggles, selects...
 
 
 ## Backlog

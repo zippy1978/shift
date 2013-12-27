@@ -226,6 +226,18 @@ public abstract class AbstractController implements Initializable, PersistableSt
 
         return this.newWindow(title, rootNode, StageStyle.UTILITY);
     }
+    
+    /**
+     * Create new basic window.
+     *
+     * @param title Window title
+     * @param rootNode Window content
+     * @return Window created (Stage)
+     */
+    public Stage newDecoratedWindow(String title, Parent rootNode) {
+
+        return this.newWindow(title, rootNode, StageStyle.DECORATED);
+    }
 
     /**
      * Create new modal window

@@ -52,7 +52,7 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
 
         // Retrieve parent controller from user data
         this.projectNavigatorController = (ProjectNavigatorController) this.getUserData();
-
+        
         if (!empty) {
             setContentDisplay(ContentDisplay.LEFT);
             setText(artifact.getName());

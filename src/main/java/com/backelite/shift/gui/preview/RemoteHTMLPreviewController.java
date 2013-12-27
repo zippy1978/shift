@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -40,6 +42,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
@@ -82,6 +85,8 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
     
     @FXML
     private TableView connectionTable;
+    @FXML
+    private ToggleButton trackActiveFileToggleButton;
     
     private ObservableList<RemoteHTMLPreviewWebSocket> tableModel = FXCollections.observableArrayList();
     
@@ -126,6 +131,15 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
             
             // Table view setup
             this.setupConnectionTable();
+            
+            // Bind tracking button state
+            trackActiveFileToggleButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+                public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
+                    setActiveDocumentTrackingEnabled(t1);
+                }
+            });
+            trackActiveFileToggleButton.setSelected(true);
         }
         
 

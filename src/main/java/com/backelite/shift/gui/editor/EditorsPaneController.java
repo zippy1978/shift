@@ -38,6 +38,9 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -62,7 +65,13 @@ public class EditorsPaneController extends AbstractController implements Observe
 
     @FXML
     private TabPane tabPane;
-    private EventHandler<ActiveDocumentChangedEvent> onActiveDocumentChanged;
+    
+    /**
+     * EventHandler in charge of notifying active document change or active document updates.
+     * To track only active editor / document change consider using a listener on activeEditorControllerProperty instead.
+     */
+    private EventHandler<ActiveDocumentUpdatedEvent> onActiveDocumentUpdated;
+    public ReadOnlyObjectWrapper<EditorController> activeEditorControllerProperty = new ReadOnlyObjectWrapper<EditorController>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -75,9 +84,10 @@ public class EditorsPaneController extends AbstractController implements Observe
         tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
             @Override
             public void changed(ObservableValue<? extends Tab> tab, Tab oldTab, Tab newTab) {
-                if (onActiveDocumentChanged != null && newTab != null) {
+                if (onActiveDocumentUpdated != null && newTab != null) {
                     EditorController controller = (EditorController) newTab.getUserData();
-                    onActiveDocumentChanged.handle(new ActiveDocumentChangedEvent(EventType.ROOT, controller.getDocument()));
+                    activeEditorControllerProperty.set(controller);
+                    onActiveDocumentUpdated.handle(new ActiveDocumentUpdatedEvent(EventType.ROOT, controller.getDocument()));
                 }
             }
         });
@@ -134,8 +144,8 @@ public class EditorsPaneController extends AbstractController implements Observe
 
                                         // Notify document changed
                                         if (tabPane.getTabs().size() == 0) {
-                                            if (onActiveDocumentChanged != null) {
-                                                onActiveDocumentChanged.handle(new ActiveDocumentChangedEvent(EventType.ROOT, null));
+                                            if (onActiveDocumentUpdated != null) {
+                                                onActiveDocumentUpdated.handle(new ActiveDocumentUpdatedEvent(EventType.ROOT, null));
                                             }
                                         }
                                     }
@@ -148,8 +158,8 @@ public class EditorsPaneController extends AbstractController implements Observe
 
                             // Notify document changed
                             if (tabPane.getTabs().size() == 0) {
-                                if (onActiveDocumentChanged != null) {
-                                    onActiveDocumentChanged.handle(new ActiveDocumentChangedEvent(EventType.ROOT, null));
+                                if (onActiveDocumentUpdated != null) {
+                                    onActiveDocumentUpdated.handle(new ActiveDocumentUpdatedEvent(EventType.ROOT, null));
                                 }
                             }
                         }
@@ -201,12 +211,7 @@ public class EditorsPaneController extends AbstractController implements Observe
 
     public EditorController getActiveEditorController() {
 
-        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
-        if (selectedTab != null) {
-            return (EditorController) selectedTab.getUserData();
-        } else {
-            return null;
-        }
+        return activeEditorControllerProperty.get();
     }
 
     public void update(Observable observable, Object arg) {
@@ -249,8 +254,8 @@ public class EditorsPaneController extends AbstractController implements Observe
             tabPane.getTabs().removeAll(tabsToRemove);
 
             // Notify change on active document
-            if (onActiveDocumentChanged != null) {
-                onActiveDocumentChanged.handle(new ActiveDocumentChangedEvent(EventType.ROOT, (Document) observable));
+            if (onActiveDocumentUpdated != null) {
+                onActiveDocumentUpdated.handle(new ActiveDocumentUpdatedEvent(EventType.ROOT, (Document) observable));
             }
 
         // Workspace was updated
@@ -342,28 +347,28 @@ public class EditorsPaneController extends AbstractController implements Observe
     }
 
     /**
-     * @return the onActiveDocumentChanged
+     * @return the onActiveDocumentUpdated
      */
-    public EventHandler<ActiveDocumentChangedEvent> getOnActiveDocumentChanged() {
-        return onActiveDocumentChanged;
+    public EventHandler<ActiveDocumentUpdatedEvent> getOnActiveDocumentUpdated() {
+        return onActiveDocumentUpdated;
     }
 
     /**
-     * @param onActiveDocumentChanged the onActiveDocumentChanged to set
+     * @param onActiveDocumentUpdated the onActiveDocumentUpdated to set
      */
-    public void setOnActiveDocumentChanged(EventHandler<ActiveDocumentChangedEvent> onActiveDocumentChanged) {
-        this.onActiveDocumentChanged = onActiveDocumentChanged;
+    public void setOnActiveDocumentUpdated(EventHandler<ActiveDocumentUpdatedEvent> onActiveDocumentChanged) {
+        this.onActiveDocumentUpdated = onActiveDocumentChanged;
     }
 
-    public class ActiveDocumentChangedEvent extends Event {
+    public class ActiveDocumentUpdatedEvent extends Event {
 
         private Document document;
 
-        public ActiveDocumentChangedEvent(EventType<? extends Event> et) {
+        public ActiveDocumentUpdatedEvent(EventType<? extends Event> et) {
             super(et);
         }
 
-        public ActiveDocumentChangedEvent(EventType<? extends Event> et, Document document) {
+        public ActiveDocumentUpdatedEvent(EventType<? extends Event> et, Document document) {
             super(et);
             this.document = document;
         }

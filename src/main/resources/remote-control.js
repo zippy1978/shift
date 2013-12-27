@@ -94,10 +94,10 @@ Shift.remoteControl = {
         // Handle commands
         switch(command.name) {
             case 'REFRESH':
-                window.location.href = command.parameters.url;
+                window.location.replace(command.parameters.url);
                 break;
             case 'PING' :
-                alert("Hello, is it me you're looking for ? ♬");
+                alert("Hello, is it me you're looking for ?");
                 break;
         }
     },

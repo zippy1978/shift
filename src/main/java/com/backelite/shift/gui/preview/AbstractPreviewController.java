@@ -22,11 +22,14 @@ package com.backelite.shift.gui.preview;
  * #L%
  */
 import com.backelite.shift.gui.AbstractController;
+import com.backelite.shift.gui.editor.EditorController;
 import com.backelite.shift.workspace.artifact.Document;
 import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.stage.Stage;
 
 /**
@@ -38,10 +41,24 @@ public abstract class AbstractPreviewController extends AbstractController imple
 
     protected Document document;
     protected Stage parentStage;
+    protected ChangeListener<EditorController> editorChangeListener;
+    private boolean activeDocumentTrackingEnabled = true;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        super.initialize(url, rb); //To change body of generated methods, choose Tools | Templates.
+        super.initialize(url, rb);
+        
+        // Editor change listener
+        editorChangeListener = new ChangeListener<EditorController>() {
+
+            public void changed(ObservableValue<? extends EditorController> ov, EditorController t, EditorController t1) {
+                
+                // Set new document
+                if (activeDocumentTrackingEnabled) {
+                    setDocument(t1.getDocument());
+                }
+            }
+        };
     }
 
     /**
@@ -102,4 +119,24 @@ public abstract class AbstractPreviewController extends AbstractController imple
             getParentStage().close();
         }
     }
+
+    public ChangeListener<EditorController> getActiveEditorChangeListener() {
+        return editorChangeListener;
+    }
+
+    /**
+     * @return the activeDocumentTrackingEnabled
+     */
+    public boolean isActiveDocumentTrackingEnabled() {
+        return activeDocumentTrackingEnabled;
+    }
+
+    /**
+     * @param activeDocumentTrackingEnabled the activeDocumentTrackingEnabled to set
+     */
+    public void setActiveDocumentTrackingEnabled(boolean activeDocumentTrackingEnabled) {
+        this.activeDocumentTrackingEnabled = activeDocumentTrackingEnabled;
+    }
+    
+    
 }
