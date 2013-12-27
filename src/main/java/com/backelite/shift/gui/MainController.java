@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
@@ -497,7 +498,7 @@ public class MainController extends AbstractController {
 
         windowMenu.getItems().clear();
 
-        // Window >New preview
+        // Window > New preview
         newPreviewMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.window.new_preview"));
         newPreviewMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_NEW_PREVIEW));
         newPreviewMenuItem.setOnAction(new EventHandler<ActionEvent>() {
@@ -515,7 +516,16 @@ public class MainController extends AbstractController {
 
             // Add opened windows
             for (Stage stage : this.getChildrenWindows()) {
-                MenuItem item = new MenuItem(stage.getTitle());
+                final Stage currentStage = stage;
+                MenuItem item = new MenuItem(currentStage.getTitle());
+                // On click : bring window to front
+                item.setOnAction(new EventHandler<ActionEvent>() {
+
+                    public void handle(ActionEvent t) {
+                        currentStage.toFront();
+                        currentStage.requestFocus();
+                    }
+                });
                 windowMenu.getItems().add(item);
             }
 
@@ -537,7 +547,13 @@ public class MainController extends AbstractController {
         super.onChildWindowAdded(stage);
 
         // Update opened windows in Window menu
-        this.buildWindowMenu();
+        Platform.runLater(new Runnable() {
+
+            public void run() {
+                buildWindowMenu();
+            }
+        });
+        //this.buildWindowMenu();
     }
 
     private void handleSaveMenuAction() {
