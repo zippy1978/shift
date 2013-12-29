@@ -26,6 +26,7 @@ package com.backelite.shift.gui.preview;
  * #L%
  */
 import com.backelite.shift.gui.editor.EditorController;
+import com.backelite.shift.plugin.PreviewFactory;
 import com.backelite.shift.workspace.artifact.Document;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Tab;
@@ -47,12 +48,15 @@ public interface PreviewController {
 
     public void setParentStage(Stage parentStage);
     
+    public void setFactory(PreviewFactory factory);
+    
     /**
      * Return a change listener to track the active editor.
      * If the preview does not provide the ability to track the active editor, return null.
      * @param editorController 
      */
     public ChangeListener<EditorController> getActiveEditorChangeListener();
+    
     /**
      * Close the current window.
      */

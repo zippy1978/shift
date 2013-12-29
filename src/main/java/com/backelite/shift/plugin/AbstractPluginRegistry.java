@@ -105,8 +105,6 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
         
     }
     
-    
-    
     public Node newPreview(Document document, FXMLLoader loader) throws PluginException {
         
         // Look for matching preview factory
@@ -127,6 +125,10 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
         // Check if the controller implements PreviewController interface
         if (!(loader.getController() instanceof PreviewController)) {
             throw new ClassCastException(String.format("%s s not an instance of PreviewController", loader.getController().getClass().getName()));
+        } else {
+            // Set factory on preview controller
+            PreviewController previewController = (PreviewController)loader.getController();
+            previewController.setFactory(factory);
         }
 
         return node;

@@ -23,6 +23,8 @@ package com.backelite.shift.gui.preview;
  */
 import com.backelite.shift.gui.AbstractController;
 import com.backelite.shift.gui.editor.EditorController;
+import com.backelite.shift.plugin.PreviewFactory;
+import com.backelite.shift.util.FileUtils;
 import com.backelite.shift.workspace.artifact.Document;
 import java.net.URL;
 import java.util.Observable;
@@ -43,6 +45,11 @@ public abstract class AbstractPreviewController extends AbstractController imple
     protected Stage parentStage;
     protected ChangeListener<EditorController> editorChangeListener;
     private boolean activeDocumentTrackingEnabled = true;
+    
+    /**
+     * Factory that created the preview.
+     */
+    private PreviewFactory factory;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -54,11 +61,21 @@ public abstract class AbstractPreviewController extends AbstractController imple
             public void changed(ObservableValue<? extends EditorController> ov, EditorController t, EditorController t1) {
                 
                 // Set new document
-                if (activeDocumentTrackingEnabled) {
+                if (activeDocumentTrackingEnabled && isDocumentSupported(t1.getDocument())) {
                     setDocument(t1.getDocument());
                 }
             }
         };
+    }
+    
+    /**
+     * Check if a given document is supported by the current preview controller.
+     * @param document Document to test
+     * @return true if document is supported, false otherwise
+     */
+    protected boolean isDocumentSupported(Document document) {
+        String extension = FileUtils.getFileExtension(document.getName());
+        return factory.getSupportedExtensions().contains(extension.toLowerCase());
     }
 
     /**
@@ -137,6 +154,11 @@ public abstract class AbstractPreviewController extends AbstractController imple
     public void setActiveDocumentTrackingEnabled(boolean activeDocumentTrackingEnabled) {
         this.activeDocumentTrackingEnabled = activeDocumentTrackingEnabled;
     }
+
+    public void setFactory(PreviewFactory factory) {
+        this.factory = factory;
+    }
+    
     
     
 }

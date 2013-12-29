@@ -520,7 +520,6 @@ public class MainController extends AbstractController {
                 MenuItem item = new MenuItem(currentStage.getTitle());
                 // On click : bring window to front
                 item.setOnAction(new EventHandler<ActionEvent>() {
-
                     public void handle(ActionEvent t) {
                         currentStage.toFront();
                         currentStage.requestFocus();
@@ -548,7 +547,6 @@ public class MainController extends AbstractController {
 
         // Update opened windows in Window menu
         Platform.runLater(new Runnable() {
-
             public void run() {
                 buildWindowMenu();
             }
@@ -610,15 +608,7 @@ public class MainController extends AbstractController {
 
                                 try {
                                     Stage stage = newDecoratedWindow("", (Parent) ApplicationContext.getPluginRegistry().newPreview(selection, loader));
-                                    PreviewController previewController = (PreviewController) loader.getController();
-                                    previewController.setDocument(activeDocument);
-                                    previewController.setParentStage(stage);
-                                    ChangeListener<EditorController> changeListener = previewController.getActiveEditorChangeListener();
-                                    if (changeListener != null) {
-                                        editorsPaneController.activeEditorControllerProperty.addListener(changeListener);
-                                    }
-
-                                    stage.show();
+                                    setupAndShowPreviewWindow(stage, loader);
                                 } catch (Exception ex) {
                                     displayErrorDialog(ex);
                                 }
@@ -629,15 +619,7 @@ public class MainController extends AbstractController {
                     // Only one preview available ...
                 } else {
                     Stage stage = newDecoratedWindow("", (Parent) ApplicationContext.getPluginRegistry().newPreview(editorsPaneController.getActiveDocument(), loader));
-                    PreviewController previewController = (PreviewController) loader.getController();
-                    previewController.setDocument(activeDocument);
-                    previewController.setParentStage(stage);
-                    ChangeListener<EditorController> changeListener = previewController.getActiveEditorChangeListener();
-                    if (changeListener != null) {
-                        editorsPaneController.activeEditorControllerProperty.addListener(changeListener);
-                    }
-
-                    stage.show();
+                    setupAndShowPreviewWindow(stage, loader);
                 }
 
             }
@@ -647,6 +629,25 @@ public class MainController extends AbstractController {
         } catch (Exception ex) {
             this.displayErrorDialog(ex);
         }
+    }
+
+    /**
+     * Setup a newly created preview window
+     * @param parentStage Preview window
+     * @param loader Loader used for loading the preview window
+     */
+    private void setupAndShowPreviewWindow(Stage previewStage, FXMLLoader loader) {
+
+        Document activeDocument = editorsPaneController.getActiveDocument();
+        PreviewController previewController = (PreviewController) loader.getController();
+        previewController.setDocument(activeDocument);
+        previewController.setParentStage(previewStage);
+        ChangeListener<EditorController> changeListener = previewController.getActiveEditorChangeListener();
+        if (changeListener != null) {
+            editorsPaneController.activeEditorControllerProperty.addListener(changeListener);
+        }
+
+        previewStage.show();
     }
 
     private void handleUndoMenuAction() {
