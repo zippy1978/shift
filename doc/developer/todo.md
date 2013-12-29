@@ -49,7 +49,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <t>✘</t> Device presets with name, dimensions, screen density  
 
-<t>✘</t> Track active document  
+<d>✔ 12/29/13</d> Track active document  
 
 #### Remote Preview
 
@@ -107,6 +107,10 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <t>✘</t> Preferences window (with tree navigation)
 
+### Output pane
+
+<t>✘</t> Output pane at the bottom of the MainController to display : lint and other output in tabs (or something else...)
+
 ### Code editors
 
 <t>✘</t> Javascript completion  
@@ -114,6 +118,14 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 <t>✘</t> CSS completion  
 
 <t>✘</t> XHTML completion  with XSD
+
+<t>✘</t> Lint and marker support
+
+### Menu
+
+<t>✘</t> Search file by name
+
+<t>✘</t> Search file with content
 
 ### WOPE support
 
@@ -132,6 +144,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 ### Project Navigator
 
 <t>✘</t> Drag n drop to move file and folders (from within the same project)
+<t>x</t> 'Duplicate' on all items
 
 ### Preprocessor
 
@@ -156,3 +169,5 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 ### Tools
 
 <t>✘</t> Tool to manage .PSD slicing and multi density resizing.
+
+<t>✘</t> Tool to check appication resources usage.

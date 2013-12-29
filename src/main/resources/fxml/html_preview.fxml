@@ -4,17 +4,17 @@
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.collections.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
 
-<AnchorPane prefHeight="415.0" prefWidth="423.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.preview.HTMLPreviewController">
+<AnchorPane minWidth="114.0" prefHeight="415.0000999999975" prefWidth="424.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.preview.HTMLPreviewController">
   <children>
-    <ToolBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <items>
-        <Button fx:id="orientationButton" mnemonicParsing="false" text="Orientation" />
-        <ComboBox fx:id="presetCombo">
+    <AnchorPane fx:id="topToolBar" minHeight="22.0" prefHeight="41.0" prefWidth="423.0" styleClass="top-tool-bar" AnchorPane.bottomAnchor="374.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+        <ChoiceBox fx:id="presetChoice" layoutY="10.0" prefWidth="396.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
           <items>
             <FXCollections fx:factory="observableArrayList">
               <String fx:value="Item 1" />
@@ -22,9 +22,22 @@
               <String fx:value="Item 3" />
             </FXCollections>
           </items>
-        </ComboBox>
-      </items>
-    </ToolBar>
-    <WebView fx:id="webView" prefHeight="169.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="31.0" />
+        </ChoiceBox>
+      </children>
+      <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      </padding>
+    </AnchorPane>
+    <WebView fx:id="webView" prefHeight="332.9999694824219" prefWidth="424.0" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="41.0" />
+    <AnchorPane fx:id="bottomToolBar" minHeight="22.0" prefHeight="41.0" prefWidth="424.0" styleClass="bottom-tool-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <children>
+        <HBox alignment="CENTER" prefHeight="41.0" prefWidth="424.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+          <children>
+            <ToggleButton fx:id="orientationButton" mnemonicParsing="false" prefWidth="120.0" text="%builtin.plugin.preview.html.orientation" />
+            <ToggleButton fx:id="trackActiveFileToggleButton" mnemonicParsing="false" prefWidth="120.0" text="%builtin.plugin.preview.html.track_active_file" />
+          </children>
+        </HBox>
+      </children>
+    </AnchorPane>
   </children>
 </AnchorPane>

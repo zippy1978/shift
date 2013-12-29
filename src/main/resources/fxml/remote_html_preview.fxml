@@ -15,6 +15,6 @@
     <Hyperlink fx:id="urlLink" alignment="CENTER" prefWidth="395.0" text="Hyperlink" underline="true" wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="55.0" />
     <TableView fx:id="connectionTable" prefHeight="190.0" prefWidth="502.0" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="122.0" />
     <Label layoutY="91.0" prefHeight="31.0" prefWidth="395.0" styleClass="title-label" text="%builtin.plugin.preview.remote_html.active_connections" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="16.0" />
-    <ToggleButton fx:id="trackActiveFileToggleButton" mnemonicParsing="false" prefWidth="165.0" text="%builtin.plugin.preview.remote_html.track_active_file" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="182.5" AnchorPane.rightAnchor="182.5" />
+    <ToggleButton fx:id="trackActiveFileToggleButton" mnemonicParsing="false" prefWidth="110.0" text="%builtin.plugin.preview.remote_html.track_active_file" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="210.0" AnchorPane.rightAnchor="210.0" />
   </children>
 </AnchorPane>

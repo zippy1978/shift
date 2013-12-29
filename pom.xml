@@ -291,6 +291,13 @@
             <version>0.7-groovy-2.0</version>
             <scope>test</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>com.github.goldin</groupId>
+            <artifactId>spock-extensions</artifactId>
+            <version>0.1.4</version>
+            <scope>test</scope>
+        </dependency>
     
     </dependencies>
    

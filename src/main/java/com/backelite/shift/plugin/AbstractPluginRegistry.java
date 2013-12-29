@@ -59,7 +59,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
                 matchingFactories = editorExtensions.get("*");
             }
             // Take the first factory
-            // TODO : get the one set in preferences instead
+            // TODO : get the one set in preferences instead or present the picker first
             EditorFactory factory = matchingFactories.iterator().next();
 
 

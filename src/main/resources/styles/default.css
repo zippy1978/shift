@@ -58,14 +58,24 @@
     -fx-effect: innershadow(two-pass-box , rgba(0,0,0,0.6) , 4, 0.0 , 0 , 0);
 }
 
+.top-tool-bar {
+    -fx-padding: 5px;
+    -fx-background-insets: 0;
+    -fx-background-color: -fx-body-color;
+    -fx-effect: innershadow(two-pass-box , rgba(0,0,0,0.6) , 4, 0.0 , 0 , 0);
+}
+
 /* Buttons */
 
 .button, .toggle-button {
     -fx-background-color: -fx-body-color;
     -fx-border-color:  transparent;
     -fx-background-radius: 5;
-    -fx-text-fill: white;
     -fx-padding: 3;
+}
+
+.button:default {
+    -fx-text-fill: white;
 }
 
 .toggle-button:selected {
@@ -84,7 +94,13 @@
 /* Form controls */
 
 .text-input:focused .invalid {
-   -fx-background-color: -fx-error-color,-fx-box-border,-fx-control-inner-background;
+    -fx-background-color: -fx-error-color,-fx-box-border,-fx-control-inner-background;
+}
+
+.choice-box {
+    -fx-background-color: -fx-body-color;
+    -fx-border-color:  transparent;
+    -fx-text-fill: white;
 }
 
 /* Labels */

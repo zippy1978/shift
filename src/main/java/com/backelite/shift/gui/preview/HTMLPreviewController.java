@@ -33,7 +33,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -59,12 +61,18 @@ public class HTMLPreviewController extends AbstractPreviewController {
     private static int HTML_SERVER_PORT = 9000;
     @FXML
     private AnchorPane rootPane;
+    @FXML 
+    private AnchorPane topToolBar;
+    @FXML 
+    private AnchorPane bottomToolBar;
     @FXML
     private WebView webView;
     @FXML
-    private Button orientationButton;
+    private ToggleButton orientationButton;
     @FXML
-    private ComboBox<String> presetCombo;
+    private ToggleButton trackActiveFileToggleButton;
+    @FXML
+    private ChoiceBox<String> presetChoice;
     List<Map<String, Object>> presets;
 
     public HTMLPreviewController() {
@@ -84,11 +92,11 @@ public class HTMLPreviewController extends AbstractPreviewController {
 
         // Populate preset combo
         this.populatePresetCombo();
-        presetCombo.valueProperty().addListener(new ChangeListener<String>() {
+        presetChoice.valueProperty().addListener(new ChangeListener<String>() {
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
 
                 // Apply new preset
-                applyPreset(presets.get(presetCombo.getSelectionModel().getSelectedIndex()));
+                applyPreset(presets.get(presetChoice.getSelectionModel().getSelectedIndex()));
             }
         });
 
@@ -96,13 +104,18 @@ public class HTMLPreviewController extends AbstractPreviewController {
         orientationButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
 
-                // Reverse view
-                double width = getParentStage().getWidth();
-                double height = getParentStage().getHeight();
-                getParentStage().setWidth(height);
-                getParentStage().setHeight(width);
+                // Apply preset
+                applyPreset(presets.get(presetChoice.getSelectionModel().getSelectedIndex()));
             }
         });
+        
+        // Bind tracking button state
+        trackActiveFileToggleButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
+                setActiveDocumentTrackingEnabled(t1);
+            }
+        });
+        trackActiveFileToggleButton.setSelected(true);
 
         // Later ...
         Platform.runLater(new Runnable() {
@@ -129,9 +142,9 @@ public class HTMLPreviewController extends AbstractPreviewController {
 
         presets = (List<Map<String, Object>>) ApplicationContext.getPreferencesManager().getValue("preview.html.presets");
 
-        presetCombo.getItems().clear();
+        presetChoice.getItems().clear();
         for (Map<String, Object> preset : presets) {
-            presetCombo.getItems().add((String) preset.get("name"));
+            presetChoice.getItems().add((String) preset.get("name"));
         }
 
     }
@@ -141,10 +154,20 @@ public class HTMLPreviewController extends AbstractPreviewController {
      *
      * @param preset
      */
-    private void applyPreset(Map<String, Object> preset) {
+    private void applyPreset(final Map<String, Object> preset) {
 
-        this.getParentStage().setWidth((Integer) preset.get("width"));
-        this.getParentStage().setHeight((Integer) preset.get("height"));
+        int height = (Integer) preset.get("height");
+        int width = (Integer) preset.get("width");
+        
+        // Reverse if orientation is reversed
+        if (orientationButton.isSelected()) {
+            height = (Integer) preset.get("width");
+            width = (Integer) preset.get("height");
+        }
+        
+        this.getParentStage().setWidth(width);
+        this.getParentStage().setHeight(height + topToolBar.getPrefHeight() + bottomToolBar.getPrefHeight());
+       
     }
 
     @Override
@@ -152,6 +175,6 @@ public class HTMLPreviewController extends AbstractPreviewController {
         super.setParentStage(parentStage);
 
         // Apply first preset
-        presetCombo.getSelectionModel().select(0);
+        presetChoice.getSelectionModel().select(0);
     }
 }
