@@ -68,9 +68,11 @@ public class HTMLPreviewController extends AbstractPreviewController {
     @FXML
     private WebView webView;
     @FXML
-    private ToggleButton orientationButton;
+    private ToggleButton orientationToggleButton;
     @FXML
     private ToggleButton trackActiveFileToggleButton;
+    @FXML
+    private Button resetButton;
     @FXML
     private ChoiceBox<String> presetChoice;
     List<Map<String, Object>> presets;
@@ -101,9 +103,9 @@ public class HTMLPreviewController extends AbstractPreviewController {
         });
 
         // Handle orientation change
-        orientationButton.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        orientationToggleButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
                 // Apply preset
                 applyPreset(presets.get(presetChoice.getSelectionModel().getSelectedIndex()));
             }
@@ -116,6 +118,14 @@ public class HTMLPreviewController extends AbstractPreviewController {
             }
         });
         trackActiveFileToggleButton.setSelected(true);
+        
+        // Handle reset
+        resetButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            public void handle(ActionEvent t) {
+                refresh();
+            }
+        });
 
         // Later ...
         Platform.runLater(new Runnable() {
@@ -160,7 +170,7 @@ public class HTMLPreviewController extends AbstractPreviewController {
         int width = (Integer) preset.get("width");
         
         // Reverse if orientation is reversed
-        if (orientationButton.isSelected()) {
+        if (orientationToggleButton.isSelected()) {
             height = (Integer) preset.get("width");
             width = (Integer) preset.get("height");
         }

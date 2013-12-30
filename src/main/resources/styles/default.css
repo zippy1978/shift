@@ -71,7 +71,7 @@
     -fx-background-color: -fx-body-color;
     -fx-border-color:  transparent;
     -fx-background-radius: 5;
-    -fx-padding: 3;
+    -fx-padding: 3 5 3 5;
 }
 
 .button:default {

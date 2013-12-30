@@ -33,8 +33,9 @@
       <children>
         <HBox alignment="CENTER" prefHeight="41.0" prefWidth="424.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
           <children>
-            <ToggleButton fx:id="orientationButton" mnemonicParsing="false" prefWidth="120.0" text="%builtin.plugin.preview.html.orientation" />
-            <ToggleButton fx:id="trackActiveFileToggleButton" mnemonicParsing="false" prefWidth="120.0" text="%builtin.plugin.preview.html.track_active_file" />
+            <Button fx:id="resetButton" mnemonicParsing="false" text="%builtin.plugin.preview.html.reset" />
+            <ToggleButton fx:id="orientationToggleButton" mnemonicParsing="false" text="%builtin.plugin.preview.html.orientation" />
+            <ToggleButton fx:id="trackActiveFileToggleButton" mnemonicParsing="false" text="%builtin.plugin.preview.html.track_active_file" />
           </children>
         </HBox>
       </children>
