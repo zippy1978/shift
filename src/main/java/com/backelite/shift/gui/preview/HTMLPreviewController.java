@@ -178,6 +178,7 @@ public class HTMLPreviewController extends AbstractPreviewController {
         this.getParentStage().setWidth(width);
         this.getParentStage().setHeight(height + topToolBar.getPrefHeight() + bottomToolBar.getPrefHeight());
        
+        this.getParentStage().setResizable(false);
     }
 
     @Override
