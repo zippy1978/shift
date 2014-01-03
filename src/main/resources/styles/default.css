@@ -49,6 +49,25 @@
     -fx-text-fill: white;
 }
 
+/* Menu */
+
+.menu-bar {
+    -fx-background-color: 
+        rgb(50, 50, 50),
+        rgb(35, 35, 35);
+}  
+
+.menu-bar .context-menu {
+    -fx-background-color: 
+        rgb(50, 50, 50),
+        rgb(35, 35, 35);
+    -fx-background-insets: 0, 1 1 0 1;
+}  
+
+.menu-bar .menu-button .label {
+    -fx-text-fill: white;
+}
+
 /* Toolbars */
 
 .bottom-tool-bar {
@@ -188,7 +207,6 @@
 
 #projectNavigator .tree-cell {
     -fx-text-fill: #333333;
-    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
     -fx-background-color: null;    
     -fx-cell-size: 24;
     -fx-indent: 6;
