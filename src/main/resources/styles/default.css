@@ -24,9 +24,7 @@
 
 .root{
     -fx-font-size: 110%;
-    /*-fx-font-family: "Source Code Pro";*/
-    -fx-font-family: "Helvetica";
-    -fx-background-color: rgb(246, 246, 246);
+    -fx-font-family: Helvetica;
     -fx-control-inner-background: white;
     -fx-accent: rgb(170, 196, 0);
     -fx-focus-color: rgb(170, 196, 0);
@@ -36,37 +34,8 @@
 
 /* Context menus */
 
-.context-menu {
-    -fx-background-color: rgba(255, 255, 255, 0.8);
-    -fx-text-fill: rgb(24, 24, 24);
-    -fx-background-radius: 0;
-    -fx-background-insets: 0;
-    -fx-padding: 5px;
-}
+/* Menu bar */
 
-.menu-item:focused {
-    -fx-background-color: -fx-focus-color;
-    -fx-text-fill: white;
-}
-
-/* Menu */
-
-.menu-bar {
-    -fx-background-color: 
-        rgb(50, 50, 50),
-        rgb(35, 35, 35);
-}  
-
-.menu-bar .context-menu {
-    -fx-background-color: 
-        rgb(50, 50, 50),
-        rgb(35, 35, 35);
-    -fx-background-insets: 0, 1 1 0 1;
-}  
-
-.menu-bar .menu-button .label {
-    -fx-text-fill: white;
-}
 
 /* Toolbars */
 
@@ -95,6 +64,7 @@
 
 .button:default {
     -fx-text-fill: white;
+    -fx-background-color: -fx-accent;
 }
 
 .toggle-button:selected {
@@ -112,8 +82,8 @@
 
 /* Form controls */
 
-.text-input:focused .invalid {
-    -fx-background-color: -fx-error-color,-fx-box-border,-fx-control-inner-background;
+.text-input:focused.invalid {
+    -fx-border-color: -fx-error-color !important;
 }
 
 .choice-box {

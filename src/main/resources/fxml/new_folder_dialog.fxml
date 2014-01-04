@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
 
-<AnchorPane minHeight="69.0" minWidth="289.0" prefHeight="95.0" prefWidth="377.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.dialog.NewFolderDialogController">
+<AnchorPane minHeight="69.0" minWidth="289.0" prefHeight="105.0" prefWidth="377.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.dialog.NewFolderDialogController">
   <children>
     <AnchorPane minHeight="22.0" prefHeight="41.0" prefWidth="360.0" styleClass="bottom-tool-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
       <children>
@@ -20,6 +20,6 @@
     </AnchorPane>
     <ValidatedTextField fx:id="nameTextField" prefWidth="246.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="13.0" />
     <Label text="%main.new_folder.folder_name" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="16.0" />
-    <Label fx:id="nameErrorLabel" alignment="CENTER_RIGHT" prefWidth="246.0" styleClass="error-label" text="Label" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="38.0" />
+    <Label fx:id="nameErrorLabel" alignment="CENTER_RIGHT" prefWidth="246.0" styleClass="error-label" text="Label" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="43.0" />
   </children>
 </AnchorPane>

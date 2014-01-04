@@ -49,10 +49,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -95,6 +93,7 @@ public class MainController extends AbstractController {
     MenuItem newFolderMenuItem;
     MenuItem saveMenuItem;
     MenuItem closeProjectMenuItem;
+    MenuItem quitMenuItem;
     Menu editMenu;
     MenuItem undoMenuItem;
     MenuItem redoMenuItem;
@@ -104,7 +103,7 @@ public class MainController extends AbstractController {
     MenuItem selectAllMenuItem;
     MenuItem contentAssistMenuItem;
     Menu windowMenu;
-    MenuItem newPreviewMenuItem;
+    MenuItem newPreviewMenuItem; 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -355,6 +354,21 @@ public class MainController extends AbstractController {
             }
         });
         fileMenu.getItems().add(saveMenuItem);
+        
+        // File > Quit (only available when no application wide menu)
+        if (!this.supportsApplicationWideMenu()) {
+            // File > -
+            fileMenu.getItems().add(new SeparatorMenuItem());
+            // File > Quit 
+            quitMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.file.quit"));
+            quitMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+
+                public void handle(ActionEvent t) {
+                    ApplicationContext.getMainStage().close();
+                }
+            });
+            fileMenu.getItems().add(quitMenuItem);
+        }
 
         // Edit menu
         editMenu = new Menu(this.getResourceBundle().getString("main.menu.edit"));

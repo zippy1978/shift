@@ -81,6 +81,7 @@ public class ValidatedTextField extends TextField {
         } else {
             this.getStyleClass().add("invalid");
         }
+        
     }
 
     /**

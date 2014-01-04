@@ -62,19 +62,6 @@ public class MainApp extends Application {
 
     public void start(Stage stage) throws Exception {
 
-        // Force usage of CASPIAN theme (only if method exists)
-        // TODO : use MODERNA instead when JFX 8 is released
-        //setUserAgentStylesheet(STYLESHEET_CASPIAN);·
-        try {
-            Method userAgentStylesheetMethod = this.getClass().getMethod("setUserAgentStylesheet", new Class[]{String.class});
-            if (userAgentStylesheetMethod != null) {
-                userAgentStylesheetMethod.invoke(this, "CASPIAN");
-                //setUserAgentStylesheet(STYLESHEET_CASPIAN);
-            }
-        } catch (Exception ex) {
-            // Nothing
-        }
-
         // *** This section should be asynced and moved to splash screen
         // Initialize preferences
         this.initializePreferences();
@@ -85,8 +72,8 @@ public class MainApp extends Application {
         // ***
 
         // Load custom fonts
-        Font.loadFont(getClass().getResource("/fonts/SourceCodePro-Medium.ttf").toExternalForm(), 12);
-
+        Font.loadFont(getClass().getResource("/fonts/SourceCodePro-Regular.ttf").toExternalForm(), 12);
+  
         // Load root
         FXMLLoader loader = FXMLLoaderFactory.newInstance();
         Parent rootNode = null;
@@ -131,7 +118,7 @@ public class MainApp extends Application {
      *
      * @param stage Main stage
      */
-    private void registerCloseRequestHandler(Stage stage) {
+    private void registerCloseRequestHandler(final Stage stage) {
 
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(final WindowEvent we) {
@@ -158,6 +145,14 @@ public class MainApp extends Application {
                 }
             }
         });
+        
+        stage.setOnHiding(new EventHandler<WindowEvent>() {
+
+            public void handle(WindowEvent t) {
+                stage.getOnCloseRequest().handle(t);
+            }
+        });
+       
     }
 
     /**
