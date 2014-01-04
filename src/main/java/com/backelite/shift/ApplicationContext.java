@@ -59,7 +59,7 @@ public class ApplicationContext {
     private static ThemeManager THEME_MANAGER_INSTANCE;
     private static Properties PROPERTIES_INSTANCE;
     private static HostServices HOST_SERVICES;
-    private static boolean FIRST_LAUNCH = true;
+    private static boolean FIRST_LAUNCH = false;
     
     /**
      * Holds the main stage.
@@ -192,9 +192,9 @@ public class ApplicationContext {
 
         if (!applicationDataDirectory.exists()) {
             applicationDataDirectory.mkdirs();
-        } else {
-            // This is not afirst launch detected !
-            FIRST_LAUNCH = false;
+            
+            // First launch detected
+            FIRST_LAUNCH = true;
         }
 
         return applicationDataDirectory;

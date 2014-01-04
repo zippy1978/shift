@@ -197,7 +197,7 @@
     -fx-padding: 3;
 }
 
-#projectNavigator .tree-cell .folder {
+#projectNavigator .tree-cell.folder {
     -fx-font-weight: bold;
 }
 
