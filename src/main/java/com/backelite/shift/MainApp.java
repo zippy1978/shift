@@ -139,10 +139,14 @@ public class MainApp extends Application {
                             if (t.getChoice() == ConfirmDialogController.Choice.NEGATIVE) {
                                 // Consume event to stop propagation and prevent close
                                 we.consume();
+                            } else {
+                                stage.setOnCloseRequest(null);
+                                stage.setOnHiding(null);
                             }
                         }
                     });
                 }
+                
             }
         });
         
@@ -150,6 +154,7 @@ public class MainApp extends Application {
 
             public void handle(WindowEvent t) {
                 stage.getOnCloseRequest().handle(t);
+             
             }
         });
        

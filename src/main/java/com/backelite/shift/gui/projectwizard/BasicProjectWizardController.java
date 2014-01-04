@@ -140,7 +140,7 @@ public class BasicProjectWizardController extends AbstractProjectWizardControlle
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle(this.getResourceBundle().getString("project_wizard.browse.title"));
-        File selectedDirectory = directoryChooser.showDialog(null);
+        File selectedDirectory = directoryChooser.showDialog(this.getParentStage());
 
         if (selectedDirectory != null) {
             locationTextField.setText(selectedDirectory.getAbsolutePath());

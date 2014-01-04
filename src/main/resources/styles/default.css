@@ -83,7 +83,21 @@
 /* Form controls */
 
 .text-input:focused.invalid {
-    -fx-border-color: -fx-error-color !important;
+    -fx-background-color:
+        -fx-error-color,
+        #FFFFFF;
+}
+
+.text-input:focused {
+    -fx-background-color:
+        -fx-accent,
+        #FFFFFF;
+}
+
+.text-input {
+    -fx-background-color:
+        #AAAAAA,
+        #FFFFFF;
 }
 
 .choice-box {
