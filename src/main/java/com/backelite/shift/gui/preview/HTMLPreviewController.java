@@ -166,6 +166,10 @@ public class HTMLPreviewController extends AbstractPreviewController {
      */
     private void applyPreset(final Map<String, Object> preset) {
 
+        // User agent
+        webView.getEngine().setUserAgent((String)preset.get("userAgent"));
+        
+        // Screen size
         int height = (Integer) preset.get("height");
         int width = (Integer) preset.get("width");
         
@@ -179,6 +183,9 @@ public class HTMLPreviewController extends AbstractPreviewController {
         this.getParentStage().setHeight(height + topToolBar.getPrefHeight() + bottomToolBar.getPrefHeight());
        
         this.getParentStage().setResizable(false);
+        
+        // Refresh
+        this.refresh();
     }
 
     @Override
