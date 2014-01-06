@@ -63,7 +63,7 @@ class BasePreferencesManagerSpec extends Specification {
         input                   | result
         ['four', 'five', 'six'] | ['one', 'two', 'three', 'four', 'five', 'six']
         []                      | ['one', 'two', 'three']
-        
+
     }
     
 }

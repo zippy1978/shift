@@ -63,9 +63,9 @@ public abstract class BasePreferencesManager implements PreferencesManager {
                 throw new PreferencesException(String.format("%s preference is not a List", key));
             }
             
-        // No vlaue set yet ...
+        // No value set yet ...
         } else {
-            this.setValue(key, existingValue);
+            this.setValue(key, value);
         }
         
     }

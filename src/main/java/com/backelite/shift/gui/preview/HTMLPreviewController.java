@@ -149,9 +149,9 @@ public class HTMLPreviewController extends AbstractPreviewController {
 
     private void populatePresetCombo() {
 
-        // Get presets from preferences and sort them
+        // Get presets from preferences
         presets = (List<Map<String, Object>>) ApplicationContext.getPreferencesManager().getValue("preview.html.presets");
-
+        
         presetChoice.getItems().clear();
         for (Map<String, Object> preset : presets) {
             presetChoice.getItems().add((String) preset.get("name"));

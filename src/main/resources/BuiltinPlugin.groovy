@@ -41,30 +41,98 @@ plugin {
             PreferencesManager preferencesManager = ApplicationContext.getPreferencesManager()
             
             // HTML Preview presets
+            // Source : http://en.wikipedia.org/wiki/List_of_displays_by_pixel_density
             preferencesManager.mergeListValue(
                     'preview.html.presets', [
-                        ['name' : 'Apple iPad Retina (1024x768@2x)',
+                        ['name' : 'Apple iPad Retina (2048x1536@2x)',
                         'width' : 1024,
                         'height' : 768,
                         'pixelRatio' : 2,
                         'userAgent' : 'Mozilla/5.0 (iPad; CPU OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B176 Safari/7534.48.3'],
-                        ['name' : 'Apple iPhone 4 (320x480@2x)',
+                        ['name' : 'Apple iPhone 4 (640x960@2x)',
                         'width' : 320,
                         'height' : 480,
                         'pixelRatio' : 2,
                         'userAgent' : 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7'],
-                        ['name' : 'Apple iPhone 5 (320x568@2x)',
+                        ['name' : 'Apple iPhone 5 (640x1136@2x)',
                         'width' : 320,
                         'height' : 568,
                         'pixelRatio' : 2,
                         'userAgent' : 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0_2 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A551 Safari/8536.25'],
-                        ['name' : 'LG Nexus 4 (384x640@2x)',
+                        ['name' : 'LG Nexus 4 (768x1280@2x)',
                         'width' : 384,
                         'height' : 640,
                         'pixelRatio' : 2,
-                        'userAgent' : 'Mozilla/5.0 (Linux; Android 4.2; Nexus 4 Build/JVP15Q) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19']
+                        'userAgent' : 'Mozilla/5.0 (Linux; Android 4.2; Nexus 4 Build/JVP15Q) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'],
+                        ['name' : 'BlackBerry PlayBook (1024x600@1x)',
+                        'width' : 1024,
+                        'height' : 600,
+                        'pixelRatio' : 1,
+                        'userAgent' : 'Mozilla/5.0 (PlayBook; U; RIM Tablet OS 2.0.1; en-US) AppleWebKit/535.8+ (KHTML, like Gecko) Version/7.2.0.1 Safari/535.8+'],
+                        ['name' : 'BlackBerry Z10 (768x1280@2x)',
+                        'width' : 384,
+                        'height' : 640,
+                        'pixelRatio' : 2,
+                        'userAgent' : 'Mozilla/5.0 (BB10; Touch) AppleWebKit/537.10+ (KHTML, like Gecko) Version/10.0.9.2372 Mobile Safari/537.10+'],
+                        ['name' : 'BlackBerry Bold 9900 (480x640@1x)',
+                        'width' : 480,
+                        'height' : 640,
+                        'pixelRatio' : 1,
+                        'userAgent' : 'Mozilla/5.0 (BlackBerry; U; BlackBerry 9900; en-US) AppleWebKit/534.11+ (KHTML, like Gecko) Version/7.0.0 Mobile Safari/534.11+'],
+                        ['name' : 'HTC Wildfire (240x320@1x)',
+                        'width' : 240,
+                        'height' : 320,
+                        'pixelRatio' : 1,
+                        'userAgent' : 'Mozilla/5.0 (Linux; U; Android 2.3.3; en-us; HTC Wildfire S A510e Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1'],
+                        ['name' : 'HTC One X (720x1280@2x)',
+                        'width' : 360,
+                        'height' : 640,
+                        'pixelRatio' : 2,
+                        'userAgent' : 'Mozilla/5.0 (Linux; Android 4.0.3; HTC One X Build/IML74K) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19'],
+                        ['name' : 'HTC Desire (480x800@1x)',
+                        'width' : 480,
+                        'height' : 800,
+                        'pixelRatio' : 1,
+                        'userAgent' : 'Mozilla/5.0 (Linux; U; Android 2.2; en-us; Desire_A8181 Build/ERE27) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17'],
+                        ['name' : 'LG Optimus G (768x1280@2x)',
+                        'width' : 384,
+                        'height' : 640,
+                        'pixelRatio' : 2,
+                        'userAgent' : 'Mozilla/5.0 (Linux; Android 4.0; LG-E975 Build/IMM76L) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'],
+                        ['name' : 'Nokia N95 (240x320@1x)',
+                        'width' : 240,
+                        'height' : 320,
+                        'pixelRatio' : 1,
+                        'userAgent' : 'Mozilla/5.0 (SymbianOS/9.2; U; Series60/3.1 NokiaN95/10.0.010; Profile/MIDP-2.0 Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML, like Gecko) Safari/413 (383; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.507'],
+                        ['name' : 'Samsung Galaxy Ace (320x480@1x)',
+                        'width' : 320,
+                        'height' : 480,
+                        'pixelRatio' : 1,
+                        'userAgent' : 'Mozilla/5.0 (Linux U Android 2.2 en-us GT-S5830 Build/FROYO) AppleWebKit/533.1(KHTML, like Gecko) Version/4.0 Mobile Safari/533.1'],
+                        ['name' : 'Samsung Galaxy S II (480x800@1.5x)',
+                        'width' : 320,
+                        'height' : 534,
+                        'pixelRatio' : 1.5,
+                        'userAgent' : 'Mozilla/5.0 (Linux; U; Android 2.3; en-us; GT-I9100 Build/GRH78) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1'],
+                        ['name' : 'Samsung Galaxy S III (720x1280@2x)',
+                        'width' : 360,
+                        'height' : 640,
+                        'pixelRatio' : 2,
+                        'userAgent' : 'Mozilla/5.0 (Linux; U; Android 4.0.4; en-us; GT-I9300 Build/IMM76D) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30'],
+                        ['name' : 'Samsung Galaxy S4 (1080x1920@3x)',
+                        'width' : 360,
+                        'height' : 640,
+                        'pixelRatio' : 3,
+                        'userAgent' : 'Mozilla/5.0 (Linux; Android 4.2.2; en-us; SAMSUNG GT-I9195 Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Version/1.0 Chrome/18.0.1025.308 Mobile Safari/535.19']
+                    
+                    
                         
-                    ]
+                        
+                        
+                        
+                    ].sort {a, b ->
+                        a['name'] <=> b['name']
+                    }
             )
         
             preferencesManager.commit()
