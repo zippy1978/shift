@@ -23,6 +23,7 @@ package com.backelite.shift.preferences;
  */
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -32,12 +33,11 @@ import org.slf4j.LoggerFactory;
  *
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
-public class LocalPreferencesManager implements PreferencesManager {
+public class LocalPreferencesManager extends BasePreferencesManager {
 
     private static final Logger log = LoggerFactory.getLogger(LocalPreferencesManager.class);
     private static final String FILENAME = "preferences.json";
     private File rootDirectory;
-    private Map<String, Object> loadedValues = new HashMap<String, Object>();
 
     public LocalPreferencesManager(File rootDirectory) {
         super();
@@ -47,36 +47,6 @@ public class LocalPreferencesManager implements PreferencesManager {
         } catch (PreferencesException ex) {
             log.error("Failed to load preferences", ex);
         }
-    }
-
-    public void setInitialValue(String key, Object value) throws PreferencesException {
-
-        Object existingValue = this.getValue(key);
-        if (existingValue == null) {
-            this.setValue(key, value);
-        }
-    }
-
-    public void setInitialValues(Map<String, Object> values) throws PreferencesException {
-
-        for (String key : values.keySet()) {
-            this.setInitialValue(key, values.get(key));
-        }
-    }
-
-    public void setValues(Map<String, Object> values) throws PreferencesException {
-
-        for (String key : values.keySet()) {
-            this.setValue(key, values.get(key));
-        }
-    }
-
-    public void setValue(String key, Object value) throws PreferencesException {
-        loadedValues.put(key, value);
-    }
-
-    public Object getValue(String key){
-        return loadedValues.get(key);
     }
 
     public void commit() throws PreferencesException {

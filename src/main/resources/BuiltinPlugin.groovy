@@ -41,8 +41,8 @@ plugin {
             PreferencesManager preferencesManager = ApplicationContext.getPreferencesManager()
             
             // HTML Preview presets
-            preferencesManager.setInitialValues([
-                    'preview.html.presets' : [
+            preferencesManager.mergeListValue(
+                    'preview.html.presets', [
                         ['name' : 'Apple iPad Retina (1024x768@2x)',
                         'width' : 1024,
                         'height' : 768,
@@ -65,7 +65,7 @@ plugin {
                         'userAgent' : 'Mozilla/5.0 (Linux; Android 4.2; Nexus 4 Build/JVP15Q) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19']
                         
                     ]
-            ])
+            )
         
             preferencesManager.commit()
         }

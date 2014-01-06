@@ -250,7 +250,7 @@ public abstract class AbstractController implements Initializable, PersistableSt
 
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        //stage.initOwner(ApplicationContext.getMainStage());
+        stage.initOwner(ApplicationContext.getMainStage());
         Scene scene = new Scene(rootNode);
         scene.getStylesheets().add(ApplicationContext.getThemeManager().getCSS());
         stage.setScene(scene);

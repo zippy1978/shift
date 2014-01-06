@@ -22,6 +22,7 @@ package com.backelite.shift.preferences;
  * #L%
  */
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,6 +46,14 @@ public interface PreferencesManager {
     public void setValue(String key, Object value) throws PreferencesException;
     
     public void setValues(Map<String, Object> values) throws PreferencesException;
+    
+    /**
+     * Merge list with an existing list value.
+     * @param key
+     * @param value
+     * @throws PreferencesException 
+     */
+    public void mergeListValue(String key, List value) throws PreferencesException;
 
     public Object getValue(String key);
 
