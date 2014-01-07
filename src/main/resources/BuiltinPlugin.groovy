@@ -123,7 +123,34 @@ plugin {
                         'width' : 360,
                         'height' : 640,
                         'pixelRatio' : 3,
-                        'userAgent' : 'Mozilla/5.0 (Linux; Android 4.2.2; en-us; SAMSUNG GT-I9195 Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Version/1.0 Chrome/18.0.1025.308 Mobile Safari/535.19']
+                        'userAgent' : 'Mozilla/5.0 (Linux; Android 4.2.2; en-us; SAMSUNG GT-I9195 Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Version/1.0 Chrome/18.0.1025.308 Mobile Safari/535.19'],
+                        ['name' : 'Samsung Galaxy Note (800x1280@2x)',
+                        'width' : 400,
+                        'height' : 640,
+                        'pixelRatio' : 2,
+                        'userAgent' : 'Mozilla/5.0 (Linux; U; Android 2.3; xx-xx; GT-N7000 Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1'],
+                        ['name' : 'Samsung Galaxy Tab 10.1 (1280x800@1x)',
+                        'width' : 1280,
+                        'height' : 800,
+                        'pixelRatio' : 1,
+                        'userAgent' : 'Mozilla/5.0 (Linux; U; Android 3.0; xx-xx; GT-P7100 Build/HRI83) AppleWebkit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13'],
+                        ['name' : 'Samsung Nexus 10 (2560x1600@2x)',
+                        'width' : 1280,
+                        'height' : 800,
+                        'pixelRatio' : 2,
+                        'userAgent' : 'Mozilla/5.0 (Linux; U; Android 4.2; en-us; Nexus 10 Build/JOP12D) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30'],
+                        ['name' : 'Sony Xperia Z (1080x1920@3x)',
+                        'width' : 360,
+                        'height' : 640,
+                        'pixelRatio' : 3,
+                        'userAgent' : 'Mozilla/5.0 (Linux; U; Android 4.1; en-us; SonyEricssonC6603 Build/10.1.A.0.182) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30'],
+                        ['name' : 'Sony Ericsson W995 (240x320@1x)',
+                        'width' : 240,
+                        'height' : 320,
+                        'pixelRatio' : 1,
+                        'userAgent' : 'SonyEricssonW995/R1DB Browser/NetFront/3.4 Profile/MIDP-2.1 Configuration/CLDC-1.1 JavaPlatform/JP-8.4.1']
+                    
+                    
                     
                     
                         
