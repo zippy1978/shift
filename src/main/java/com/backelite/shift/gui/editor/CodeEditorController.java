@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 
 /**
@@ -51,6 +52,9 @@ public class CodeEditorController extends AbstractController implements EditorCo
     @FXML
     private CodeEditor codeEditor;
     private EventHandler<CursorChangedEvent> onCursorChanged;
+    
+    private EventHandler<CodeEditor.ContentChangedEvent> codeEditorContentChangedEventHandler;
+    private EventHandler<CodeEditor.CursorChangedEvent> codeEditorCursorChangedEventHandler;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -61,8 +65,9 @@ public class CodeEditorController extends AbstractController implements EditorCo
         }
         
         // Content changed event
-        codeEditor.setOnContentChanged(new EventHandler<CodeEditor.ContentChangedEvent>() {
+        codeEditorContentChangedEventHandler = new EventHandler<CodeEditor.ContentChangedEvent>() {
 
+                @Override
                 public void handle(CodeEditor.ContentChangedEvent event) {
                     
                     String newContent = codeEditor.getContent();
@@ -72,17 +77,20 @@ public class CodeEditorController extends AbstractController implements EditorCo
                     
                 }
             
-        });
+        };
+        codeEditor.setOnContentChanged(new WeakEventHandler<>(codeEditorContentChangedEventHandler));
         
         // Cursor changed event (forward event)
-        codeEditor.setOnCursorChanged(new EventHandler<CodeEditor.CursorChangedEvent>() {
+        codeEditorCursorChangedEventHandler = new EventHandler<CodeEditor.CursorChangedEvent>() {
 
+            @Override
             public void handle(CodeEditor.CursorChangedEvent t) {
                 if (getOnCursorChanged() != null) {
                     getOnCursorChanged().handle(new CursorChangedEvent(EventType.ROOT));
                 }
             }
-        });
+        };
+        codeEditor.setOnCursorChanged(new WeakEventHandler<>(codeEditorCursorChangedEventHandler));
         
     }
 
@@ -151,6 +159,7 @@ public class CodeEditorController extends AbstractController implements EditorCo
     }
 
     public void close() {
+        
         document.close();
     }
 

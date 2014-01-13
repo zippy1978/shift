@@ -134,6 +134,7 @@ public class MainApp extends Application {
 
                 if (unsavedFiles) {
                     mainController.displayConfirmDialog(mainController.getResourceBundle().getString("dialog.confirm.close_app.unsaved.title"), mainController.getResourceBundle().getString("dialog.confirm.close_app.unsaved.text"), new EventHandler<ConfirmDialogController.ChoiceEvent>() {
+                        @Override
                         public void handle(ConfirmDialogController.ChoiceEvent t) {
 
                             if (t.getChoice() == ConfirmDialogController.Choice.NEGATIVE) {
@@ -176,6 +177,7 @@ public class MainApp extends Application {
             shortcuts.put(Constants.SHORTCUT_COPY, new KeyCodeCombination(KeyCode.C, KeyCombination.SHORTCUT_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_PASTE, new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_SELECT_ALL, new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN).getName());
+            shortcuts.put(Constants.SHORTCUT_FIND_REPLACE, new KeyCodeCombination(KeyCode.F, KeyCombination.SHORTCUT_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_CONTENT_ASSIST, new KeyCodeCombination(KeyCode.SPACE, KeyCombination.CONTROL_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_NEW_PREVIEW, new KeyCodeCombination(KeyCode.P, KeyCombination.SHORTCUT_DOWN).getName());
             preferencesManager.setInitialValue(Constants.PREFERENCES_KEY_SHORTCUTS, shortcuts);

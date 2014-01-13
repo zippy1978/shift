@@ -58,6 +58,7 @@ public abstract class AbstractPreviewController extends AbstractController imple
         // Editor change listener
         editorChangeListener = new ChangeListener<EditorController>() {
 
+            @Override
             public void changed(ObservableValue<? extends EditorController> ov, EditorController t, EditorController t1) {
                 
                 // Set new document
@@ -89,6 +90,7 @@ public abstract class AbstractPreviewController extends AbstractController imple
      * @param o
      * @param arg
      */
+    @Override
     public void update(Observable o, Object arg) {
 
         // Something in the project was updated
@@ -100,6 +102,7 @@ public abstract class AbstractPreviewController extends AbstractController imple
     /**
      * @return the document
      */
+    @Override
     public Document getDocument() {
         return document;
     }
@@ -107,6 +110,7 @@ public abstract class AbstractPreviewController extends AbstractController imple
     /**
      * @param document the document to set
      */
+    @Override
     public void setDocument(Document document) {
         this.document = document;
 
@@ -119,6 +123,7 @@ public abstract class AbstractPreviewController extends AbstractController imple
     /**
      * @return the parentStage
      */
+    @Override
     public Stage getParentStage() {
         return parentStage;
     }
@@ -126,6 +131,7 @@ public abstract class AbstractPreviewController extends AbstractController imple
     /**
      * @param parentStage the parentStage to set
      */
+    @Override
     public void setParentStage(Stage parentStage) {
         this.parentStage = parentStage;
     }
@@ -137,6 +143,7 @@ public abstract class AbstractPreviewController extends AbstractController imple
         }
     }
 
+    @Override
     public ChangeListener<EditorController> getActiveEditorChangeListener() {
         return editorChangeListener;
     }
@@ -155,6 +162,7 @@ public abstract class AbstractPreviewController extends AbstractController imple
         this.activeDocumentTrackingEnabled = activeDocumentTrackingEnabled;
     }
 
+    @Override
     public void setFactory(PreviewFactory factory) {
         this.factory = factory;
     }

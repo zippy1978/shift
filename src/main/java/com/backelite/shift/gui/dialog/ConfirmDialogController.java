@@ -28,6 +28,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -46,13 +47,15 @@ public class ConfirmDialogController extends AbstractDialogController {
     private Button negativeButton;
     
     private EventHandler<ChoiceEvent> onChoice;
+    private EventHandler<ActionEvent> positiveButtonActionEventHandler;
+    private EventHandler<ActionEvent> negativeButtonActionEventHandler;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
         
         // Handle positive button click
-        positiveButton.setOnAction(new EventHandler<ActionEvent>() {
+        positiveButtonActionEventHandler = new EventHandler<ActionEvent>() {
 
             public void handle(ActionEvent t) {
                 if (onChoice != null) {
@@ -61,10 +64,11 @@ public class ConfirmDialogController extends AbstractDialogController {
                 
                 close();
             }
-        });
+        };
+        positiveButton.setOnAction(new WeakEventHandler<>(positiveButtonActionEventHandler));
         
         // Handle negative button click
-        negativeButton.setOnAction(new EventHandler<ActionEvent>() {
+        negativeButtonActionEventHandler = new EventHandler<ActionEvent>() {
 
             public void handle(ActionEvent t) {
                 if (onChoice != null) {
@@ -73,7 +77,8 @@ public class ConfirmDialogController extends AbstractDialogController {
                 
                 close();
             }
-        });
+        };
+        negativeButton.setOnAction(new WeakEventHandler<>(negativeButtonActionEventHandler));
         
         // Default focus on negative button
         Platform.runLater(new Runnable() {

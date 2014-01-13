@@ -2,9 +2,9 @@ package com.backelite.shift.gui.dialog;
 
 /*
  * #%L
- * WelcomeDialogController.java - Shift - 2013
+ * FindReplaceDialogController.java - Shift - 2013
  * %%
- * Copyright (C) 2013 Gilles Grousset
+ * Copyright (C) 2013 - 2014 Gilles Grousset
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as 
@@ -29,28 +29,26 @@ import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.web.WebView;
 
 /**
  *
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
-public class WelcomeDialogController extends AbstractDialogController {
+public class FindReplaceDialogController extends AbstractDialogController {
 
     @FXML
-    private WebView webView;
-    @FXML
-    private Button closeButton;
+    private Button findButton;
+    @FXML 
+    private Button replaceAllButton;
+    @FXML Button closeButton;
     
     private EventHandler<ActionEvent> closeButtonActionEventHandler;
-    
+            
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
-         
-        webView.getEngine().load(getClass().getResource("/welcome.html").toExternalForm());
         
-        // Close button click
+        // Close dialog on close button click
         closeButtonActionEventHandler = new EventHandler<ActionEvent>() {
 
             @Override
@@ -60,5 +58,16 @@ public class WelcomeDialogController extends AbstractDialogController {
         };
         closeButton.setOnAction(new WeakEventHandler<>(closeButtonActionEventHandler));
     }
-  
+
+    @Override
+    public void close() {
+        
+        // Clean up
+        closeButton.setOnAction(null);
+        
+        super.close(); 
+    }
+
+    
+    
 }

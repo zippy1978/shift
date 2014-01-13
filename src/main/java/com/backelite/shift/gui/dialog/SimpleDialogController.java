@@ -26,6 +26,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -40,22 +41,24 @@ public class SimpleDialogController extends AbstractDialogController {
     protected Label messageLabel;
     @FXML
     protected Button closeButton;
+    
+    private EventHandler<ActionEvent> closeButtonActionEventHandler;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
         
         // Close dialog on close button click
-        closeButton.setOnAction(new EventHandler<ActionEvent>() {
+        closeButtonActionEventHandler = new EventHandler<ActionEvent>() {
 
+            @Override
             public void handle(ActionEvent t) {
                 close();
             }
-        });
+        };
+        closeButton.setOnAction(new WeakEventHandler<>(closeButtonActionEventHandler));
     }
-    
-    
-    
+ 
     public void setMessage(String message) {
         this.messageLabel.setText(message);
     }

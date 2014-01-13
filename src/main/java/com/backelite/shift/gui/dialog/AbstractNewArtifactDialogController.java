@@ -32,8 +32,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -52,6 +54,10 @@ public abstract class AbstractNewArtifactDialogController extends AbstractDialog
     protected Button okButton;
     @FXML
     protected Button cancelButton;
+    
+    private ChangeListener<Boolean> nameChangeListener;
+    private EventHandler<ActionEvent> cancelActionEventHandler;
+    private EventHandler<ActionEvent> okActionEventHandler;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -59,7 +65,8 @@ public abstract class AbstractNewArtifactDialogController extends AbstractDialog
        
         // Listen to input validity
         okButton.setDisable(!nameTextField.isValid());
-        nameTextField.validProperty().addListener(new ChangeListener<Boolean>() {
+        nameChangeListener = new ChangeListener<Boolean>() {
+            @Override
             public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
 
                 okButton.setDisable(!nameTextField.isValid());
@@ -72,35 +79,42 @@ public abstract class AbstractNewArtifactDialogController extends AbstractDialog
                 }
 
             }
-        });
+        };
+        nameTextField.validProperty().addListener(new WeakChangeListener<>(nameChangeListener));
 
         // Cancel button click
-        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+        cancelActionEventHandler = new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleCancelButtonAction();
             }
-        });
+        };
+        cancelButton.setOnAction(new WeakEventHandler<>(cancelActionEventHandler));
+        
 
         // OK button click
-        okButton.setOnAction(new EventHandler<ActionEvent>() {
+        okActionEventHandler = new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleOKButtonAction();
             }
-        });
+        };
+        okButton.setOnAction(new WeakEventHandler<>(okActionEventHandler));
 
     }
+    
+    
 
     @Override
     public void setUserData(Object userData) {
         super.setUserData(userData); 
         
-         // Set validators on text field
+        // Set validators on text field
         Folder folder = (Folder) getUserData();
         nameTextField.setValidator(new CompoundValidator(new NotBlankValidator(), new FilenameValidator(), new UnusedArtifactNameValidator(folder)));
 
     }
-    
-    
+ 
 
     protected void handleCancelButtonAction() {
         this.close();

@@ -23,6 +23,7 @@ package com.backelite.shift.gui.dialog;
  */
 
 import com.backelite.shift.gui.AbstractController;
+import java.lang.ref.WeakReference;
 import javafx.stage.Stage;
 
 /**
@@ -31,29 +32,29 @@ import javafx.stage.Stage;
  */
 public abstract class AbstractDialogController extends AbstractController implements DialogController {
 
-    private Stage parentStage;
+    private WeakReference<Stage> parentStage = new WeakReference<>(null);
     private Object userData;
 
     @Override
     public Stage getParentStage() {
-        return parentStage;
+        return parentStage.get();
     }
 
     @Override
     public void setParentStage(Stage parentStage) {
-        this.parentStage = parentStage;
+         this.parentStage = new WeakReference<>(parentStage);
     }
 
+    @Override
     public Object getUserData() {
         return userData;
     }
 
+    @Override
     public void setUserData(Object userData) {
         this.userData = userData;
     }
     
-    
-
     @Override
     public void close() {
         if (getParentStage() != null) {

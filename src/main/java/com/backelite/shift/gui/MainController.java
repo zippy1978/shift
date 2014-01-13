@@ -30,6 +30,7 @@ import com.backelite.shift.workspace.artifact.FileSystemProject;
 import com.backelite.shift.workspace.artifact.Project;
 import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.Constants;
+import com.backelite.shift.gui.dialog.FindReplaceDialogController;
 import com.backelite.shift.gui.dialog.PickerDialogController;
 import com.backelite.shift.gui.editor.EditorController;
 import com.backelite.shift.gui.preview.PreviewController;
@@ -43,12 +44,14 @@ import com.backelite.shift.workspace.artifact.Artifact;
 import com.backelite.shift.workspace.artifact.Folder;
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Task;
@@ -88,22 +91,24 @@ public class MainController extends AbstractController {
     private EditorsPaneController editorsPaneController;
     @FXML
     private StatusBarController statusBarController;
-    Menu fileMenu;
-    MenuItem newFileMenuItem;
-    MenuItem newFolderMenuItem;
-    MenuItem saveMenuItem;
-    MenuItem closeProjectMenuItem;
-    MenuItem quitMenuItem;
-    Menu editMenu;
-    MenuItem undoMenuItem;
-    MenuItem redoMenuItem;
-    MenuItem cutMenuItem;
-    MenuItem copyMenuItem;
-    MenuItem pasteMenuItem;
-    MenuItem selectAllMenuItem;
-    MenuItem contentAssistMenuItem;
-    Menu windowMenu;
-    MenuItem newPreviewMenuItem; 
+    private Menu fileMenu;
+    private MenuItem newFileMenuItem;
+    private MenuItem newFolderMenuItem;
+    private MenuItem saveMenuItem;
+    private MenuItem closeProjectMenuItem;
+    private MenuItem quitMenuItem;
+    private Menu editMenu;
+    private MenuItem undoMenuItem;
+    private MenuItem redoMenuItem;
+    private MenuItem cutMenuItem;
+    private MenuItem copyMenuItem;
+    private MenuItem pasteMenuItem;
+    private MenuItem selectAllMenuItem;
+    private MenuItem findReplaceMenuItem;
+    private MenuItem contentAssistMenuItem;
+    private Menu windowMenu;
+    private MenuItem newPreviewMenuItem;
+    private FindReplaceDialogController findReplaceDialogController;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -200,7 +205,7 @@ public class MainController extends AbstractController {
 
         FXMLLoader loader = FXMLLoaderFactory.newInstance();
         try {
-            Stage stage = this.newWindow(getResourceBundle().getString("welcome.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/welcome.fxml")), StageStyle.DECORATED);
+            Stage stage = this.newDecoratedWindow(getResourceBundle().getString("welcome.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/welcome.fxml")));
             DialogController controller = (DialogController) loader.getController();
             controller.setParentStage(stage);
             stage.showAndWait();
@@ -265,6 +270,7 @@ public class MainController extends AbstractController {
             copyMenuItem.setDisable(false);
             pasteMenuItem.setDisable(false);
             cutMenuItem.setDisable(false);
+            findReplaceMenuItem.setDisable(false);
             contentAssistMenuItem.setDisable(!editorController.canContentAssist());
         } else {
             undoMenuItem.setDisable(true);
@@ -273,6 +279,7 @@ public class MainController extends AbstractController {
             copyMenuItem.setDisable(true);
             pasteMenuItem.setDisable(true);
             cutMenuItem.setDisable(true);
+            findReplaceMenuItem.setDisable(true);
             contentAssistMenuItem.setDisable(true);
         }
     }
@@ -354,7 +361,7 @@ public class MainController extends AbstractController {
             }
         });
         fileMenu.getItems().add(saveMenuItem);
-        
+
         // File > Quit (only available when no application wide menu)
         if (!this.supportsApplicationWideMenu()) {
             // File > -
@@ -362,7 +369,6 @@ public class MainController extends AbstractController {
             // File > Quit 
             quitMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.file.quit"));
             quitMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-
                 public void handle(ActionEvent t) {
                     ApplicationContext.getMainStage().close();
                 }
@@ -441,6 +447,20 @@ public class MainController extends AbstractController {
             }
         });
         editMenu.getItems().add(selectAllMenuItem);
+
+        // Edit > -
+        editMenu.getItems().add(new SeparatorMenuItem());
+
+        // Edit > Find/Replace ...
+        findReplaceMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.find_replace"));
+        findReplaceMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_FIND_REPLACE));
+        findReplaceMenuItem.setDisable(true);
+        findReplaceMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                handleFindReplaceMenuAction();
+            }
+        });
+        editMenu.getItems().add(findReplaceMenuItem);
 
         // Edit > -
         editMenu.getItems().add(new SeparatorMenuItem());
@@ -647,6 +667,7 @@ public class MainController extends AbstractController {
 
     /**
      * Setup a newly created preview window
+     *
      * @param parentStage Preview window
      * @param loader Loader used for loading the preview window
      */
@@ -710,6 +731,35 @@ public class MainController extends AbstractController {
         if (editorController != null) {
             editorController.selectAll();
         }
+    }
+
+    private void handleFindReplaceMenuAction() {
+
+        EditorController editorController = editorsPaneController.getActiveEditorController();
+        if (editorController != null) {
+
+            // Build initial find / replace window
+            if (findReplaceDialogController == null) {
+                try {
+                    FXMLLoader loader = FXMLLoaderFactory.newInstance();
+                    Stage stage = newDecoratedWindow(getResourceBundle().getString("main.menu.edit.find_replace"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/find_replace_dialog.fxml")), true);
+                    findReplaceDialogController = (FindReplaceDialogController) loader.getController();
+                    findReplaceDialogController.setParentStage(stage);
+                    findReplaceDialogController.setUserData(editorController);
+                    stage.setResizable(false);
+                    stage.setFullScreen(false);
+                } catch (IOException ex) {
+                    this.displayErrorDialog(ex);
+                }
+            }
+            
+            // Show 
+            findReplaceDialogController.getParentStage().show();
+
+
+        }
+
+
     }
 
     private void handleContentAssistMenuAction() {
@@ -776,6 +826,7 @@ public class MainController extends AbstractController {
                 message = String.format(getResourceBundle().getString("dialog.confirm.delete_file.message"), artifact.getName());
             }
             displayConfirmDialog(getResourceBundle().getString("dialog.confirm.delete_artifact.title"), message, new EventHandler<ConfirmDialogController.ChoiceEvent>() {
+                @Override
                 public void handle(ConfirmDialogController.ChoiceEvent t) {
 
                     if (t.getChoice() == ConfirmDialogController.Choice.POSITIVE) {

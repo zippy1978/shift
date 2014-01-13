@@ -23,7 +23,6 @@ package com.backelite.shift.gui.preview;
  */
 import com.backelite.shift.ApplicationContext;
 import java.net.URL;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -39,7 +38,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import org.codehaus.jackson.map.util.Comparators;
 import org.eclipse.jetty.server.Server;
 import org.slf4j.LoggerFactory;
 
@@ -96,6 +94,7 @@ public class HTMLPreviewController extends AbstractPreviewController {
         // Populate preset combo
         this.populatePresetCombo();
         presetChoice.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
 
                 // Apply new preset
@@ -105,6 +104,7 @@ public class HTMLPreviewController extends AbstractPreviewController {
 
         // Handle orientation change
         orientationToggleButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
             public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
                 // Apply preset
                 applyPreset(presets.get(presetChoice.getSelectionModel().getSelectedIndex()));
@@ -121,6 +121,7 @@ public class HTMLPreviewController extends AbstractPreviewController {
 
         // Handle reset
         resetButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 refresh();
             }
@@ -128,6 +129,7 @@ public class HTMLPreviewController extends AbstractPreviewController {
 
         // Later ...
         Platform.runLater(new Runnable() {
+            @Override
             public void run() {
 
                 // Title

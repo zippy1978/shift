@@ -28,6 +28,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
 import javafx.scene.control.TextField;
 
 /**
@@ -40,6 +41,8 @@ public class ValidatedTextField extends TextField {
     private ValidatorResult lastValidatorResult;
     
     private final BooleanProperty valid = new SimpleBooleanProperty(false);
+    
+    private ChangeListener<String> textChangeListener;
 
     public ValidatedTextField() {
         super();
@@ -58,12 +61,13 @@ public class ValidatedTextField extends TextField {
         
         updateValid();
 
-        this.textProperty().addListener(new ChangeListener<String>() {
+        textChangeListener = new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
                 updateValid();
             }
-        });
+        };
+        this.textProperty().addListener(new WeakChangeListener<>(textChangeListener));
 
     }
     

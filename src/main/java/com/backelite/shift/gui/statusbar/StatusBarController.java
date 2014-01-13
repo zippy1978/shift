@@ -68,6 +68,7 @@ public class StatusBarController extends AbstractController implements TaskManag
         cursorPositionLabel.setVisible(false);
     }
 
+    @Override
     public void onTaskStarted(Task task) {
         
         // Store initial width
@@ -83,11 +84,13 @@ public class StatusBarController extends AbstractController implements TaskManag
         taskTitleLabel.textProperty().bind(task.titleProperty());
     }
 
+    @Override
     public void onTaskFailed(Task task) {
         this.taskBoxSlideOutAnimation();
         this.displayErrorDialog(task.getException());
     }
 
+    @Override
     public void onTaskSucceeded(Task task) {
         this.taskBoxSlideOutAnimation();
     }

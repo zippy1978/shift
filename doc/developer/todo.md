@@ -47,7 +47,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 #### HTML Preview
 
-<t>✘</t> Device presets with name, dimensions, screen density  
+<d>✔ 01/07/14</d> Device presets with name, dimensions, screen density  
 
 <d>✔ 12/29/13</d> Track active document  
 

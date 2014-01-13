@@ -56,8 +56,9 @@ public abstract class AbstractController implements Initializable, PersistableSt
     
     private ResourceBundle resourceBundle;
     
-    private List<Stage> childrenWindows = new ArrayList<Stage>();
+    private List<Stage> childrenWindows = new ArrayList<>();
 
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
 
         resourceBundle = rb;
@@ -186,9 +187,11 @@ public abstract class AbstractController implements Initializable, PersistableSt
      *
      * @param title Window title
      * @param rootNode Window content
+     * @param style Window style
+     * @param alwaysOnTop If true window is displayed always on top of the main stage
      * @return Window created (Stage)
      */
-    public Stage newWindow(String title, Parent rootNode, StageStyle style) {
+    public Stage newWindow(String title, Parent rootNode, StageStyle style, boolean alwaysOnTop) {
 
         Stage stage = new Stage();
         stage.initStyle(style);
@@ -197,15 +200,21 @@ public abstract class AbstractController implements Initializable, PersistableSt
         stage.setScene(scene);
         stage.setTitle(title);
         
+        if (alwaysOnTop) {
+            stage.initOwner(ApplicationContext.getMainStage());
+        }
+        
         // Register listeners
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 
+            @Override
             public void handle(WindowEvent t) {
                 onChildWindowRemoved((Stage)t.getSource());
             }
         });
         stage.setOnShown(new EventHandler<WindowEvent>() {
 
+            @Override
             public void handle(WindowEvent t) {
                 onChildWindowAdded((Stage)t.getSource());
             }
@@ -224,7 +233,7 @@ public abstract class AbstractController implements Initializable, PersistableSt
      */
     public Stage newUtilityWindow(String title, Parent rootNode) {
 
-        return this.newWindow(title, rootNode, StageStyle.UTILITY);
+        return this.newWindow(title, rootNode, StageStyle.UTILITY, false);
     }
     
     /**
@@ -236,7 +245,20 @@ public abstract class AbstractController implements Initializable, PersistableSt
      */
     public Stage newDecoratedWindow(String title, Parent rootNode) {
 
-        return this.newWindow(title, rootNode, StageStyle.DECORATED);
+        return this.newDecoratedWindow(title, rootNode, false);
+    }
+    
+    /**
+     * Create new basic window.
+     *
+     * @param title Window title
+     * @param rootNode Window content
+     * @param alwaysOnTop If true window is displayed always on top of the main stage
+     * @return Window created (Stage)
+     */
+    public Stage newDecoratedWindow(String title, Parent rootNode, boolean alwaysOnTop) {
+
+        return this.newWindow(title, rootNode, StageStyle.DECORATED, alwaysOnTop);
     }
 
     /**

@@ -691,7 +691,9 @@ TODO
 
 # User interface
 
-TODO
+## General notice on object cleanup and memory leaks
+
+Explain how to cleanup a dialog controller (ovveride 'close')/ component (implement a 'dispose')
 
 ## AbstractController and AbstractDialogController
 

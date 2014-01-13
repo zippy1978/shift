@@ -27,10 +27,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
 import javafx.concurrent.Worker.State;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.event.WeakEventHandler;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -64,6 +66,9 @@ public class CodeEditor extends AnchorPane {
     private EventHandler<ContentChangedEvent> onContentChanged;
     private EventHandler<CursorChangedEvent> onCursorChanged;
     private String contentAssistFunction = null;
+    
+    private EventHandler<KeyEvent> webViewKeyEventHandler;
+    private ChangeListener<State> webViewStateChangeListener;
 
     public CodeEditor() {
         super();
@@ -74,8 +79,8 @@ public class CodeEditor extends AnchorPane {
         AnchorPane.setBottomAnchor(webView, 0.0);
         AnchorPane.setLeftAnchor(webView, 0.0);
         AnchorPane.setRightAnchor(webView, 0.0);
-        webView.getEngine().getLoadWorker().stateProperty().addListener(
-                new ChangeListener<State>() {
+        webViewStateChangeListener = new ChangeListener<State>() {
+            @Override
             public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
 
 
@@ -91,10 +96,11 @@ public class CodeEditor extends AnchorPane {
                     }
                 }
             }
-        });
+        };
+        webView.getEngine().getLoadWorker().stateProperty().addListener(new WeakChangeListener<>(webViewStateChangeListener));
 
         // Consume default clipboard shortcuts to prevent double call
-        this.webView.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
+        webViewKeyEventHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
 
@@ -102,12 +108,13 @@ public class CodeEditor extends AnchorPane {
                     keyEvent.consume();
                 }
             }
-        });
+        };
+        this.webView.addEventFilter(KeyEvent.ANY, new WeakEventHandler<>(webViewKeyEventHandler));
         
         this.refresh();
 
     }
-
+   
     private String buildInlineScriptsForMode() {
 
         StringBuilder inlineScripts = new StringBuilder();

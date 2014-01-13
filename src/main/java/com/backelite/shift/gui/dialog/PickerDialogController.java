@@ -29,6 +29,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -53,14 +54,18 @@ public class PickerDialogController extends AbstractDialogController {
     @FXML
     private ChoiceBox selectorChoice;
     
+    private EventHandler<ActionEvent> okButtonActionEventHandler;
+    private EventHandler<ActionEvent> cancelButtonActionEventHandler;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
         
          // Handle ok button click
-        okButton.setOnAction(new EventHandler<ActionEvent>() {
+        okButtonActionEventHandler = new EventHandler<ActionEvent>() {
 
+            @Override
             public void handle(ActionEvent t) {
                 if (onSelection != null) {
                     onSelection.handle(new SelectionEvent(EventType.ROOT, selectorChoice.getSelectionModel().getSelectedIndex()));
@@ -68,11 +73,13 @@ public class PickerDialogController extends AbstractDialogController {
                 
                 close();
             }
-        });
+        };
+        okButton.setOnAction(new WeakEventHandler<>(okButtonActionEventHandler));
         
         // Handle cancel button click
-        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+        cancelButtonActionEventHandler = new EventHandler<ActionEvent>() {
 
+            @Override
             public void handle(ActionEvent t) {
                 if (onSelection != null) {
                     onSelection.handle(new SelectionEvent(EventType.ROOT, -1));
@@ -80,10 +87,11 @@ public class PickerDialogController extends AbstractDialogController {
                 
                 close();
             }
-        });
+        };
+        cancelButton.setOnAction(new WeakEventHandler<>(cancelButtonActionEventHandler));
         
     }
-
+ 
     /**
      * @return the onSelection
      */

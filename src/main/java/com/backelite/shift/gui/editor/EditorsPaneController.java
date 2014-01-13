@@ -65,14 +65,14 @@ public class EditorsPaneController extends AbstractController implements Observe
 
     @FXML
     private TabPane tabPane;
-    
     /**
-     * EventHandler in charge of notifying active document change or active document updates.
-     * To track only active editor / document change consider using a listener on activeEditorControllerProperty instead.
+     * EventHandler in charge of notifying active document change or active
+     * document updates. To track only active editor / document change consider
+     * using a listener on activeEditorControllerProperty instead.
      */
     private EventHandler<ActiveDocumentUpdatedEvent> onActiveDocumentUpdated;
-    public ReadOnlyObjectWrapper<EditorController> activeEditorControllerProperty = new ReadOnlyObjectWrapper<EditorController>();
-
+    public ReadOnlyObjectWrapper<EditorController> activeEditorControllerProperty = new ReadOnlyObjectWrapper<>();
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
@@ -86,8 +86,10 @@ public class EditorsPaneController extends AbstractController implements Observe
             public void changed(ObservableValue<? extends Tab> tab, Tab oldTab, Tab newTab) {
                 if (onActiveDocumentUpdated != null && newTab != null) {
                     EditorController controller = (EditorController) newTab.getUserData();
-                    activeEditorControllerProperty.set(controller);
-                    onActiveDocumentUpdated.handle(new ActiveDocumentUpdatedEvent(EventType.ROOT, controller.getDocument()));
+                    if (controller != null) {
+                        activeEditorControllerProperty.set(controller);
+                        onActiveDocumentUpdated.handle(new ActiveDocumentUpdatedEvent(EventType.ROOT, controller.getDocument()));
+                    }
                 }
             }
         });
@@ -135,33 +137,18 @@ public class EditorsPaneController extends AbstractController implements Observe
                         // Confirm close if document was modified
                         if (controller.getDocument().isModified()) {
                             displayConfirmDialog(getResourceBundle().getString("dialog.confirm.close_editor.unsaved.title"), getResourceBundle().getString("dialog.confirm.close_editor.unsaved.text"), new EventHandler<ConfirmDialogController.ChoiceEvent>() {
+                                @Override
                                 public void handle(ConfirmDialogController.ChoiceEvent t) {
 
                                     if (t.getChoice() == ConfirmDialogController.Choice.POSITIVE) {
                                         // Close editor
-                                        controller.close();
-                                        tabPane.getTabs().remove(tab);
-
-                                        // Notify document changed
-                                        if (tabPane.getTabs().size() == 0) {
-                                            if (onActiveDocumentUpdated != null) {
-                                                onActiveDocumentUpdated.handle(new ActiveDocumentUpdatedEvent(EventType.ROOT, null));
-                                            }
-                                        }
+                                        closeTab(tab);
                                     }
                                 }
                             });
                         } else {
                             // Close editor
-                            controller.close();
-                            tabPane.getTabs().remove(tab);
-
-                            // Notify document changed
-                            if (tabPane.getTabs().size() == 0) {
-                                if (onActiveDocumentUpdated != null) {
-                                    onActiveDocumentUpdated.handle(new ActiveDocumentUpdatedEvent(EventType.ROOT, null));
-                                }
-                            }
+                            closeTab(tab);
                         }
 
 
@@ -171,7 +158,7 @@ public class EditorsPaneController extends AbstractController implements Observe
                 tabPane.getTabs().add(tab);
                 SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
                 selectionModel.select(tab);
-
+                
                 return tab;
 
             } catch (PluginException ex) {
@@ -199,6 +186,23 @@ public class EditorsPaneController extends AbstractController implements Observe
 
     }
 
+    private void closeTab(Tab tab) {
+
+        // Close editor
+        EditorController controller = (EditorController) tab.getUserData();
+        controller.close();
+        controller.setOnCursorChanged(null);
+        tabPane.getTabs().remove(tab);
+        tab.setGraphic(null);
+
+        // Notify document changed
+        if (tabPane.getTabs().size() == 0) {
+            if (onActiveDocumentUpdated != null) {
+                onActiveDocumentUpdated.handle(new ActiveDocumentUpdatedEvent(EventType.ROOT, null));
+            }
+        }
+    }
+
     public Document getActiveDocument() {
 
         EditorController controller = this.getActiveEditorController();
@@ -214,13 +218,14 @@ public class EditorsPaneController extends AbstractController implements Observe
         return activeEditorControllerProperty.get();
     }
 
+    @Override
     public void update(Observable observable, Object arg) {
 
         // A document was updated
         if (observable instanceof Document) {
 
             ObservableList<Tab> tabs = tabPane.getTabs();
-            List<Tab> tabsToRemove = new ArrayList<Tab>();
+            List<Tab> tabsToRemove = new ArrayList<>();
             for (Tab tab : tabs) {
 
                 EditorController controller = (EditorController) tab.getUserData();
@@ -249,7 +254,7 @@ public class EditorsPaneController extends AbstractController implements Observe
                     }
                 }
             }
-            
+
             // Remove tabs
             tabPane.getTabs().removeAll(tabsToRemove);
 
@@ -258,7 +263,7 @@ public class EditorsPaneController extends AbstractController implements Observe
                 onActiveDocumentUpdated.handle(new ActiveDocumentUpdatedEvent(EventType.ROOT, (Document) observable));
             }
 
-        // Workspace was updated
+            // Workspace was updated
         } else if (observable instanceof Workspace) {
 
             if (arg != null && arg instanceof Project) {
@@ -267,7 +272,7 @@ public class EditorsPaneController extends AbstractController implements Observe
                 // Project was removed from workspace : all its documents must be closed
                 if (!ApplicationContext.getWorkspace().getProjects().contains(project)) {
 
-                    List<Tab> tabsToRemove = new ArrayList<Tab>();
+                    List<Tab> tabsToRemove = new ArrayList<>();
                     for (Tab tab : tabPane.getTabs()) {
                         CodeEditorController controller = (CodeEditorController) tab.getUserData();
                         if (controller.getDocument().getProject() == project) {

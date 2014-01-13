@@ -42,6 +42,7 @@ public interface Constants {
     public static final String SHORTCUT_COPY = "copy";
     public static final String SHORTCUT_PASTE = "paste";
     public static final String SHORTCUT_SELECT_ALL = "select_all";
+    public static final String SHORTCUT_FIND_REPLACE = "find_replace";
     public static final String SHORTCUT_CONTENT_ASSIST = "content_assist";
     public static final String SHORTCUT_NEW_PREVIEW = "new_preview";
     
