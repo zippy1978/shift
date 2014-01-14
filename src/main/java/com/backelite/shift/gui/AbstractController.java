@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.EventHandler;
+import javafx.event.WeakEventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -50,13 +51,19 @@ import org.slf4j.LoggerFactory;
  *
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
-public abstract class AbstractController implements Initializable, PersistableState {
+public abstract class AbstractController implements Controller, Initializable, PersistableState {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractController.class);
     
     private ResourceBundle resourceBundle;
     
     private List<Stage> childrenWindows = new ArrayList<>();
+    private List<Controller> childrenControllers = new ArrayList<>();
+    private Controller parentController;
+    
+    private EventHandler<WindowEvent> closeChildrenWindowEventHandler;
+    private EventHandler<WindowEvent> shownChildrenWindowEventHandler;
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -64,6 +71,29 @@ public abstract class AbstractController implements Initializable, PersistableSt
         resourceBundle = rb;
     }
 
+    @Override
+    public List<Controller> getChildrenControllers() {
+        return childrenControllers;
+    }
+
+    @Override
+    public void setParentController(Controller controller) {
+        
+        if (controller != null) {
+            controller.getChildrenControllers().add(this);
+        } else if (this.parentController != null) {
+            this.parentController.getChildrenControllers().remove(this);
+        }
+        
+        this.parentController = controller;
+    }
+
+    @Override
+    public Controller getParentController() {
+        return parentController;
+    }
+    
+    
     /**
      * Test if the target platform supports application wide menu bar.
      *
@@ -84,7 +114,7 @@ public abstract class AbstractController implements Initializable, PersistableSt
             }
             Stage stage = newModalWindow(title, (Parent) loader.load(getClass().getResourceAsStream("/fxml/info_dialog.fxml")));
             InfoDialogController controller = (InfoDialogController) loader.getController();
-            controller.setParentStage(stage);
+            controller.setStage(stage);
             controller.setMessage(message);
             stage.setResizable(false);
             stage.setFullScreen(false);
@@ -105,7 +135,7 @@ public abstract class AbstractController implements Initializable, PersistableSt
             }
             Stage stage = newModalWindow(title, (Parent) loader.load(getClass().getResourceAsStream("/fxml/error_dialog.fxml")));
             ErrorDialogController controller = (ErrorDialogController) loader.getController();
-            controller.setParentStage(stage);
+            controller.setStage(stage);
             controller.setMessage(message);
             stage.setResizable(false);
             stage.setFullScreen(false);
@@ -125,7 +155,7 @@ public abstract class AbstractController implements Initializable, PersistableSt
             FXMLLoader loader = FXMLLoaderFactory.newInstance();
             Stage stage = newModalWindow(title, (Parent) loader.load(getClass().getResourceAsStream("/fxml/picker_dialog.fxml")));
             PickerDialogController controller = (PickerDialogController) loader.getController();
-            controller.setParentStage(stage);
+            controller.setStage(stage);
             controller.setOnSelection(onSelection);
             controller.setOptions(options);
             controller.setMessage(message);
@@ -146,7 +176,7 @@ public abstract class AbstractController implements Initializable, PersistableSt
             FXMLLoader loader = FXMLLoaderFactory.newInstance();
             Stage stage = newModalWindow(title, (Parent) loader.load(getClass().getResourceAsStream("/fxml/confirm_dialog.fxml")));
             ConfirmDialogController controller = (ConfirmDialogController) loader.getController();
-            controller.setParentStage(stage);
+            controller.setStage(stage);
             controller.setOnChoice(onChoice);
             if (positiveText != null) {
                 controller.setPositiveButtonText(positiveText);
@@ -181,6 +211,14 @@ public abstract class AbstractController implements Initializable, PersistableSt
         this.childrenWindows.add(stage);
     }
 
+    @Override
+    public void close() {
+        
+        // Remove parent controller
+        this.setParentController(null);
+    }
+
+    
 
     /**
      * Create new window.
@@ -188,39 +226,42 @@ public abstract class AbstractController implements Initializable, PersistableSt
      * @param title Window title
      * @param rootNode Window content
      * @param style Window style
-     * @param alwaysOnTop If true window is displayed always on top of the main stage
+     * @param alwaysOnTop If true window is displayed always on top of the main newStage
      * @return Window created (Stage)
      */
     public Stage newWindow(String title, Parent rootNode, StageStyle style, boolean alwaysOnTop) {
 
-        Stage stage = new Stage();
-        stage.initStyle(style);
+        Stage newStage = new Stage();
+        newStage.initStyle(style);
         Scene scene = new Scene(rootNode);
         scene.getStylesheets().add(ApplicationContext.getThemeManager().getCSS());
-        stage.setScene(scene);
-        stage.setTitle(title);
+        newStage.setScene(scene);
+        newStage.setTitle(title);
         
         if (alwaysOnTop) {
-            stage.initOwner(ApplicationContext.getMainStage());
+            newStage.initOwner(ApplicationContext.getMainStage());
         }
         
         // Register listeners
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+        closeChildrenWindowEventHandler = new EventHandler<WindowEvent>() {
 
             @Override
             public void handle(WindowEvent t) {
                 onChildWindowRemoved((Stage)t.getSource());
             }
-        });
-        stage.setOnShown(new EventHandler<WindowEvent>() {
+        };
+        newStage.setOnCloseRequest(new WeakEventHandler<>(closeChildrenWindowEventHandler));
+        
+        shownChildrenWindowEventHandler = new EventHandler<WindowEvent>() {
 
             @Override
             public void handle(WindowEvent t) {
                 onChildWindowAdded((Stage)t.getSource());
             }
-        });
+        };
+        newStage.setOnShown(new WeakEventHandler<>(shownChildrenWindowEventHandler));
 
-        return stage;
+        return newStage;
     }
     
 
@@ -253,7 +294,7 @@ public abstract class AbstractController implements Initializable, PersistableSt
      *
      * @param title Window title
      * @param rootNode Window content
-     * @param alwaysOnTop If true window is displayed always on top of the main stage
+     * @param alwaysOnTop If true window is displayed always on top of the main newStage
      * @return Window created (Stage)
      */
     public Stage newDecoratedWindow(String title, Parent rootNode, boolean alwaysOnTop) {

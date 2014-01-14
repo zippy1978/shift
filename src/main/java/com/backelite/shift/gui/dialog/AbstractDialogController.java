@@ -24,7 +24,11 @@ package com.backelite.shift.gui.dialog;
 
 import com.backelite.shift.gui.AbstractController;
 import java.lang.ref.WeakReference;
+import javafx.event.EventHandler;
+import javafx.event.WeakEventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  *
@@ -32,17 +36,31 @@ import javafx.stage.Stage;
  */
 public abstract class AbstractDialogController extends AbstractController implements DialogController {
 
-    private WeakReference<Stage> parentStage = new WeakReference<>(null);
+    private Stage stage;
     private Object userData;
+    
+    private EventHandler<WindowEvent> closeWindowEventHandler;
 
     @Override
-    public Stage getParentStage() {
-        return parentStage.get();
+    public Stage getStage() {
+        return stage;
     }
 
     @Override
-    public void setParentStage(Stage parentStage) {
-         this.parentStage = new WeakReference<>(parentStage);
+    public void setStage(Stage stage) {
+         this.stage = stage;
+         
+         // Set close window listener to track when stage closes
+         if (stage != null) {
+             closeWindowEventHandler = new EventHandler<WindowEvent>() {
+
+                 @Override
+                 public void handle(WindowEvent t) {
+                     close();
+                 }
+             };
+             stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new WeakEventHandler<>(closeWindowEventHandler));
+         }
     }
 
     @Override
@@ -57,8 +75,9 @@ public abstract class AbstractDialogController extends AbstractController implem
     
     @Override
     public void close() {
-        if (getParentStage() != null) {
-            getParentStage().close();
+        super.close();
+        if (getStage() != null) {
+            getStage().close();
         }
     }
 }

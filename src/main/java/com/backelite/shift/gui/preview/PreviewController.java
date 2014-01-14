@@ -25,6 +25,8 @@ package com.backelite.shift.gui.preview;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
+import com.backelite.shift.gui.Controller;
+import com.backelite.shift.gui.dialog.DialogController;
 import com.backelite.shift.gui.editor.EditorController;
 import com.backelite.shift.plugin.PreviewFactory;
 import com.backelite.shift.workspace.artifact.Document;
@@ -38,16 +40,12 @@ import javafx.stage.Stage;
  *
  * @author ggrousset
  */
-public interface PreviewController {
+public interface PreviewController extends DialogController {
 
     public void setDocument(Document document);
 
     public Document getDocument();
 
-    public Stage getParentStage();
-
-    public void setParentStage(Stage parentStage);
-    
     public void setFactory(PreviewFactory factory);
     
     /**
@@ -57,8 +55,4 @@ public interface PreviewController {
      */
     public ChangeListener<EditorController> getActiveEditorChangeListener();
     
-    /**
-     * Close the current window.
-     */
-    public void close();
 }

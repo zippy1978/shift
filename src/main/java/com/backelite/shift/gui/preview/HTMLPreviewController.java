@@ -29,8 +29,10 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -75,7 +77,12 @@ public class HTMLPreviewController extends AbstractPreviewController {
     @FXML
     private ChoiceBox<String> presetChoice;
     List<Map<String, Object>> presets;
-
+    
+    private ChangeListener<String> presetChoiceChangeListener;
+    private ChangeListener<Boolean> orientationChangeListener;
+    private ChangeListener<Boolean> trackActiveFileChangeListener;
+    private EventHandler<ActionEvent> resetActionEventHandler;
+    
     public HTMLPreviewController() {
         super();
 
@@ -93,39 +100,44 @@ public class HTMLPreviewController extends AbstractPreviewController {
 
         // Populate preset combo
         this.populatePresetCombo();
-        presetChoice.valueProperty().addListener(new ChangeListener<String>() {
+        presetChoiceChangeListener = new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
 
                 // Apply new preset
                 applyPreset(presets.get(presetChoice.getSelectionModel().getSelectedIndex()));
             }
-        });
+        };
+        presetChoice.valueProperty().addListener(new WeakChangeListener<>(presetChoiceChangeListener));
 
         // Handle orientation change
-        orientationToggleButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
+        orientationChangeListener =  new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
                 // Apply preset
                 applyPreset(presets.get(presetChoice.getSelectionModel().getSelectedIndex()));
             }
-        });
+        };
+        orientationToggleButton.selectedProperty().addListener(new WeakChangeListener<>(orientationChangeListener));
 
         // Bind tracking button state
-        trackActiveFileToggleButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
+        trackActiveFileChangeListener = new ChangeListener<Boolean>() {
+            @Override
             public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
                 setActiveDocumentTrackingEnabled(t1);
             }
-        });
+        };
+        trackActiveFileToggleButton.selectedProperty().addListener(new WeakChangeListener<>(trackActiveFileChangeListener));
         trackActiveFileToggleButton.setSelected(true);
 
         // Handle reset
-        resetButton.setOnAction(new EventHandler<ActionEvent>() {
+        resetActionEventHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
                 refresh();
             }
-        });
+        };
+        resetButton.setOnAction(new WeakEventHandler<>(resetActionEventHandler));
 
         // Later ...
         Platform.runLater(new Runnable() {
@@ -133,7 +145,7 @@ public class HTMLPreviewController extends AbstractPreviewController {
             public void run() {
 
                 // Title
-                parentStage.setTitle(getResourceBundle().getString("builtin.plugin.preview.html.title"));
+                getStage().setTitle(getResourceBundle().getString("builtin.plugin.preview.html.title"));
             }
         });
 
@@ -181,18 +193,18 @@ public class HTMLPreviewController extends AbstractPreviewController {
             width = (Integer) preset.get("height");
         }
 
-        this.getParentStage().setWidth(width);
-        this.getParentStage().setHeight(height + topToolBar.getPrefHeight() + bottomToolBar.getPrefHeight());
+        this.getStage().setWidth(width);
+        this.getStage().setHeight(height + topToolBar.getPrefHeight() + bottomToolBar.getPrefHeight());
 
-        this.getParentStage().setResizable(false);
+        this.getStage().setResizable(false);
 
         // Refresh
         this.refresh();
     }
 
     @Override
-    public void setParentStage(Stage parentStage) {
-        super.setParentStage(parentStage);
+    public void setStage(Stage parentStage) {
+        super.setStage(parentStage);
 
         // Apply first preset
         presetChoice.getSelectionModel().select(0);

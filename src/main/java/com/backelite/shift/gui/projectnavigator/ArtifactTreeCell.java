@@ -25,8 +25,10 @@ import com.backelite.shift.workspace.artifact.Artifact;
 import com.backelite.shift.workspace.artifact.Document;
 import com.backelite.shift.workspace.artifact.Folder;
 import com.backelite.shift.workspace.artifact.Project;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.WeakEventHandler;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -41,6 +43,11 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
 
     private ProjectNavigatorController projectNavigatorController;
 
+    private EventHandler<ActionEvent> closeActionEventHandler;
+    private EventHandler<ActionEvent> newFileActionEventHandler;
+    private EventHandler<ActionEvent> newFolderActionEventHandler;
+    private EventHandler<ActionEvent> deleteActionEventHandler;
+    
     public ArtifactTreeCell() {
         super();
 
@@ -66,35 +73,42 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                 // Close
                 MenuItem closeMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.project.menu.close"));
                 projectContextMenu.getItems().add(closeMenuItem);
-                closeMenuItem.setOnAction(new EventHandler() {
+                
+                closeActionEventHandler = new EventHandler() {
+                    @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Project) {
                             projectNavigatorController.closeProject((Project) getItem());
                         }
                     }
-                });
+                };
+                closeMenuItem.setOnAction(new WeakEventHandler<>(closeActionEventHandler));
 
                 // New file
                 MenuItem newFileMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.folder.menu.new_file"));
                 projectContextMenu.getItems().add(newFileMenuItem);
-                newFileMenuItem.setOnAction(new EventHandler() {
+                newFileActionEventHandler = new EventHandler() {
+                    @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Project) {
                             projectNavigatorController.newFile((Project) getItem());
                         }
                     }
-                });
+                };
+                newFileMenuItem.setOnAction(new WeakEventHandler<>(newFileActionEventHandler));
 
                 // New folder
                 MenuItem newFolderMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.folder.menu.new_folder"));
                 projectContextMenu.getItems().add(newFolderMenuItem);
-                newFolderMenuItem.setOnAction(new EventHandler() {
+                newFolderActionEventHandler = new EventHandler() {
+                    @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Project) {
                             projectNavigatorController.newFolder((Project) getItem());
                         }
                     }
-                });
+                };
+                newFolderMenuItem.setOnAction(new WeakEventHandler<>(newFolderActionEventHandler));
                 
                 // -
                 projectContextMenu.getItems().add(new SeparatorMenuItem());
@@ -102,13 +116,14 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                 // Delete
                 MenuItem deleteMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.artifact.menu.delete"));
                 projectContextMenu.getItems().add(deleteMenuItem);
-                deleteMenuItem.setOnAction(new EventHandler() {
+                deleteActionEventHandler = new EventHandler() {
                     public void handle(Event t) {
                         if (getItem() instanceof Project) {
                             projectNavigatorController.deleteArtifact(getItem());
                         }
                     }
-                });
+                };
+                deleteMenuItem.setOnAction(new WeakEventHandler<>(deleteActionEventHandler));
 
                 setContextMenu(projectContextMenu);
 
@@ -121,24 +136,27 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                 // New file
                 MenuItem newFileMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.folder.menu.new_file"));
                 folderContextMenu.getItems().add(newFileMenuItem);
-                newFileMenuItem.setOnAction(new EventHandler() {
+                newFileActionEventHandler = new EventHandler() {
+                    @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Folder) {
                             projectNavigatorController.newFile((Folder) getItem());
                         }
                     }
-                });
+                };
+                newFileMenuItem.setOnAction(new WeakEventHandler<>(newFileActionEventHandler));
 
                 // New folder
                 MenuItem newFolderMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.folder.menu.new_folder"));
                 folderContextMenu.getItems().add(newFolderMenuItem);
-                newFolderMenuItem.setOnAction(new EventHandler() {
+                newFolderActionEventHandler = new EventHandler() {
                     public void handle(Event t) {
                         if (getItem() instanceof Folder) {
                             projectNavigatorController.newFolder((Folder) getItem());
                         }
                     }
-                });
+                };
+                newFolderMenuItem.setOnAction(new WeakEventHandler<>(newFolderActionEventHandler));
                 
                 // -
                 folderContextMenu.getItems().add(new SeparatorMenuItem());
@@ -146,13 +164,15 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                 // Delete
                 MenuItem deleteMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.artifact.menu.delete"));
                 folderContextMenu.getItems().add(deleteMenuItem);
-                deleteMenuItem.setOnAction(new EventHandler() {
+                deleteActionEventHandler = new EventHandler() {
+                    @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Folder) {
                             projectNavigatorController.deleteArtifact(getItem());
                         }
                     }
-                });
+                };
+                deleteMenuItem.setOnAction(new WeakEventHandler<>(deleteActionEventHandler));
 
                 setContextMenu(folderContextMenu);
 
@@ -165,13 +185,15 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                 // Delete
                 MenuItem deleteMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.artifact.menu.delete"));
                 documentContextMenu.getItems().add(deleteMenuItem);
-                deleteMenuItem.setOnAction(new EventHandler() {
+                deleteActionEventHandler = new EventHandler() {
+                    @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Document) {
                             projectNavigatorController.deleteArtifact(getItem());
                         }
                     }
-                });
+                };
+                deleteMenuItem.setOnAction(new WeakEventHandler<>(deleteActionEventHandler));
                 
                 setContextMenu(documentContextMenu);
             }

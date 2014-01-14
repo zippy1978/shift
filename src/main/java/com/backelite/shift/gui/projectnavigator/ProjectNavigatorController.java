@@ -68,7 +68,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
     /**
      * Maintains expanded state of each artifact of the treee
      */
-    private Map<String, Boolean> expandedStates = new HashMap<String, Boolean>();
+    private Map<String, Boolean> expandedStates = new HashMap<>();
     private Artifact lastSelectedArtifact;
 
     @Override
@@ -97,6 +97,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
 
         // Listen to selection change
         treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Artifact>>() {
+            @Override
             public void changed(ObservableValue<? extends TreeItem<Artifact>> ov, TreeItem<Artifact> t, TreeItem<Artifact> t1) {
                 
                 // Notify artifact selection (any kind)

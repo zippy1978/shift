@@ -54,6 +54,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -207,7 +208,7 @@ public class MainController extends AbstractController {
         try {
             Stage stage = this.newDecoratedWindow(getResourceBundle().getString("welcome.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/welcome.fxml")));
             DialogController controller = (DialogController) loader.getController();
-            controller.setParentStage(stage);
+            controller.setStage(stage);
             stage.showAndWait();
         } catch (IOException ex) {
             this.displayErrorDialog(ex);
@@ -511,7 +512,7 @@ public class MainController extends AbstractController {
                         Stage stage = newModalWindow(projectWizardFactory.getName(), (Parent) ApplicationContext.getPluginRegistry().newProjectWizard(projectWizardFactory, loader));
                         ProjectWizardController controller = (ProjectWizardController) loader.getController();
                         controller.setProjectGenerator(projectWizardFactory.getProjectGenerator());
-                        controller.setParentStage(stage);
+                        controller.setStage(stage);
                         stage.showAndWait();
 
                     } catch (PluginException ex) {
@@ -585,7 +586,6 @@ public class MainController extends AbstractController {
                 buildWindowMenu();
             }
         });
-        //this.buildWindowMenu();
     }
 
     private void handleSaveMenuAction() {
@@ -627,7 +627,7 @@ public class MainController extends AbstractController {
                 if (availableFactories.size() > 1) {
 
                     // Option list
-                    List<String> options = new ArrayList<String>();
+                    List<String> options = new ArrayList<>();
                     for (PreviewFactory factory : availableFactories) {
                         options.add(factory.getName());
                     }
@@ -649,8 +649,7 @@ public class MainController extends AbstractController {
                             }
                         }
                     });
-
-                    // Only one preview available ...
+                // Only one preview available ...
                 } else {
                     Stage stage = newDecoratedWindow("", (Parent) ApplicationContext.getPluginRegistry().newPreview(editorsPaneController.getActiveDocument(), loader));
                     setupAndShowPreviewWindow(stage, loader);
@@ -676,10 +675,11 @@ public class MainController extends AbstractController {
         Document activeDocument = editorsPaneController.getActiveDocument();
         PreviewController previewController = (PreviewController) loader.getController();
         previewController.setDocument(activeDocument);
-        previewController.setParentStage(previewStage);
+        previewController.setStage(previewStage);
+        previewController.setParentController(this);
         ChangeListener<EditorController> changeListener = previewController.getActiveEditorChangeListener();
         if (changeListener != null) {
-            editorsPaneController.activeEditorControllerProperty.addListener(changeListener);
+            editorsPaneController.activeEditorControllerProperty.addListener(new WeakChangeListener<>(changeListener));
         }
 
         previewStage.show();
@@ -744,7 +744,7 @@ public class MainController extends AbstractController {
                     FXMLLoader loader = FXMLLoaderFactory.newInstance();
                     Stage stage = newDecoratedWindow(getResourceBundle().getString("main.menu.edit.find_replace"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/find_replace_dialog.fxml")), true);
                     findReplaceDialogController = (FindReplaceDialogController) loader.getController();
-                    findReplaceDialogController.setParentStage(stage);
+                    findReplaceDialogController.setStage(stage);
                     findReplaceDialogController.setUserData(editorController);
                     stage.setResizable(false);
                     stage.setFullScreen(false);
@@ -754,7 +754,7 @@ public class MainController extends AbstractController {
             }
             
             // Show 
-            findReplaceDialogController.getParentStage().show();
+            findReplaceDialogController.getStage().show();
 
 
         }
@@ -776,7 +776,7 @@ public class MainController extends AbstractController {
             FXMLLoader loader = FXMLLoaderFactory.newInstance();
             Stage stage = newModalWindow(getResourceBundle().getString("main.new_file.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/new_file_dialog.fxml")));
             DialogController controller = (DialogController) loader.getController();
-            controller.setParentStage(stage);
+            controller.setStage(stage);
             controller.setUserData(projectNavigatorController.getSelectedArtifact());
             stage.setResizable(false);
             stage.setFullScreen(false);
@@ -844,7 +844,7 @@ public class MainController extends AbstractController {
             FXMLLoader loader = FXMLLoaderFactory.newInstance();
             Stage stage = newModalWindow(getResourceBundle().getString("main.new_folder.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/new_folder_dialog.fxml")));
             DialogController controller = (DialogController) loader.getController();
-            controller.setParentStage(stage);
+            controller.setStage(stage);
             controller.setUserData(projectNavigatorController.getSelectedArtifact());
             stage.setResizable(false);
             stage.setFullScreen(false);

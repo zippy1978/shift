@@ -21,13 +21,12 @@ package com.backelite.shift;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-import com.sun.javafx.runtime.VersionInfo;
-import com.backelite.shift.gui.dialog.ConfirmDialogController;
 import com.backelite.shift.gui.FXMLLoaderFactory;
 import com.backelite.shift.gui.MainController;
+import com.backelite.shift.gui.dialog.ConfirmDialogController;
 import com.backelite.shift.preferences.PreferencesManager;
 import com.backelite.shift.workspace.artifact.Project;
-import java.lang.reflect.Method;
+import com.sun.javafx.runtime.VersionInfo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

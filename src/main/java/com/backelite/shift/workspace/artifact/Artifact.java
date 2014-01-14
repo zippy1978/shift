@@ -63,5 +63,7 @@ public interface Artifact {
     public void moveTo(Artifact newParent) throws IOException;
     
     public void addObserver(Observer o);
+    public void deleteObserver(Observer o);
+    public void deleteObservers();
     
 }

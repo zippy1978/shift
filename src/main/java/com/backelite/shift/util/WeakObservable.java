@@ -53,12 +53,16 @@ public class WeakObservable extends Observable {
 
     @Override
     public void notifyObservers() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                originalNotifyObservers();
-            }
-        });
+        try {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    originalNotifyObservers();
+                }
+            });
+        } catch (IllegalStateException e) {
+            originalNotifyObservers();
+        }
 
     }
 
@@ -68,12 +72,16 @@ public class WeakObservable extends Observable {
 
     @Override
     public void notifyObservers(final Object arg) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                originalNotifyObservers(arg);
-            }
-        });
+        try {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    originalNotifyObservers(arg);
+                }
+            });
+        } catch (IllegalStateException e) {
+            originalNotifyObservers(arg);
+        }
     }
 
     private void originalNotifyObservers(Object arg) {

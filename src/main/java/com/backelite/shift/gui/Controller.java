@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.backelite.shift.gui.dialog;
+package com.backelite.shift.gui;
 
 /*
  * #%L
- * DialogController.java - shift - 2013
+ * Controller.java - Shift - 2013
  * %%
- * Copyright (C) 2013 Gilles Grousset
+ * Copyright (C) 2013 - 2014 Gilles Grousset
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as 
@@ -26,18 +26,17 @@ package com.backelite.shift.gui.dialog;
  * #L%
  */
 
-import com.backelite.shift.gui.Controller;
-import javafx.stage.Stage;
+import java.util.List;
 
 /**
  *
  * @author ggrousset
  */
-public interface DialogController extends Controller {
+public interface Controller {
     
-    public Stage getStage();
-    public void setStage(Stage stage);
+    public List<Controller> getChildrenControllers();
+    public void setParentController(Controller controller);
+    public Controller getParentController();
+    
     public void close();
-    public void setUserData(Object userData);
-    public Object getUserData();
 }

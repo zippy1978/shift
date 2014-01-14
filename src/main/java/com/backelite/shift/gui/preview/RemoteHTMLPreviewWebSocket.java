@@ -21,6 +21,7 @@ package com.backelite.shift.gui.preview;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +58,7 @@ public class RemoteHTMLPreviewWebSocket {
     /**
      * Static listener.
      */
-    private static RemoteHTMLPreviewWebSocketListener listener;
+    private static WeakReference<RemoteHTMLPreviewWebSocketListener> listener = new WeakReference<>(null);
 
     public interface RemoteHTMLPreviewWebSocketListener {
 
@@ -106,8 +107,8 @@ public class RemoteHTMLPreviewWebSocket {
                 }
 
                 // Notify
-                if (listener != null) {
-                    listener.onConnectionDataUpdated(this);
+                if (listener.get() != null) {
+                    listener.get().onConnectionDataUpdated(this);
                 }
 
             }
@@ -127,8 +128,8 @@ public class RemoteHTMLPreviewWebSocket {
         BROADCAST.add(this);
 
         // Notify
-        if (listener != null) {
-            listener.onConnectionAdded(this);
+        if (listener.get() != null) {
+            listener.get().onConnectionAdded(this);
         }
     }
 
@@ -138,8 +139,8 @@ public class RemoteHTMLPreviewWebSocket {
         BROADCAST.remove(this);
 
         // Notify
-        if (listener != null) {
-            listener.onConnectionRemoved(this);
+        if (listener.get() != null) {
+            listener.get().onConnectionRemoved(this);
         }
     }
 
@@ -180,11 +181,11 @@ public class RemoteHTMLPreviewWebSocket {
     }
 
     public static void setListener(RemoteHTMLPreviewWebSocketListener uniqueListener) {
-        listener = uniqueListener;
+        listener = new WeakReference<>(uniqueListener);
     }
 
     public static List<RemoteHTMLPreviewWebSocket> getConnections() {
-        return new ArrayList<RemoteHTMLPreviewWebSocket>(BROADCAST);
+        return new ArrayList<>(BROADCAST);
     }
 
     /**

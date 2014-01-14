@@ -22,6 +22,7 @@ package com.backelite.shift.gui.preview;
  * #L%
  */
 import com.backelite.shift.gui.AbstractController;
+import com.backelite.shift.gui.dialog.AbstractDialogController;
 import com.backelite.shift.gui.editor.EditorController;
 import com.backelite.shift.plugin.PreviewFactory;
 import com.backelite.shift.util.FileUtils;
@@ -39,10 +40,9 @@ import javafx.stage.Stage;
  *
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
-public abstract class AbstractPreviewController extends AbstractController implements PreviewController, Observer {
+public abstract class AbstractPreviewController extends AbstractDialogController implements PreviewController, Observer {
 
     protected Document document;
-    protected Stage parentStage;
     protected ChangeListener<EditorController> editorChangeListener;
     private boolean activeDocumentTrackingEnabled = true;
     
@@ -119,29 +119,7 @@ public abstract class AbstractPreviewController extends AbstractController imple
             this.refresh();
         }
     }
-
-    /**
-     * @return the parentStage
-     */
-    @Override
-    public Stage getParentStage() {
-        return parentStage;
-    }
-
-    /**
-     * @param parentStage the parentStage to set
-     */
-    @Override
-    public void setParentStage(Stage parentStage) {
-        this.parentStage = parentStage;
-    }
     
-    @Override
-    public void close() {
-        if (getParentStage() != null) {
-            getParentStage().close();
-        }
-    }
 
     @Override
     public ChangeListener<EditorController> getActiveEditorChangeListener() {

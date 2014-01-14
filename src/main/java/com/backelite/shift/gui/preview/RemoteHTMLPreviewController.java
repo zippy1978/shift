@@ -31,11 +31,13 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -88,7 +90,7 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
     @FXML
     private ToggleButton trackActiveFileToggleButton;
     
-    private ObservableList<RemoteHTMLPreviewWebSocket> tableModel = FXCollections.observableArrayList();
+    private final ObservableList<RemoteHTMLPreviewWebSocket> tableModel = FXCollections.observableArrayList();
     
     /**
      * Indicate if remote preview is already running.
@@ -101,6 +103,10 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
      * Server port.
      */
     private int port = 0;
+    
+    private EventHandler<ActionEvent> urlLinkActionEventHandler;
+    private ChangeListener<Boolean> trackActiveFileChangeListener;
+    private EventHandler<MouseEvent> tableCellMouseEventHandler;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -110,6 +116,7 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
             displayInfoDialog(getResourceBundle().getString("builtin.plugin.preview.remote_html.title"), getResourceBundle().getString("builtin.plugin.preview.remote_html.already_running.text"));
             Platform.runLater(new Runnable() {
 
+                @Override
                 public void run() {
                     close();
                 }
@@ -122,23 +129,27 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
             startServer();
             
             // URL click
-            urlLink.setOnAction(new EventHandler<ActionEvent>() {
+            urlLinkActionEventHandler = new EventHandler<ActionEvent>() {
 
+                @Override
                 public void handle(ActionEvent t) {
                     ApplicationContext.getHostServices().showDocument(urlLink.getText());
                 }
-            });
+            };
+            urlLink.setOnAction(new WeakEventHandler<>(urlLinkActionEventHandler));
             
             // Table view setup
             this.setupConnectionTable();
             
             // Bind tracking button state
-            trackActiveFileToggleButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            trackActiveFileChangeListener = new ChangeListener<Boolean>() {
 
+                @Override
                 public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
                     setActiveDocumentTrackingEnabled(t1);
                 }
-            });
+            };
+            trackActiveFileToggleButton.selectedProperty().addListener(new WeakChangeListener<>(trackActiveFileChangeListener));
             trackActiveFileToggleButton.setSelected(true);
         }
         
@@ -146,10 +157,11 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
         
         // Later ...
         Platform.runLater(new Runnable() {
+            @Override
             public void run() {
 
                 // Title
-                parentStage.setTitle(getResourceBundle().getString("builtin.plugin.preview.remote_html.title"));
+                getStage().setTitle(getResourceBundle().getString("builtin.plugin.preview.remote_html.title"));
             }
         });
     }
@@ -157,14 +169,10 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
     
     private void setupConnectionTable() {
         
-        // Cell factory
-        Callback<TableColumn, TableCell> cellFactory =
-                new Callback<TableColumn, TableCell>() {
-            @Override
-            public TableCell call(TableColumn p) {
-                TextFieldTableCell cell = new TextFieldTableCell();
-                cell.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+        // Cell click handler
+        tableCellMouseEventHandler = new EventHandler<MouseEvent>() {
 
+                    @Override
                     public void handle(MouseEvent t) {
                         TableCell c = (TableCell) t.getSource();
                         int index = c.getIndex();
@@ -174,10 +182,19 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
                             tableModel.get(index).ping();
                         }
                     }
-                });
+                };
+        
+        // Cell factory
+        Callback<TableColumn, TableCell> cellFactory =
+                new Callback<TableColumn, TableCell>() {
+            @Override
+            public TableCell call(TableColumn p) {
+                TextFieldTableCell cell = new TextFieldTableCell();
+                cell.addEventFilter(MouseEvent.MOUSE_CLICKED, new WeakEventHandler<>(tableCellMouseEventHandler));
                 return cell;
             }
         };
+        
         
         // Remote address
         TableColumn remoteAddressCol = new TableColumn(getResourceBundle().getString("builtin.plugin.preview.remote_html.remote_address"));
@@ -205,26 +222,18 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
         connectionTable.setItems(tableModel);
         
     }
-    
 
     @Override
-    public void setParentStage(Stage parentStage) {
-        super.setParentStage(parentStage);
-        
-        this.getParentStage().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
-
-            public void handle(WindowEvent t) {
-                stopServer();
-            }
-        
-        });
+    public void close() {
+        super.close();
+        stopServer();
     }
-
+   
     private void startServer() {
         
         started = true;
         
-        // Lusten to client browser connections
+        // Listen to client browser connections
         RemoteHTMLPreviewWebSocket.setListener(this);
 
         // Start Workspace HTTP server (if not done yet)
@@ -388,18 +397,21 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
         }
     }
 
+    @Override
     public void onConnectionAdded(RemoteHTMLPreviewWebSocket connection) {
         
         log.debug("Adding connection");
         tableModel.add(connection);
     }
 
+    @Override
     public void onConnectionRemoved(RemoteHTMLPreviewWebSocket connection) {
         
         log.debug("Removing connection");
         tableModel.remove(connection);
     }
 
+    @Override
     public void onConnectionDataUpdated(RemoteHTMLPreviewWebSocket connection) {
         
         ObservableList<RemoteHTMLPreviewWebSocket> newModel = FXCollections.observableArrayList(tableModel);
