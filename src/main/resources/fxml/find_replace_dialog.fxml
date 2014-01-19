@@ -19,5 +19,7 @@
         <Button id="closeButton" fx:id="replaceAllButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="35.0" prefWidth="93.0" text="%dialog.find_replace.replace_all" textAlignment="CENTER" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="95.0" AnchorPane.topAnchor="2.0" />
       </children>
     </AnchorPane>
+    <Label layoutX="14.0" layoutY="28.0" prefWidth="93.0" text="%dialog.find_replace.find" />
+    <TextField fx:id="findTextField" layoutX="61.0" layoutY="25.0" prefWidth="200.0" />
   </children>
 </AnchorPane>

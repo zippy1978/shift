@@ -88,7 +88,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 09/12/13</d> 'Select All' in 'Edit' menu  
 
-<t>✘</t> 'Search' in 'Edit' menu  
+<t>WIP</t> 'Search' in 'Edit' menu  (replace support / UI / active doc change / menu shortcuts disables when focused)
 
 ### Packaging
 

@@ -154,6 +154,7 @@ public class CodeEditorController extends AbstractController implements EditorCo
         this.onCursorChanged = onCursorChanged;
     }
     
+    @Override
     public EventHandler<CursorChangedEvent> getOnCursorChanged() {
         return onCursorChanged;
     }
@@ -201,6 +202,11 @@ public class CodeEditorController extends AbstractController implements EditorCo
 
     public boolean canContentAssist() {
         return codeEditor.canContentAssist();
+    }
+
+    @Override
+    public void find(String query) {
+        codeEditor.find(query);
     }
     
     

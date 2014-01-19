@@ -151,6 +151,10 @@ public class CodeEditor extends AnchorPane {
                 contentAssistFunction = "CodeMirror.showHint(cm, CodeMirror.xmlHint);";
                 break;
         }
+        
+        // Search feature
+        inlineScripts.append(getFileContent("/customcmsearch.js"));
+        inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/search/searchcursor.js"));
 
         return inlineScripts.toString();
 
@@ -381,6 +385,14 @@ public class CodeEditor extends AnchorPane {
 
         }
 
+    }
+    
+    public void find(String query) {
+        JSObject cmInstance = this.getCodeMirrorJSInstance();
+        if (cmInstance != null) {
+            JSObject commands =  (JSObject) webView.getEngine().executeScript("CodeMirror.commands");
+            commands.call("find", cmInstance, query);
+        }
     }
     
     public boolean canContentAssist() {

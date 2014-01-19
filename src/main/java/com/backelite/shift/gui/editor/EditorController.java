@@ -42,6 +42,8 @@ public interface EditorController {
     
     public Document getDocument();
     
+    public void find(String query);
+    
     public boolean canUndo();
     
     public boolean canRedo();

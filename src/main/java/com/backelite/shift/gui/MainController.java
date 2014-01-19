@@ -649,7 +649,7 @@ public class MainController extends AbstractController {
                             }
                         }
                     });
-                // Only one preview available ...
+                    // Only one preview available ...
                 } else {
                     Stage stage = newDecoratedWindow("", (Parent) ApplicationContext.getPluginRegistry().newPreview(editorsPaneController.getActiveDocument(), loader));
                     setupAndShowPreviewWindow(stage, loader);
@@ -752,7 +752,7 @@ public class MainController extends AbstractController {
                     this.displayErrorDialog(ex);
                 }
             }
-            
+
             // Show 
             findReplaceDialogController.getStage().show();
 

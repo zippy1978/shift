@@ -22,6 +22,8 @@ package com.backelite.shift.gui.dialog;
  * #L%
  */
 
+import com.backelite.shift.ApplicationContext;
+import com.backelite.shift.gui.editor.EditorController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -29,6 +31,7 @@ import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
 /**
  *
@@ -38,15 +41,21 @@ public class FindReplaceDialogController extends AbstractDialogController {
 
     @FXML
     private Button findButton;
+    @FXML
+    private TextField findTextField;
     @FXML 
     private Button replaceAllButton;
     @FXML Button closeButton;
     
     private EventHandler<ActionEvent> closeButtonActionEventHandler;
+    private EventHandler<ActionEvent> findButtonActionEventHandler;
+    
+    private EditorController editorController;
             
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
+        
         
         // Close dialog on close button click
         closeButtonActionEventHandler = new EventHandler<ActionEvent>() {
@@ -57,7 +66,27 @@ public class FindReplaceDialogController extends AbstractDialogController {
             }
         };
         closeButton.setOnAction(new WeakEventHandler<>(closeButtonActionEventHandler));
+        
+        // Find button
+        findButtonActionEventHandler = new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                editorController.find(findTextField.getText());
+            }
+        };
+        findButton.setOnAction(new WeakEventHandler<>(findButtonActionEventHandler));
+
     }
+
+    @Override
+    public void setUserData(Object userData) {
+        
+         // Get target editor controller
+        editorController = (EditorController)userData;
+    }
+    
+    
 
     @Override
     public void close() {
