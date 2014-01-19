@@ -691,9 +691,54 @@ TODO
 
 # User interface
 
+## Concepts
+
+TODO
+
 ## General notice on object cleanup and memory leaks
 
-Explain how to cleanup a dialog controller (ovveride 'close')/ component (implement a 'dispose')
+When working with JavaFX it is really easy to endup with a lot of leaked objects. Here are a set of best practices to avoid those leaks.
+
+### Listeners and EventHandlers
+
+Listeners and EventHandlers is the first cause of memory leak: it is important to declare them as class members but use a weak reference when setting them.
+
+Here is an example with a *ChangeListener*:
+
+```java
+// Initialize change listener (class member)
+presetChoiceChangeListener = new ChangeListener<String>() {
+	@Override
+    public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+    	// ...
+    }
+};
+
+// Add the listener using a WeakChangeListener
+presetChoice.valueProperty().addListener(new WeakChangeListener<>(presetChoiceChangeListener));
+```
+
+And an example with a *EventHandler*:
+
+```java
+// Initialize event handler (class member)
+resetActionEventHandler = new EventHandler<ActionEvent>() {
+ 	@Override
+ 	public void handle(ActionEvent t) {
+    	// ...
+  	}
+};
+
+// Set event handler using a WeakEventHandler
+resetButton.setOnAction(new WeakEventHandler<>(resetActionEventHandler));
+```
+
+### TableView
+
+*TableView* objects are hard to clean up: there are several operations to perform to ensure it is garbage collected when not needed anymore.
+
+To clean up such objects it is recommanded to use the utility method *MemoryUtils.cleanUpTableView(...)* when the object is not needed anymore (usually called in *Controller.close()* method).
+
 
 ## AbstractController and AbstractDialogController
 

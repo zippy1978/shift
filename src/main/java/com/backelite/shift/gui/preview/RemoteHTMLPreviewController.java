@@ -23,6 +23,7 @@ package com.backelite.shift.gui.preview;
  */
 import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.util.FileUtils;
+import com.backelite.shift.util.MemoryUtils;
 import com.backelite.shift.util.NetworkUtils;
 import com.backelite.shift.workspace.HTTPWorkspaceProxyServer;
 import java.io.IOException;
@@ -227,6 +228,10 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
     public void close() {
         super.close();
         stopServer();
+        
+        // Table clean up (if cell factory is not removed = memory leak)
+        MemoryUtils.cleanUpTableView(connectionTable);
+        
     }
    
     private void startServer() {

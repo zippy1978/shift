@@ -97,18 +97,22 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#themes"><span class="toc-section-number">3.5</span> Themes</a></li>
 </ul></li>
 <li><a href="#user-interface"><span class="toc-section-number">4</span> User interface</a><ul>
-<li><a href="#abstractcontroller-and-abstractdialogcontroller"><span class="toc-section-number">4.1</span> AbstractController and AbstractDialogController</a></li>
-<li><a href="#main-window"><span class="toc-section-number">4.2</span> Main window</a><ul>
-<li><a href="#menu"><span class="toc-section-number">4.2.1</span> Menu</a></li>
-<li><a href="#project-navigator"><span class="toc-section-number">4.2.2</span> Project navigator</a></li>
-<li><a href="#editors-pane"><span class="toc-section-number">4.2.3</span> Editors pane</a></li>
-<li><a href="#status-bar"><span class="toc-section-number">4.2.4</span> Status bar</a></li>
+<li><a href="#general-notice-on-object-cleanup-and-memory-leaks"><span class="toc-section-number">4.1</span> General notice on object cleanup and memory leaks</a><ul>
+<li><a href="#listeners-and-eventhandlers"><span class="toc-section-number">4.1.1</span> Listeners and EventHandlers</a></li>
+<li><a href="#tableview"><span class="toc-section-number">4.1.2</span> TableView</a></li>
 </ul></li>
-<li><a href="#validation"><span class="toc-section-number">4.3</span> Validation</a><ul>
-<li><a href="#compoundvalidator"><span class="toc-section-number">4.3.1</span> CompoundValidator</a></li>
-<li><a href="#validation-result"><span class="toc-section-number">4.3.2</span> Validation result</a></li>
+<li><a href="#abstractcontroller-and-abstractdialogcontroller"><span class="toc-section-number">4.2</span> AbstractController and AbstractDialogController</a></li>
+<li><a href="#main-window"><span class="toc-section-number">4.3</span> Main window</a><ul>
+<li><a href="#menu"><span class="toc-section-number">4.3.1</span> Menu</a></li>
+<li><a href="#project-navigator"><span class="toc-section-number">4.3.2</span> Project navigator</a></li>
+<li><a href="#editors-pane"><span class="toc-section-number">4.3.3</span> Editors pane</a></li>
+<li><a href="#status-bar"><span class="toc-section-number">4.3.4</span> Status bar</a></li>
 </ul></li>
-<li><a href="#custom-controls"><span class="toc-section-number">4.4</span> Custom controls</a></li>
+<li><a href="#validation"><span class="toc-section-number">4.4</span> Validation</a><ul>
+<li><a href="#compoundvalidator"><span class="toc-section-number">4.4.1</span> CompoundValidator</a></li>
+<li><a href="#validation-result"><span class="toc-section-number">4.4.2</span> Validation result</a></li>
+</ul></li>
+<li><a href="#custom-controls"><span class="toc-section-number">4.5</span> Custom controls</a></li>
 </ul></li>
 </ul>
 </div>
@@ -118,7 +122,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>Thereby a good knowledge of Java and Object Oriented Programming is required, as well as Asynchronous Programmation.</p>
 <h2 id="technical-setup-and-tools"><a href="#technical-setup-and-tools"><span class="header-section-number">1.2</span> Technical setup and tools</a></h2>
 <h3 id="java"><a href="#java"><span class="header-section-number">1.2.1</span> Java</a></h3>
-<p>The required JDK version is 1.7 (a recent official Oracle version with JavaFX 2.2 included).</p>
+<p>The required JDK version is 1.7 (a recent official Oracle version with JavaFX 2.2 included but not higher than update 21, because JavaFX has a <a href="https://javafx-jira.kenai.com/browse/RT-32415">bug</a>).</p>
 <p>However, due to some limitations with Java 1.7, Java 1.8 will be used as soon as it will be available.</p>
 <p>The current limitations on Java 1.7 are:</p>
 <ul>
@@ -127,6 +131,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </ul>
 <h3 id="maven"><a href="#maven"><span class="header-section-number">1.2.2</span> Maven</a></h3>
 <p>Maven 3 and the <a href="https://github.com/zonski/javafx-maven-plugin">javafx-maven-plugin</a> are used to run and package the application.</p>
+<p>When using the plugin form the first time, remember to fix your current JRE classpath with the folling command:</p>
+<pre><code>mvn jfx:fix-classpath</code></pre>
 <h3 id="ide"><a href="#ide"><span class="header-section-number">1.2.3</span> IDE</a></h3>
 <p>Any IDE can be used for development, however Netbeans is recommended as it has the best JavaFX support at the moment.</p>
 <h2 id="building-from-sources"><a href="#building-from-sources"><span class="header-section-number">1.3</span> Building from sources</a></h2>
@@ -583,32 +589,48 @@ metaBuilder.<span class="fu">define</span> {
 <h2 id="themes"><a href="#themes"><span class="header-section-number">3.5</span> Themes</a></h2>
 <p>TODO</p>
 <h1 id="user-interface"><a href="#user-interface"><span class="header-section-number">4</span> User interface</a></h1>
+<h2 id="general-notice-on-object-cleanup-and-memory-leaks"><a href="#general-notice-on-object-cleanup-and-memory-leaks"><span class="header-section-number">4.1</span> General notice on object cleanup and memory leaks</a></h2>
+<p>When working with JavaFX it is really easy to endup with a lot of leaked objects. Here are a set of best practices to avoid those leaks.</p>
+<h3 id="listeners-and-eventhandlers"><a href="#listeners-and-eventhandlers"><span class="header-section-number">4.1.1</span> Listeners and EventHandlers</a></h3>
+<p>Listeners and EventHandlers is the first cause of memory leak: it is important to declare them as class members but use a weak reference when setting them.</p>
+<p>Here is an example with a <em>ChangeListener</em>:</p>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="co">// Initialize change listener (class member)</span>
+presetChoiceChangeListener = <span class="kw">new</span> ChangeListener&lt;String&gt;() {
+    <span class="fu">@Override</span>
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">changed</span>(ObservableValue&lt;? <span class="kw">extends</span> String&gt; ov, String t, String t1) {
+        <span class="co">// ...</span>
+    }
+};
+
+<span class="co">// Add the listener using a WeakChangeListener</span>
+presetChoice.<span class="fu">valueProperty</span>().<span class="fu">addListener</span>(<span class="kw">new</span> WeakChangeListener&lt;&gt;(presetChoiceChangeListener));</code></pre>
+<p>And an example with a <em>EventHandler</em>:</p>
+<h3 id="tableview"><a href="#tableview"><span class="header-section-number">4.1.2</span> TableView</a></h3>
+<h2 id="abstractcontroller-and-abstractdialogcontroller"><a href="#abstractcontroller-and-abstractdialogcontroller"><span class="header-section-number">4.2</span> AbstractController and AbstractDialogController</a></h2>
 <p>TODO</p>
-<h2 id="abstractcontroller-and-abstractdialogcontroller"><a href="#abstractcontroller-and-abstractdialogcontroller"><span class="header-section-number">4.1</span> AbstractController and AbstractDialogController</a></h2>
+<h2 id="main-window"><a href="#main-window"><span class="header-section-number">4.3</span> Main window</a></h2>
 <p>TODO</p>
-<h2 id="main-window"><a href="#main-window"><span class="header-section-number">4.2</span> Main window</a></h2>
+<h3 id="menu"><a href="#menu"><span class="header-section-number">4.3.1</span> Menu</a></h3>
 <p>TODO</p>
-<h3 id="menu"><a href="#menu"><span class="header-section-number">4.2.1</span> Menu</a></h3>
+<h3 id="project-navigator"><a href="#project-navigator"><span class="header-section-number">4.3.2</span> Project navigator</a></h3>
 <p>TODO</p>
-<h3 id="project-navigator"><a href="#project-navigator"><span class="header-section-number">4.2.2</span> Project navigator</a></h3>
+<h3 id="editors-pane"><a href="#editors-pane"><span class="header-section-number">4.3.3</span> Editors pane</a></h3>
 <p>TODO</p>
-<h3 id="editors-pane"><a href="#editors-pane"><span class="header-section-number">4.2.3</span> Editors pane</a></h3>
+<h3 id="status-bar"><a href="#status-bar"><span class="header-section-number">4.3.4</span> Status bar</a></h3>
 <p>TODO</p>
-<h3 id="status-bar"><a href="#status-bar"><span class="header-section-number">4.2.4</span> Status bar</a></h3>
-<p>TODO</p>
-<h2 id="validation"><a href="#validation"><span class="header-section-number">4.3</span> Validation</a></h2>
+<h2 id="validation"><a href="#validation"><span class="header-section-number">4.4</span> Validation</a></h2>
 <p>Unfortunately, JavaFX does not provide any input validation system at the time. That is why the application uses its own.</p>
 <p>Classes related to validation are located in <code>com.backelite.shift.gui.validation</code>.</p>
 <p>The validation mechanism is pretty basic: it exposes a <code>Validator</code> interface with a single <code>validate(…)</code> method and a set of implementations to perform common validations : not blank, filename…</p>
 <p>Validators are used in <a href="#custom-controls">Custom controls</a>.</p>
-<h3 id="compoundvalidator"><a href="#compoundvalidator"><span class="header-section-number">4.3.1</span> CompoundValidator</a></h3>
+<h3 id="compoundvalidator"><a href="#compoundvalidator"><span class="header-section-number">4.4.1</span> CompoundValidator</a></h3>
 <p>The <code>CompoundValidator</code> is a special validator that can run several validators at the same time. It can be built like this:</p>
 <pre class="sourceCode java"><code class="sourceCode java">Validator validator = <span class="kw">new</span> <span class="fu">CompoundValidator</span>(<span class="kw">new</span> <span class="fu">NotBlankValidator</span>(), 
 <span class="kw">new</span> <span class="fu">FilenameValidator</span>());</code></pre>
-<h3 id="validation-result"><a href="#validation-result"><span class="header-section-number">4.3.2</span> Validation result</a></h3>
+<h3 id="validation-result"><a href="#validation-result"><span class="header-section-number">4.4.2</span> Validation result</a></h3>
 <p>The <code>validate(…)</code> method of <code>Validator</code>interface returns a <code>ValidatorResult</code> object. This object is composed of a <code>valid</code> attribute and a list of error messages (many messages can be returned with the <code>CompoundValidator</code>).</p>
 <p>Error messages are simple strings formatted as property key, so that it can be localized in a properties file. Example: the <code>NotBlankValidator</code> returns the following message: <em>validator.not.blank</em>.</p>
-<h2 id="custom-controls"><a href="#custom-controls"><span class="header-section-number">4.4</span> Custom controls</a></h2>
+<h2 id="custom-controls"><a href="#custom-controls"><span class="header-section-number">4.5</span> Custom controls</a></h2>
 <p>TODO</p>
 </body>
 </html>

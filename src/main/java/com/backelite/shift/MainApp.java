@@ -75,8 +75,7 @@ public class MainApp extends Application {
   
         // Load root
         FXMLLoader loader = FXMLLoaderFactory.newInstance();
-        Parent rootNode = null;
-        rootNode = (Parent) loader.load(getClass().getResourceAsStream("/fxml/main.fxml"));
+        Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream("/fxml/main.fxml"));
         mainController = (MainController) loader.getController();
 
         // Restore state
