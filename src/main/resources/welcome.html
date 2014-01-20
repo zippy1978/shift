@@ -33,12 +33,13 @@
           }
 
           ul {
-            padding: 0;
+            padding-left: 20px;
             list-style-type: square;
           }
 
           li {
             padding-bottom: 5px;
+          	line-height: 20px;
           }
 
           .centered {
@@ -49,6 +50,18 @@
               width: 128px;
               height: 128px;
           }
+        
+          .warning {
+          	background-color: #eabe38;
+          	font-weight: bold;
+          color: white;
+          	padding: 10px;
+          	border-radius: 5px;
+          }
+        
+        .warning p {
+          margin: 0px 0px 5px 0px;
+        }
 
       </style>
     </head>
@@ -58,22 +71,29 @@
       </p>
       <h1>Welcome to Shift !</h1>
       <p>
-        Shift is the code editor for the new web. The perfect tool for your responsive and mobile web sites.
+        Shift is a code editor designed for the modern web. The perfect tool for your responsive and mobile web sites.
       </p>
-      <p>
-        It's time to Shift !
-      </p>
-      <h2>Features</h2>
+      <h2>
+        Features
+      </h2>
       <ul>
       	<li>Fast loading editor</li>
       	<li>Syntax coloration and completion for common web file formats</li>
         <li>Project wizards to help you get started with your projects</li>
-        <li>Live preview and remote preview</li>
+        <li>Live preview and live remote preview</li>
       </ul>
       <!--<h2>Release notes</h2>
       <h3>Release 0.1</h3>
       <ul>
         <li>Checkout the feature list above :)</li>
       </ul>-->
+      <div id="snapshot_warning" class="warning" style="display: none">
+        <p>
+          This version of Shift is a SNAPSHOT release. It maybe unstable. 
+        </p>
+        <p>
+          If you encounter issues after upgrading from a previous version, please consider deleting your previous settings (.shift folder in user directory).
+        </p>
+      </div>
     </body>
 </html>

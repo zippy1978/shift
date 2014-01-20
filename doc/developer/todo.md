@@ -94,9 +94,11 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <t>✘</t> About window  
 
-<t>✘</t> Welcome window display must display version and build numbers + warning message when snapshot release.
+<d>✔ 01/20/14</d> Welcome window display
 
 <d>✔ 09/12/13</d> Icon
+
+<t>✘</t> Display help texts in poject navigator and editors pane when they are empty
 
 
 ## Backlog

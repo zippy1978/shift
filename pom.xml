@@ -10,9 +10,11 @@
     <properties>
         <slf4j.version>1.6.1</slf4j.version>
         <versionCode>1</versionCode>
-        <versionName>0.1</versionName>
+        <versionName>${project.version}</versionName>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
     </properties>
    
     <packaging>jar</packaging>

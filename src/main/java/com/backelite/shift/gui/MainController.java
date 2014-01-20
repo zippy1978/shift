@@ -212,6 +212,7 @@ public class MainController extends AbstractController {
             Stage stage = this.newDecoratedWindow(getResourceBundle().getString("welcome.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/welcome.fxml")));
             DialogController controller = (DialogController) loader.getController();
             controller.setStage(stage);
+            stage.setResizable(false);
             stage.showAndWait();
         } catch (IOException ex) {
             this.displayErrorDialog(ex);

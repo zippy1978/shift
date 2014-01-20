@@ -21,15 +21,22 @@ package com.backelite.shift.gui.dialog;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-
+import com.backelite.shift.ApplicationContext;
+import com.backelite.shift.gui.control.CodeEditor;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.web.WebView;
+import netscape.javascript.JSObject;
 
 /**
  *
@@ -41,24 +48,47 @@ public class WelcomeDialogController extends AbstractDialogController {
     private WebView webView;
     @FXML
     private Button closeButton;
-    
+    @FXML 
+    private Label infoLabel;
     private EventHandler<ActionEvent> closeButtonActionEventHandler;
-    
+    private ChangeListener<Worker.State> webViewStateChangeListener;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
-         
+
         webView.getEngine().load(getClass().getResource("/welcome.html").toExternalForm());
-        
+
         // Close button click
         closeButtonActionEventHandler = new EventHandler<ActionEvent>() {
-
             @Override
             public void handle(ActionEvent t) {
                 close();
             }
         };
         closeButton.setOnAction(new WeakEventHandler<>(closeButtonActionEventHandler));
+
+
+        final String versionName = (String) ApplicationContext.getProperties().get("application.version.name");
+        final String buildNumber = (String) ApplicationContext.getProperties().get("application.build.number");
+        // Wait for the HTML to load
+        webViewStateChangeListener = new ChangeListener<Worker.State>() {
+            @Override
+            public void changed(ObservableValue<? extends Worker.State> ov, Worker.State oldState, Worker.State newState) {
+
+
+                if (newState == Worker.State.SUCCEEDED) {
+
+                    // Display warning note if application is SNAPSHOT
+                    if (versionName.contains("SNAPSHOT")) {
+                        webView.getEngine().executeScript("document.getElementById('snapshot_warning').style.display = 'block'");
+                    }
+                }
+            }
+        };
+        webView.getEngine().getLoadWorker().stateProperty().addListener(new WeakChangeListener<>(webViewStateChangeListener));
+
+        // Set version info
+        infoLabel.setText(String.format(getResourceBundle().getString("welcome.info"), versionName, buildNumber));
     }
-  
 }

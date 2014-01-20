@@ -9,12 +9,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
 
-<AnchorPane minWidth="624.0" prefHeight="476.0" prefWidth="732.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.dialog.WelcomeDialogController">
+<AnchorPane minWidth="477.0" prefHeight="585.0" prefWidth="477.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.dialog.WelcomeDialogController">
   <children>
     <WebView fx:id="webView" prefHeight="404.0" prefWidth="732.0" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
     <AnchorPane minHeight="22.0" prefHeight="41.0" prefWidth="800.0" styleClass="bottom-tool-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
       <children>
-        <Button fx:id="closeButton" alignment="CENTER" contentDisplay="CENTER" defaultButton="true" mnemonicParsing="false" prefWidth="67.0" text="%close" textAlignment="CENTER" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="332.0" AnchorPane.rightAnchor="333.0" AnchorPane.topAnchor="2.0" />
+        <Button fx:id="closeButton" alignment="CENTER" contentDisplay="CENTER" defaultButton="true" mnemonicParsing="false" prefWidth="67.0" text="%start" textAlignment="CENTER" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="2.0" />
+        <Label fx:id="infoLabel" layoutX="14.0" layoutY="13.0" prefWidth="363.0" text="Label" />
       </children>
     </AnchorPane>
   </children>
