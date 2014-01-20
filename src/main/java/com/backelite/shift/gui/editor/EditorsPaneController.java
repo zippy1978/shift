@@ -23,12 +23,12 @@ package com.backelite.shift.gui.editor;
  */
 import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.gui.AbstractController;
-import com.backelite.shift.gui.dialog.ConfirmDialogController;
 import com.backelite.shift.gui.FXMLLoaderFactory;
-import com.backelite.shift.workspace.artifact.Document;
+import com.backelite.shift.gui.dialog.ConfirmDialogController;
 import com.backelite.shift.plugin.PluginException;
 import com.backelite.shift.state.StateException;
 import com.backelite.shift.workspace.Workspace;
+import com.backelite.shift.workspace.artifact.Document;
 import com.backelite.shift.workspace.artifact.Project;
 import java.net.URL;
 import java.util.ArrayList;
@@ -38,9 +38,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -72,7 +70,7 @@ public class EditorsPaneController extends AbstractController implements Observe
      */
     private EventHandler<ActiveDocumentUpdatedEvent> onActiveDocumentUpdated;
     public ReadOnlyObjectWrapper<EditorController> activeEditorControllerProperty = new ReadOnlyObjectWrapper<>();
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
@@ -90,6 +88,8 @@ public class EditorsPaneController extends AbstractController implements Observe
                         activeEditorControllerProperty.set(controller);
                         onActiveDocumentUpdated.handle(new ActiveDocumentUpdatedEvent(EventType.ROOT, controller.getDocument()));
                     }
+                } else {
+                    activeEditorControllerProperty.set(null);
                 }
             }
         });
@@ -158,7 +158,7 @@ public class EditorsPaneController extends AbstractController implements Observe
                 tabPane.getTabs().add(tab);
                 SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
                 selectionModel.select(tab);
-                
+
                 return tab;
 
             } catch (PluginException ex) {

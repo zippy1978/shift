@@ -92,6 +92,15 @@ public class CodeEditorController extends AbstractController implements EditorCo
         };
         codeEditor.setOnCursorChanged(new WeakEventHandler<>(codeEditorCursorChangedEventHandler));
         
+        // Code editor i18n
+        codeEditor.setSearchPromptLabel(getResourceBundle().getString("editor.search.prompt"));
+        codeEditor.setSearchTipLabel(getResourceBundle().getString("editor.search.tip"));
+        codeEditor.setReplacePromptLabel(getResourceBundle().getString("editor.replace.prompt"));
+        codeEditor.setReplaceTipLabel(getResourceBundle().getString("editor.replace.tip"));
+        codeEditor.setReplaceWithPromptLabel(getResourceBundle().getString("editor.replace.with_prompt"));
+        codeEditor.setReplaceConfirmYesLabel(getResourceBundle().getString("yes"));
+        codeEditor.setReplaceConfirmNoLabel(getResourceBundle().getString("no"));
+        codeEditor.setReplaceConfirmStopLabel(getResourceBundle().getString("stop"));
     }
 
     /**
@@ -205,11 +214,36 @@ public class CodeEditorController extends AbstractController implements EditorCo
     }
 
     @Override
-    public void find(String query) {
-        codeEditor.find(query);
+    public boolean canSearch() {
+        return true;
     }
     
     
+
+    @Override
+    public void find() {
+        codeEditor.find();
+    }
+
+    @Override
+    public void findNext() {
+        codeEditor.findNext();
+    }
+
+    @Override
+    public void findPrevious() {
+        codeEditor.findPrevious();
+    }
+
+    @Override
+    public void replace() {
+        codeEditor.replace();
+    }
+
+    @Override
+    public void replaceAll() {
+        codeEditor.replace();
+    }    
     
     public void clearHistory() {
         codeEditor.clearHistory();

@@ -88,7 +88,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 09/12/13</d> 'Select All' in 'Edit' menu  
 
-<t>WIP</t> 'Search' in 'Edit' menu  (replace support / UI / active doc change / menu shortcuts disables when focused)
+<d>✔ 01/20/14</d> 'Search' in 'Edit' menu
 
 ### Packaging
 
@@ -97,8 +97,6 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 <t>✘</t> Welcome window display must display version and build numbers + warning message when snapshot release.
 
 <d>✔ 09/12/13</d> Icon
-
-<t>✘</t> Styling : button, toggles, selects...
 
 
 ## Backlog

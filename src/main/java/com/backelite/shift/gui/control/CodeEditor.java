@@ -48,6 +48,132 @@ import netscape.javascript.JSObject;
  */
 public class CodeEditor extends AnchorPane {
 
+    /**
+     * @return the searchPromptLabel
+     */
+    public String getSearchPromptLabel() {
+        return searchPromptLabel;
+    }
+
+    /**
+     * @param searchPromptLabel the searchPromptLabel to set
+     */
+    public void setSearchPromptLabel(String searchPromptLabel) {
+        this.searchPromptLabel = searchPromptLabel;
+    }
+
+    /**
+     * @return the searchTipLabel
+     */
+    public String getSearchTipLabel() {
+        return searchTipLabel;
+    }
+
+    /**
+     * @param searchTipLabel the searchTipLabel to set
+     */
+    public void setSearchTipLabel(String searchTipLabel) {
+        this.searchTipLabel = searchTipLabel;
+    }
+
+    /**
+     * @return the replacePromptLabel
+     */
+    public String getReplacePromptLabel() {
+        return replacePromptLabel;
+    }
+
+    /**
+     * @param replacePromptLabel the replacePromptLabel to set
+     */
+    public void setReplacePromptLabel(String replacePromptLabel) {
+        this.replacePromptLabel = replacePromptLabel;
+    }
+
+    /**
+     * @return the replaceWithPromptLabel
+     */
+    public String getReplaceWithPromptLabel() {
+        return replaceWithPromptLabel;
+    }
+
+    /**
+     * @param replaceWithPromptLabel the replaceWithPromptLabel to set
+     */
+    public void setReplaceWithPromptLabel(String replaceWithPromptLabel) {
+        this.replaceWithPromptLabel = replaceWithPromptLabel;
+    }
+
+    /**
+     * @return the replaceTipLabel
+     */
+    public String getReplaceTipLabel() {
+        return replaceTipLabel;
+    }
+
+    /**
+     * @param replaceTipLabel the replaceTipLabel to set
+     */
+    public void setReplaceTipLabel(String replaceTipLabel) {
+        this.replaceTipLabel = replaceTipLabel;
+    }
+
+    /**
+     * @return the replaceConfirmPromptLabel
+     */
+    public String getReplaceConfirmPromptLabel() {
+        return replaceConfirmPromptLabel;
+    }
+
+    /**
+     * @param replaceConfirmPromptLabel the replaceConfirmPromptLabel to set
+     */
+    public void setReplaceConfirmPromptLabel(String replaceConfirmPromptLabel) {
+        this.replaceConfirmPromptLabel = replaceConfirmPromptLabel;
+    }
+
+    /**
+     * @return the replaceConfirmYesLabel
+     */
+    public String getReplaceConfirmYesLabel() {
+        return replaceConfirmYesLabel;
+    }
+
+    /**
+     * @param replaceConfirmYesLabel the replaceConfirmYesLabel to set
+     */
+    public void setReplaceConfirmYesLabel(String replaceConfirmYesLabel) {
+        this.replaceConfirmYesLabel = replaceConfirmYesLabel;
+    }
+
+    /**
+     * @return the replaceConfirmNoLabel
+     */
+    public String getReplaceConfirmNoLabel() {
+        return replaceConfirmNoLabel;
+    }
+
+    /**
+     * @param replaceConfirmNoLabel the replaceConfirmNoLabel to set
+     */
+    public void setReplaceConfirmNoLabel(String replaceConfirmNoLabel) {
+        this.replaceConfirmNoLabel = replaceConfirmNoLabel;
+    }
+
+    /**
+     * @return the replaceConfirmStopLabel
+     */
+    public String getReplaceConfirmStopLabel() {
+        return replaceConfirmStopLabel;
+    }
+
+    /**
+     * @param replaceConfirmStopLabel the replaceConfirmStopLabel to set
+     */
+    public void setReplaceConfirmStopLabel(String replaceConfirmStopLabel) {
+        this.replaceConfirmStopLabel = replaceConfirmStopLabel;
+    }
+
     public enum Mode {
 
         NONE,
@@ -69,6 +195,17 @@ public class CodeEditor extends AnchorPane {
     
     private EventHandler<KeyEvent> webViewKeyEventHandler;
     private ChangeListener<State> webViewStateChangeListener;
+    
+    private String searchPromptLabel = "Search:";
+    private String searchTipLabel = "(Use /re/ syntax for regexp search)";
+    private String replacePromptLabel = "Replace:";
+    private String replaceWithPromptLabel = "With:";
+    private String replaceTipLabel = "(Use /re/ syntax for regexp search)";
+    private String replaceConfirmPromptLabel = "Replace?";
+    private String replaceConfirmYesLabel = "Yes";
+    private String replaceConfirmNoLabel = "No";
+    private String replaceConfirmStopLabel = "Stop";
+    
 
     public CodeEditor() {
         super();
@@ -150,12 +287,8 @@ public class CodeEditor extends AnchorPane {
                  inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/hint/xml-hint.js"));
                 contentAssistFunction = "CodeMirror.showHint(cm, CodeMirror.xmlHint);";
                 break;
-        }
-        
-        // Search feature
-        inlineScripts.append(getFileContent("/customcmsearch.js"));
-        inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/search/searchcursor.js"));
-
+        }  
+      
         return inlineScripts.toString();
 
     }
@@ -186,6 +319,26 @@ public class CodeEditor extends AnchorPane {
         inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/edit/continuecomment.js"));
         inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/edit/continuelist.js"));
         inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/edit/matchbrackets.js"));
+        
+        inlineStyles.append(getFileContent(WEB_RESOURCES_PATH + "/addon/dialog/dialog.css"));
+        inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/dialog/dialog.js"));
+        
+        inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/search/search.js")
+                .replace("'Search: <input type=\"text\" style=\"width: 10em\"/> <span style=\"color: #888\">(Use /re/ syntax for regexp search)</span>';", 
+                String.format("'%s <input type=\"text\" style=\"width: 15em\" class=\"search\"/> <span style=\"color: #888\">%s</span>';", getSearchPromptLabel(), getSearchTipLabel()))
+               
+                .replace("'Replace: <input type=\"text\" style=\"width: 10em\"/> <span style=\"color: #888\">(Use /re/ syntax for regexp search)</span>';",
+                String.format("'%s <input type=\"text\" style=\"width: 15em\" class=\"search\"/> <span style=\"color: #888\">%s</span>';", getReplacePromptLabel(), getReplaceTipLabel()))
+                
+                .replace("'With: <input type=\"text\" style=\"width: 10em\"/>'", 
+                String.format("'With: <input type=\"text\" style=\"width: 15em\" class=\"search\"/>'", getReplaceWithPromptLabel()))
+                
+                .replace("\"Replace? <button>Yes</button> <button>No</button> <button>Stop</button>\"", 
+                String.format("\"%s <button>%s</button> <button>%s</button> <button>%s</button>\"", getReplaceConfirmPromptLabel(), getReplaceConfirmYesLabel(), getReplaceConfirmNoLabel(), getReplaceConfirmStopLabel()))
+                );
+        inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/search/searchcursor.js"));
+        inlineScripts.append(getFileContent(WEB_RESOURCES_PATH + "/addon/search/match-highlighter.js"));
+
 
         String editorMode = "";
         switch (mode) {
@@ -387,11 +540,44 @@ public class CodeEditor extends AnchorPane {
 
     }
     
-    public void find(String query) {
+    public void find() {
         JSObject cmInstance = this.getCodeMirrorJSInstance();
         if (cmInstance != null) {
             JSObject commands =  (JSObject) webView.getEngine().executeScript("CodeMirror.commands");
-            commands.call("find", cmInstance, query);
+            commands.call("find", cmInstance);
+        }
+    }
+    
+    public void findNext() {
+        JSObject cmInstance = this.getCodeMirrorJSInstance();
+        if (cmInstance != null) {
+            JSObject commands =  (JSObject) webView.getEngine().executeScript("CodeMirror.commands");
+            commands.call("findNext", cmInstance);
+        }
+    }
+    
+    public void findPrevious() {
+        JSObject cmInstance = this.getCodeMirrorJSInstance();
+        if (cmInstance != null) {
+            JSObject commands =  (JSObject) webView.getEngine().executeScript("CodeMirror.commands");
+            commands.call("findPrev", cmInstance);
+        }
+    }
+    
+    
+    public void replace() {
+        JSObject cmInstance = this.getCodeMirrorJSInstance();
+        if (cmInstance != null) {
+            JSObject commands =  (JSObject) webView.getEngine().executeScript("CodeMirror.commands");
+            commands.call("replace", cmInstance);
+        }
+    }
+    
+    public void replaceAll() {
+        JSObject cmInstance = this.getCodeMirrorJSInstance();
+        if (cmInstance != null) {
+            JSObject commands =  (JSObject) webView.getEngine().executeScript("CodeMirror.commands");
+            commands.call("replaceAll", cmInstance);
         }
     }
     

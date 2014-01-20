@@ -42,7 +42,17 @@ public interface EditorController {
     
     public Document getDocument();
     
-    public void find(String query);
+    public void find();
+    
+    public void findPrevious();
+    
+    public void findNext();
+    
+    public void replace();
+    
+    public void replaceAll();
+    
+    public boolean canSearch();
     
     public boolean canUndo();
     

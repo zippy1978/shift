@@ -30,7 +30,6 @@ import com.backelite.shift.workspace.artifact.FileSystemProject;
 import com.backelite.shift.workspace.artifact.Project;
 import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.Constants;
-import com.backelite.shift.gui.dialog.FindReplaceDialogController;
 import com.backelite.shift.gui.dialog.PickerDialogController;
 import com.backelite.shift.gui.editor.EditorController;
 import com.backelite.shift.gui.preview.PreviewController;
@@ -44,14 +43,12 @@ import com.backelite.shift.workspace.artifact.Artifact;
 import com.backelite.shift.workspace.artifact.Folder;
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
@@ -71,7 +68,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,11 +101,10 @@ public class MainController extends AbstractController {
     private MenuItem copyMenuItem;
     private MenuItem pasteMenuItem;
     private MenuItem selectAllMenuItem;
-    private MenuItem findReplaceMenuItem;
+    private Menu findSubMenu;
     private MenuItem contentAssistMenuItem;
     private Menu windowMenu;
     private MenuItem newPreviewMenuItem;
-    private FindReplaceDialogController findReplaceDialogController;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -121,6 +116,7 @@ public class MainController extends AbstractController {
 
         // Register open document handler on project navigator
         projectNavigatorController.setOnOpenFile(new EventHandler<ProjectNavigatorController.OpenFileEvent>() {
+            @Override
             public void handle(ProjectNavigatorController.OpenFileEvent t) {
                 // Open document in edtiors pane
                 editorsPaneController.openDocument(t.getDocument());
@@ -129,6 +125,7 @@ public class MainController extends AbstractController {
 
         // Register artifact selection on project navigator
         projectNavigatorController.setOnArtifactSelected(new EventHandler<ProjectNavigatorController.ArtifactSelectedEvent>() {
+            @Override
             public void handle(ProjectNavigatorController.ArtifactSelectedEvent t) {
                 // Refresh file menu
                 refreshFileMenu();
@@ -137,6 +134,7 @@ public class MainController extends AbstractController {
 
         // Register project close action on project navigator
         projectNavigatorController.setOnProjectClosed(new EventHandler<ProjectNavigatorController.ProjectClosedEvent>() {
+            @Override
             public void handle(ProjectNavigatorController.ProjectClosedEvent t) {
                 handleCloseProjectMenuAction();
             }
@@ -144,6 +142,7 @@ public class MainController extends AbstractController {
 
         // Register new file action on project navigator
         projectNavigatorController.setOnNewFile(new EventHandler<ProjectNavigatorController.NewFileEvent>() {
+            @Override
             public void handle(ProjectNavigatorController.NewFileEvent t) {
                 handleNewFileMenuAction();
             }
@@ -151,6 +150,7 @@ public class MainController extends AbstractController {
 
         // Register new folder action on project navigator
         projectNavigatorController.setOnNewFolder(new EventHandler<ProjectNavigatorController.NewFolderEvent>() {
+            @Override
             public void handle(ProjectNavigatorController.NewFolderEvent t) {
                 handleNewFolderMenuAction();
             }
@@ -158,6 +158,7 @@ public class MainController extends AbstractController {
 
         // Register delete artifact action on project navigator
         projectNavigatorController.setOnDeleteArtifact(new EventHandler<ProjectNavigatorController.DeleteArtifactEvent>() {
+            @Override
             public void handle(ProjectNavigatorController.DeleteArtifactEvent t) {
                 handleDeleteArtifactMenuAction();
             }
@@ -165,6 +166,7 @@ public class MainController extends AbstractController {
 
         // Register active document change listener on editor pane
         editorsPaneController.setOnActiveDocumentUpdated(new EventHandler<EditorsPaneController.ActiveDocumentUpdatedEvent>() {
+            @Override
             public void handle(EditorsPaneController.ActiveDocumentUpdatedEvent t) {
 
                 // Refresh file menu
@@ -181,6 +183,7 @@ public class MainController extends AbstractController {
                     // Register handler to track cursor change (only if not already registered
                     if (editorController.getOnCursorChanged() == null) {
                         editorController.setOnCursorChanged(new EventHandler<EditorController.CursorChangedEvent>() {
+                            @Override
                             public void handle(EditorController.CursorChangedEvent t) {
                                 statusBarController.setCursorPosition(editorsPaneController.getActiveEditorController().getCursorPosition());
                             }
@@ -263,7 +266,6 @@ public class MainController extends AbstractController {
 
         EditorController editorController = editorsPaneController.getActiveEditorController();
 
-        // Update undo / redo items
         if (editorController != null) {
             undoMenuItem.setDisable(!editorController.canUndo());
             redoMenuItem.setDisable(!editorController.canRedo());
@@ -271,7 +273,7 @@ public class MainController extends AbstractController {
             copyMenuItem.setDisable(false);
             pasteMenuItem.setDisable(false);
             cutMenuItem.setDisable(false);
-            findReplaceMenuItem.setDisable(false);
+            findSubMenu.setDisable(!editorController.canSearch());
             contentAssistMenuItem.setDisable(!editorController.canContentAssist());
         } else {
             undoMenuItem.setDisable(true);
@@ -280,7 +282,7 @@ public class MainController extends AbstractController {
             copyMenuItem.setDisable(true);
             pasteMenuItem.setDisable(true);
             cutMenuItem.setDisable(true);
-            findReplaceMenuItem.setDisable(true);
+            findSubMenu.setDisable(true);
             contentAssistMenuItem.setDisable(true);
         }
     }
@@ -307,7 +309,7 @@ public class MainController extends AbstractController {
         fileMenu = new Menu(this.getResourceBundle().getString("main.menu.file"));
 
         // File > New project
-        this.buildNewProjectMenu();
+        this.buildNewProjectSubMenu();
 
         // File > New file
         newFileMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.file.new_file"));
@@ -452,17 +454,9 @@ public class MainController extends AbstractController {
         // Edit > -
         editMenu.getItems().add(new SeparatorMenuItem());
 
-        // Edit > Find/Replace ...
-        findReplaceMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.find_replace"));
-        findReplaceMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_FIND_REPLACE));
-        findReplaceMenuItem.setDisable(true);
-        findReplaceMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                handleFindReplaceMenuAction();
-            }
-        });
-        editMenu.getItems().add(findReplaceMenuItem);
-
+        // Edit > Find
+        this.buildFindSubMenu();
+        
         // Edit > -
         editMenu.getItems().add(new SeparatorMenuItem());
 
@@ -492,11 +486,80 @@ public class MainController extends AbstractController {
         this.refreshEditMenu();
         this.refreshWindowMenu();
     }
+    
+    /**
+     * Build Edit > Find submenu
+     */
+    private void buildFindSubMenu() {
+     
+        // Find menu
+        findSubMenu = new Menu(this.getResourceBundle().getString("main.menu.edit.find"));
+        
+        editMenu.getItems().add(findSubMenu);
+        
+        // Find > Find...
+        MenuItem findMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.find.find"));
+        findMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_FIND));
+        findMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                handleFindMenuAction();
+            }
+        });
+        findSubMenu.getItems().add(findMenuItem);
+        
+        // Find > Find Next
+        MenuItem findNextMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.find.find_next"));
+        findNextMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_FIND_NEXT));
+        findNextMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                handleFindNextMenuAction();
+            }
+        });
+        findSubMenu.getItems().add(findNextMenuItem);
+        
+        // Find > Find Previous
+        MenuItem findPreviousMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.find.find_previous"));
+        findPreviousMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_FIND_PREVIOUS));
+        findPreviousMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                handleFindPreviousMenuAction();
+            }
+        });
+        findSubMenu.getItems().add(findPreviousMenuItem);
+        
+        // Find > -
+        findSubMenu.getItems().add(new SeparatorMenuItem());
+        
+        // Find > Replace ...
+        MenuItem replaceMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.find.replace"));
+        replaceMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_REPLACE));
+        replaceMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                handleReplaceMenuAction();
+            }
+        });
+        findSubMenu.getItems().add(replaceMenuItem);
+        
+        // Find > Replace All...
+        MenuItem replaceAllMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.find.replace_all"));
+        replaceAllMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_REPLACE_ALL));
+        replaceAllMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                handleReplaceAllMenuAction();
+            }
+        });
+        findSubMenu.getItems().add(replaceAllMenuItem);
+    }
 
     /**
      * Build new project menu according to plugins
      */
-    private void buildNewProjectMenu() {
+    private void buildNewProjectSubMenu() {
 
         // New project menu
         Menu newProjectMenu = new Menu(this.getResourceBundle().getString("main.menu.file.new_project"));
@@ -505,6 +568,7 @@ public class MainController extends AbstractController {
         for (final ProjectWizardFactory projectWizardFactory : projectWizardFactories) {
             MenuItem projectWizardFactoryMenu = new MenuItem(projectWizardFactory.getName());
             projectWizardFactoryMenu.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
                 public void handle(ActionEvent t) {
                     try {
                         // Open new project wizard
@@ -663,7 +727,42 @@ public class MainController extends AbstractController {
             this.displayErrorDialog(ex);
         }
     }
+    
+    private void handleFindMenuAction() {
+        EditorController editorController = editorsPaneController.getActiveEditorController();
+        if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
+            editorController.find();
+        }
+    }
+    
+    private void handleFindNextMenuAction() {
+        EditorController editorController = editorsPaneController.getActiveEditorController();
+        if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
+            editorController.findNext();
+        }
+    }
+    
+    private void handleFindPreviousMenuAction() {
+        EditorController editorController = editorsPaneController.getActiveEditorController();
+        if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
+            editorController.findPrevious();
+        }
+    }
 
+    private void handleReplaceMenuAction() {
+        EditorController editorController = editorsPaneController.getActiveEditorController();
+        if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
+            editorController.replace();
+        }
+    }
+    
+    private void handleReplaceAllMenuAction() {
+        EditorController editorController = editorsPaneController.getActiveEditorController();
+        if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
+            editorController.replaceAll();
+        }
+    }
+    
     /**
      * Setup a newly created preview window
      *
@@ -688,7 +787,7 @@ public class MainController extends AbstractController {
     private void handleUndoMenuAction() {
 
         EditorController editorController = editorsPaneController.getActiveEditorController();
-        if (editorController != null) {
+        if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
             editorController.undo();
         }
     }
@@ -696,7 +795,7 @@ public class MainController extends AbstractController {
     private void handleRedoMenuAction() {
 
         EditorController editorController = editorsPaneController.getActiveEditorController();
-        if (editorController != null) {
+        if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
             editorController.redo();
         }
     }
@@ -704,7 +803,7 @@ public class MainController extends AbstractController {
     private void handleCutMenuAction() {
 
         EditorController editorController = editorsPaneController.getActiveEditorController();
-        if (editorController != null) {
+        if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
             editorController.cut();
         }
     }
@@ -712,7 +811,7 @@ public class MainController extends AbstractController {
     private void handleCopyMenuAction() {
 
         EditorController editorController = editorsPaneController.getActiveEditorController();
-        if (editorController != null) {
+        if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
             editorController.copy();
         }
     }
@@ -720,7 +819,7 @@ public class MainController extends AbstractController {
     private void handlePasteMenuAction() {
 
         EditorController editorController = editorsPaneController.getActiveEditorController();
-        if (editorController != null) {
+        if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
             editorController.paste();
         }
     }
@@ -728,44 +827,15 @@ public class MainController extends AbstractController {
     private void handleSelectAllMenuAction() {
 
         EditorController editorController = editorsPaneController.getActiveEditorController();
-        if (editorController != null) {
+        if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
             editorController.selectAll();
         }
-    }
-
-    private void handleFindReplaceMenuAction() {
-
-        EditorController editorController = editorsPaneController.getActiveEditorController();
-        if (editorController != null) {
-
-            // Build initial find / replace window
-            if (findReplaceDialogController == null) {
-                try {
-                    FXMLLoader loader = FXMLLoaderFactory.newInstance();
-                    Stage stage = newDecoratedWindow(getResourceBundle().getString("main.menu.edit.find_replace"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/find_replace_dialog.fxml")), true);
-                    findReplaceDialogController = (FindReplaceDialogController) loader.getController();
-                    findReplaceDialogController.setStage(stage);
-                    findReplaceDialogController.setUserData(editorController);
-                    stage.setResizable(false);
-                    stage.setFullScreen(false);
-                } catch (IOException ex) {
-                    this.displayErrorDialog(ex);
-                }
-            }
-
-            // Show 
-            findReplaceDialogController.getStage().show();
-
-
-        }
-
-
     }
 
     private void handleContentAssistMenuAction() {
 
         EditorController editorController = editorsPaneController.getActiveEditorController();
-        if (editorController != null && editorController.canContentAssist()) {
+        if (editorController != null && editorController.canContentAssist() && ApplicationContext.getMainStage().isFocused()) {
             editorController.contentAssist();
         }
     }
@@ -902,6 +972,7 @@ public class MainController extends AbstractController {
             // Check unsaved files of the project
             if (project != null && project.isModified()) {
                 displayConfirmDialog(getResourceBundle().getString("dialog.confirm.close_project.unsaved.title"), getResourceBundle().getString("dialog.confirm.file.close_project.unsaved.text"), new EventHandler<ConfirmDialogController.ChoiceEvent>() {
+                    @Override
                     public void handle(ConfirmDialogController.ChoiceEvent t) {
 
                         if (t.getChoice() == ConfirmDialogController.Choice.POSITIVE) {

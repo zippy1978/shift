@@ -165,7 +165,7 @@ public class MainApp extends Application {
     private void initializePreferences() {
         try {
             PreferencesManager preferencesManager = ApplicationContext.getPreferencesManager();
-            Map<String, String> shortcuts = new HashMap<String, String>();
+            Map<String, String> shortcuts = new HashMap<>();
             shortcuts.put(Constants.SHORTCUT_NEW_FILE, new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_OPEN_PROJECT, new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_SAVE, new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN).getName());
@@ -175,7 +175,11 @@ public class MainApp extends Application {
             shortcuts.put(Constants.SHORTCUT_COPY, new KeyCodeCombination(KeyCode.C, KeyCombination.SHORTCUT_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_PASTE, new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_SELECT_ALL, new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN).getName());
-            shortcuts.put(Constants.SHORTCUT_FIND_REPLACE, new KeyCodeCombination(KeyCode.F, KeyCombination.SHORTCUT_DOWN).getName());
+            shortcuts.put(Constants.SHORTCUT_FIND, new KeyCodeCombination(KeyCode.F, KeyCombination.SHORTCUT_DOWN).getName());
+            shortcuts.put(Constants.SHORTCUT_FIND_NEXT, new KeyCodeCombination(KeyCode.G, KeyCombination.SHORTCUT_DOWN).getName());
+            shortcuts.put(Constants.SHORTCUT_FIND_PREVIOUS, new KeyCodeCombination(KeyCode.G, KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN).getName());
+            shortcuts.put(Constants.SHORTCUT_REPLACE, new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN).getName());
+            shortcuts.put(Constants.SHORTCUT_REPLACE_ALL, new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_CONTENT_ASSIST, new KeyCodeCombination(KeyCode.SPACE, KeyCombination.CONTROL_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_NEW_PREVIEW, new KeyCodeCombination(KeyCode.P, KeyCombination.SHORTCUT_DOWN).getName());
             preferencesManager.setInitialValue(Constants.PREFERENCES_KEY_SHORTCUTS, shortcuts);
