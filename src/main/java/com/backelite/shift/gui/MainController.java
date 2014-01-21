@@ -155,6 +155,14 @@ public class MainController extends AbstractController {
                 handleNewFolderMenuAction();
             }
         });
+        
+         // Register rename artifact action on project navigator
+        projectNavigatorController.setOnRenameArtifact(new EventHandler<ProjectNavigatorController.RenameArtifactEvent>() {
+            @Override
+            public void handle(ProjectNavigatorController.RenameArtifactEvent t) {
+                handleRenameArtifactMenuAction();
+            }
+        });
 
         // Register delete artifact action on project navigator
         projectNavigatorController.setOnDeleteArtifact(new EventHandler<ProjectNavigatorController.DeleteArtifactEvent>() {
@@ -873,6 +881,27 @@ public class MainController extends AbstractController {
         } catch (IOException ex) {
             this.displayErrorDialog(ex);
         }
+    }
+    
+    private void handleRenameArtifactMenuAction() {
+        // For the moment the action is not bound to any menu item
+        // But in the future maybe...
+        
+         try {
+            // Open dialog
+            FXMLLoader loader = FXMLLoaderFactory.newInstance();
+            Stage stage = newModalWindow(getResourceBundle().getString("main.rename.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/rename_dialog.fxml")));
+            DialogController controller = (DialogController) loader.getController();
+            controller.setStage(stage);
+            controller.setUserData(projectNavigatorController.getSelectedArtifact());
+            stage.setResizable(false);
+            stage.setFullScreen(false);
+            stage.showAndWait();
+
+        } catch (IOException ex) {
+            this.displayErrorDialog(ex);
+        }
+ 
     }
 
     private void handleDeleteArtifactMenuAction() {

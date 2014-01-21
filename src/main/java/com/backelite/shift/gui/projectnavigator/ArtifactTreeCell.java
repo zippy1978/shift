@@ -25,6 +25,7 @@ import com.backelite.shift.workspace.artifact.Artifact;
 import com.backelite.shift.workspace.artifact.Document;
 import com.backelite.shift.workspace.artifact.Folder;
 import com.backelite.shift.workspace.artifact.Project;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -36,18 +37,19 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TreeCell;
 
 /**
- *
+ * Artifact cell for project navigator TreeView.
+ * Note that Platform.runLater blocks must be used in context menus handlers otherwise strange things happen (8.0.0-ea-b123)
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
 public class ArtifactTreeCell extends TreeCell<Artifact> {
 
     private ProjectNavigatorController projectNavigatorController;
-
     private EventHandler<ActionEvent> closeActionEventHandler;
     private EventHandler<ActionEvent> newFileActionEventHandler;
     private EventHandler<ActionEvent> newFolderActionEventHandler;
     private EventHandler<ActionEvent> deleteActionEventHandler;
-    
+    private EventHandler<ActionEvent> renameActionEventHandler;
+
     public ArtifactTreeCell() {
         super();
 
@@ -59,7 +61,7 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
 
         // Retrieve parent controller from user data
         this.projectNavigatorController = (ProjectNavigatorController) this.getUserData();
-        
+
         if (!empty) {
             setContentDisplay(ContentDisplay.LEFT);
             setText(artifact.getName());
@@ -73,12 +75,18 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                 // Close
                 MenuItem closeMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.project.menu.close"));
                 projectContextMenu.getItems().add(closeMenuItem);
-                
+
                 closeActionEventHandler = new EventHandler() {
                     @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Project) {
-                            projectNavigatorController.closeProject((Project) getItem());
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    projectNavigatorController.closeProject((Project) getItem());
+                                }
+                            });
+
                         }
                     }
                 };
@@ -91,7 +99,13 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                     @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Project) {
-                            projectNavigatorController.newFile((Project) getItem());
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    projectNavigatorController.newFile((Project) getItem());
+                                }
+                            });
+
                         }
                     }
                 };
@@ -104,7 +118,13 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                     @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Project) {
-                            projectNavigatorController.newFolder((Project) getItem());
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    projectNavigatorController.newFolder((Project) getItem());
+                                }
+                            });
+
                         }
                     }
                 };
@@ -113,6 +133,28 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                 // -
                 projectContextMenu.getItems().add(new SeparatorMenuItem());
                 
+                // Rename
+                MenuItem renameMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.artifact.menu.rename"));
+                projectContextMenu.getItems().add(renameMenuItem);
+                renameActionEventHandler = new EventHandler() {
+                    @Override
+                    public void handle(Event t) {
+                        if (getItem() instanceof Project) {
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    projectNavigatorController.renameArtifact(getItem());
+                                }
+                            });
+
+                        }
+                    }
+                };
+                renameMenuItem.setOnAction(new WeakEventHandler<>(renameActionEventHandler));
+
+                // -
+                projectContextMenu.getItems().add(new SeparatorMenuItem());
+
                 // Delete
                 MenuItem deleteMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.artifact.menu.delete"));
                 projectContextMenu.getItems().add(deleteMenuItem);
@@ -120,7 +162,13 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                     @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Project) {
-                            projectNavigatorController.deleteArtifact(getItem());
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    projectNavigatorController.deleteArtifact(getItem());
+                                }
+                            });
+
                         }
                     }
                 };
@@ -141,7 +189,13 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                     @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Folder) {
-                            projectNavigatorController.newFile((Folder) getItem());
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    projectNavigatorController.newFile((Folder) getItem());
+                                }
+                            });
+
                         }
                     }
                 };
@@ -154,7 +208,13 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                     @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Folder) {
-                            projectNavigatorController.newFolder((Folder) getItem());
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    projectNavigatorController.newFolder((Folder) getItem());
+                                }
+                            });
+
                         }
                     }
                 };
@@ -163,6 +223,28 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                 // -
                 folderContextMenu.getItems().add(new SeparatorMenuItem());
                 
+                // Rename
+                MenuItem renameMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.artifact.menu.rename"));
+                folderContextMenu.getItems().add(renameMenuItem);
+                renameActionEventHandler = new EventHandler() {
+                    @Override
+                    public void handle(Event t) {
+                        if (getItem() instanceof Folder) {
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    projectNavigatorController.renameArtifact(getItem());
+                                }
+                            });
+
+                        }
+                    }
+                };
+                renameMenuItem.setOnAction(new WeakEventHandler<>(renameActionEventHandler));
+
+                // -
+                folderContextMenu.getItems().add(new SeparatorMenuItem());
+
                 // Delete
                 MenuItem deleteMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.artifact.menu.delete"));
                 folderContextMenu.getItems().add(deleteMenuItem);
@@ -170,7 +252,13 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                     @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Folder) {
-                            projectNavigatorController.deleteArtifact(getItem());
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    projectNavigatorController.deleteArtifact(getItem());
+                                }
+                            });
+
                         }
                     }
                 };
@@ -184,6 +272,28 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                 // Context menu
                 ContextMenu documentContextMenu = new ContextMenu();
 
+                // Rename
+                MenuItem renameMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.artifact.menu.rename"));
+                documentContextMenu.getItems().add(renameMenuItem);
+                renameActionEventHandler = new EventHandler() {
+                    @Override
+                    public void handle(Event t) {
+                        if (getItem() instanceof Document) {
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    projectNavigatorController.renameArtifact(getItem());
+                                }
+                            });
+
+                        }
+                    }
+                };
+                renameMenuItem.setOnAction(new WeakEventHandler<>(renameActionEventHandler));
+
+                // -
+                documentContextMenu.getItems().add(new SeparatorMenuItem());
+
                 // Delete
                 MenuItem deleteMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.artifact.menu.delete"));
                 documentContextMenu.getItems().add(deleteMenuItem);
@@ -191,12 +301,18 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                     @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Document) {
-                            projectNavigatorController.deleteArtifact(getItem());
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    projectNavigatorController.deleteArtifact(getItem());
+                                }
+                            });
+
                         }
                     }
                 };
                 deleteMenuItem.setOnAction(new WeakEventHandler<>(deleteActionEventHandler));
-                
+
                 setContextMenu(documentContextMenu);
             }
 

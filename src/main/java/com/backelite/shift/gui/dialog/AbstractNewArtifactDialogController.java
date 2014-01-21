@@ -110,9 +110,10 @@ public abstract class AbstractNewArtifactDialogController extends AbstractDialog
         super.setUserData(userData); 
         
         // Set validators on text field
-        Folder folder = (Folder) getUserData();
-        nameTextField.setValidator(new CompoundValidator(new NotBlankValidator(), new FilenameValidator(), new UnusedArtifactNameValidator(folder)));
-
+        if (getUserData() != null && getUserData() instanceof Folder) {
+            Folder folder = (Folder) getUserData();
+            nameTextField.setValidator(new CompoundValidator(new NotBlankValidator(), new FilenameValidator(), new UnusedArtifactNameValidator(folder)));
+        }
     }
  
 

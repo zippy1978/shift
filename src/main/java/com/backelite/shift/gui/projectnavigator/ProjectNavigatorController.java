@@ -58,6 +58,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
 
     @FXML
     private TreeView<Artifact> treeView;
+    
     private TreeItem<Artifact> treeItemRoot;
     private EventHandler<OpenFileEvent> onOpenFile;
     private EventHandler<ArtifactSelectedEvent> onArtifactSelected;
@@ -65,6 +66,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
     private EventHandler<NewFileEvent> onNewFile;
     private EventHandler<NewFolderEvent> onNewFolder;
     private EventHandler<DeleteArtifactEvent> onDeleteArtifact;
+    private EventHandler<RenameArtifactEvent> onRenameArtifact;
     /**
      * Maintains expanded state of each artifact of the treee
      */
@@ -143,6 +145,12 @@ public class ProjectNavigatorController extends AbstractController implements Ob
     public void deleteArtifact(Artifact artifact) {
         if (getOnDeleteArtifact() != null) {
             onDeleteArtifact.handle(new DeleteArtifactEvent(EventType.ROOT, artifact));
+        }
+    }
+    
+    public void renameArtifact(Artifact artifact) {
+        if (getOnRenameArtifact()!= null) {
+            onRenameArtifact.handle(new RenameArtifactEvent(EventType.ROOT, artifact));
         }
     }
 
@@ -462,6 +470,20 @@ public class ProjectNavigatorController extends AbstractController implements Ob
         this.onDeleteArtifact = onDeleteArtifact;
     }
 
+    /**
+     * @return the onRenameArtifact
+     */
+    public EventHandler<RenameArtifactEvent> getOnRenameArtifact() {
+        return onRenameArtifact;
+    }
+
+    /**
+     * @param onRenameArtifact the onRenameArtifact to set
+     */
+    public void setOnRenameArtifact(EventHandler<RenameArtifactEvent> onRenameArtifact) {
+        this.onRenameArtifact = onRenameArtifact;
+    }
+
     /*
      * Artifact selected event.
      */
@@ -546,6 +568,30 @@ public class ProjectNavigatorController extends AbstractController implements Ob
         }
 
         protected DeleteArtifactEvent(EventType<? extends Event> et, Artifact artifact) {
+            super(et);
+            this.artifact = artifact;
+        }
+
+        /**
+         * @return the artifact
+         */
+        public Artifact getArtifact() {
+            return artifact;
+        }
+    }
+    
+    /**
+     * Rename artifact event.
+     */
+    public class RenameArtifactEvent extends Event {
+        
+        private Artifact artifact;
+        
+        protected RenameArtifactEvent(EventType<? extends Event> et) {
+            super(et);
+        }
+
+        protected RenameArtifactEvent(EventType<? extends Event> et, Artifact artifact) {
             super(et);
             this.artifact = artifact;
         }
