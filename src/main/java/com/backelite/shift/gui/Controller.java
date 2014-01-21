@@ -26,13 +26,16 @@ package com.backelite.shift.gui;
  * #L%
  */
 
+import com.backelite.shift.state.PersistableState;
 import java.util.List;
+import javafx.fxml.Initializable;
 
 /**
- *
+ * Interface defining a controller.
+ * A controller can have children and a parent.
  * @author ggrousset
  */
-public interface Controller {
+public interface Controller extends Initializable, PersistableState {
     
     public List<Controller> getChildrenControllers();
     public void setParentController(Controller controller);

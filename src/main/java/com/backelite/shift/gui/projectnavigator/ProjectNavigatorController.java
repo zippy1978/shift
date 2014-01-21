@@ -76,6 +76,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
+        
         // Build root
         treeItemRoot = new TreeItem<Artifact>(new PlaceHolderArtifact(this.getResourceBundle().getString("project_navigator.root.title")));
         treeView.setRoot(treeItemRoot);

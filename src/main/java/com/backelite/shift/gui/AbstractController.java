@@ -21,12 +21,11 @@ package com.backelite.shift.gui;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
+import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.gui.dialog.ConfirmDialogController;
 import com.backelite.shift.gui.dialog.ErrorDialogController;
-import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.gui.dialog.InfoDialogController;
 import com.backelite.shift.gui.dialog.PickerDialogController;
-import com.backelite.shift.state.PersistableState;
 import com.backelite.shift.state.StateException;
 import java.io.IOException;
 import java.net.URL;
@@ -37,7 +36,6 @@ import java.util.ResourceBundle;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -51,19 +49,15 @@ import org.slf4j.LoggerFactory;
  *
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
-public abstract class AbstractController implements Controller, Initializable, PersistableState {
+public abstract class AbstractController implements Controller {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractController.class);
-    
     private ResourceBundle resourceBundle;
-    
     private List<Stage> childrenWindows = new ArrayList<>();
     private List<Controller> childrenControllers = new ArrayList<>();
     private Controller parentController;
-    
     private EventHandler<WindowEvent> closeChildrenWindowEventHandler;
     private EventHandler<WindowEvent> shownChildrenWindowEventHandler;
-    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -78,13 +72,13 @@ public abstract class AbstractController implements Controller, Initializable, P
 
     @Override
     public void setParentController(Controller controller) {
-        
+
         if (controller != null) {
             controller.getChildrenControllers().add(this);
         } else if (this.parentController != null) {
             this.parentController.getChildrenControllers().remove(this);
         }
-        
+
         this.parentController = controller;
     }
 
@@ -92,8 +86,7 @@ public abstract class AbstractController implements Controller, Initializable, P
     public Controller getParentController() {
         return parentController;
     }
-    
-    
+
     /**
      * Test if the target platform supports application wide menu bar.
      *
@@ -104,9 +97,9 @@ public abstract class AbstractController implements Controller, Initializable, P
         // Only Mac OS supports menu outside window
         return System.getProperty("os.name").toLowerCase().contains("mac");
     }
-    
+
     public void displayInfoDialog(String title, String message) {
-        
+
         try {
             FXMLLoader loader = FXMLLoaderFactory.newInstance();
             if (title == null) {
@@ -125,9 +118,9 @@ public abstract class AbstractController implements Controller, Initializable, P
     }
 
     public void displayErrorDialog(String title, String message, Throwable e) {
-    
+
         log.error(title, e);
-        
+
         try {
             FXMLLoader loader = FXMLLoaderFactory.newInstance();
             if (title == null) {
@@ -146,10 +139,10 @@ public abstract class AbstractController implements Controller, Initializable, P
     }
 
     public void displayErrorDialog(Throwable e) {
-        
+
         this.displayErrorDialog(null, e.getMessage(), e);
     }
-    
+
     public void displayPickerDialog(String title, String message, List<String> options, EventHandler<PickerDialogController.SelectionEvent> onSelection) {
         try {
             FXMLLoader loader = FXMLLoaderFactory.newInstance();
@@ -170,7 +163,7 @@ public abstract class AbstractController implements Controller, Initializable, P
     public void displayConfirmDialog(String title, String message, EventHandler<ConfirmDialogController.ChoiceEvent> onChoice) {
         this.displayConfirmDialog(title, message, null, null, onChoice);
     }
-    
+
     public void displayConfirmDialog(String title, String message, String positiveText, String negativeText, EventHandler<ConfirmDialogController.ChoiceEvent> onChoice) {
         try {
             FXMLLoader loader = FXMLLoaderFactory.newInstance();
@@ -202,23 +195,21 @@ public abstract class AbstractController implements Controller, Initializable, P
 
         return null;
     }
-    
+
     public void onChildWindowRemoved(Stage stage) {
         this.childrenWindows.remove(stage);
     }
-    
+
     public void onChildWindowAdded(Stage stage) {
         this.childrenWindows.add(stage);
     }
 
     @Override
     public void close() {
-        
+
         // Remove parent controller
         this.setParentController(null);
     }
-
-    
 
     /**
      * Create new window.
@@ -226,7 +217,8 @@ public abstract class AbstractController implements Controller, Initializable, P
      * @param title Window title
      * @param rootNode Window content
      * @param style Window style
-     * @param alwaysOnTop If true window is displayed always on top of the main newStage
+     * @param alwaysOnTop If true window is displayed always on top of the main
+     * newStage
      * @return Window created (Stage)
      */
     public Stage newWindow(String title, Parent rootNode, StageStyle style, boolean alwaysOnTop) {
@@ -237,33 +229,30 @@ public abstract class AbstractController implements Controller, Initializable, P
         scene.getStylesheets().add(ApplicationContext.getThemeManager().getCSS());
         newStage.setScene(scene);
         newStage.setTitle(title);
-        
+
         if (alwaysOnTop) {
             newStage.initOwner(ApplicationContext.getMainStage());
         }
-        
+
         // Register listeners
         closeChildrenWindowEventHandler = new EventHandler<WindowEvent>() {
-
             @Override
             public void handle(WindowEvent t) {
-                onChildWindowRemoved((Stage)t.getSource());
+                onChildWindowRemoved((Stage) t.getSource());
             }
         };
         newStage.setOnCloseRequest(new WeakEventHandler<>(closeChildrenWindowEventHandler));
-        
-        shownChildrenWindowEventHandler = new EventHandler<WindowEvent>() {
 
+        shownChildrenWindowEventHandler = new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
-                onChildWindowAdded((Stage)t.getSource());
+                onChildWindowAdded((Stage) t.getSource());
             }
         };
         newStage.setOnShown(new WeakEventHandler<>(shownChildrenWindowEventHandler));
 
         return newStage;
     }
-    
 
     /**
      * Create new utility window.
@@ -276,7 +265,7 @@ public abstract class AbstractController implements Controller, Initializable, P
 
         return this.newWindow(title, rootNode, StageStyle.UTILITY, false);
     }
-    
+
     /**
      * Create new basic window.
      *
@@ -288,13 +277,14 @@ public abstract class AbstractController implements Controller, Initializable, P
 
         return this.newDecoratedWindow(title, rootNode, false);
     }
-    
+
     /**
      * Create new basic window.
      *
      * @param title Window title
      * @param rootNode Window content
-     * @param alwaysOnTop If true window is displayed always on top of the main newStage
+     * @param alwaysOnTop If true window is displayed always on top of the main
+     * newStage
      * @return Window created (Stage)
      */
     public Stage newDecoratedWindow(String title, Parent rootNode, boolean alwaysOnTop) {
@@ -346,7 +336,7 @@ public abstract class AbstractController implements Controller, Initializable, P
      * Return list of children windows.
      */
     public List<Stage> getChildrenWindows() {
-        
+
         return this.childrenWindows;
     }
 }

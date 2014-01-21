@@ -38,7 +38,8 @@ import javafx.scene.control.TreeCell;
 
 /**
  * Artifact cell for project navigator TreeView.
- * Note that Platform.runLater blocks must be used in context menus handlers otherwise strange things happen (8.0.0-ea-b123)
+ * Note that Platform.runLater blocks must be used in context menus 
+ * handlers otherwise strange things happen (8.0.0-ea-b123)
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
 public class ArtifactTreeCell extends TreeCell<Artifact> {
@@ -54,11 +55,13 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
         super();
 
     }
-
+    
     @Override
     protected void updateItem(Artifact artifact, boolean empty) {
+        
         super.updateItem(artifact, empty);
 
+        
         // Retrieve parent controller from user data
         this.projectNavigatorController = (ProjectNavigatorController) this.getUserData();
 
