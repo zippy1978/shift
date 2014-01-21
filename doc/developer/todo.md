@@ -24,7 +24,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 09/04/13</d> 'Delete' on all items  
 
-<t>✘</t> 'Rename' on all items    
+<d>✔ 01/21/14</d> 'Rename' on all items    
 
 <t>✘</t> 'Refresh' on all items
 

@@ -36,8 +36,8 @@ import java.util.Observer;
  */
 public class FileSystemFolder extends AbstractFileSystemArtifact implements Folder, Observer {
 
-    private List<Folder> subFolders = new ArrayList<Folder>();
-    private List<Document> documents = new ArrayList<Document>();
+    private List<Folder> subFolders = new ArrayList<>();
+    private List<Document> documents = new ArrayList<>();
     private Folder parentFolder;
     private Project project;
     
@@ -95,7 +95,8 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
 
     @Override
     public void refresh() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        this.load();
     }
 
     @Override

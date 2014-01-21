@@ -75,5 +75,19 @@ class FileSystemDocumentSpec extends Specification{
         cleanup:
         textDocument.close()
     }
+    
+    def "document content is updated on refresh when modified from outside the workspace"() {
+        
+        when:
+        textDocument.open()
+        textFile.withWriter{it << 'MODIFIED'}
+        textDocument.refresh()
+        
+        then:
+        textDocument.getContentAsString() == 'MODIFIED'
+        
+        cleanup:
+        textDocument.close()
+    }
 }
 

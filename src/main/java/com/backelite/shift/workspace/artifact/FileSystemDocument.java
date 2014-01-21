@@ -114,7 +114,12 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
 
     @Override
     public void refresh() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        // If document is opened : reopen the document to get the new content
+        if (opened) {
+            this.close();
+            this.open();
+        }
     }
 
     @Override
