@@ -45,6 +45,7 @@ public abstract class AbstractProjectWizardController  extends AbstractDialogCon
     /**
      * @param projectGenerator the projectGenerator to set
      */
+    @Override
     public void setProjectGenerator(ProjectGenerator projectGenerator) {
         this.projectGenerator = projectGenerator;
     }

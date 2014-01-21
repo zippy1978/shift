@@ -44,6 +44,7 @@ public class LocalStateManager implements StateManager {
         this.rootDirectory = rootDirectory;
     }
 
+    @Override
     public void save(PersistableState object) throws StateException {
 
         log.debug(String.format("Saving %s state", object.getClass().getSimpleName()));
@@ -61,6 +62,7 @@ public class LocalStateManager implements StateManager {
 
     }
 
+    @Override
     public void restore(PersistableState object) throws StateException {
 
         log.debug(String.format("Restoring %s state", object.getClass().getSimpleName()));

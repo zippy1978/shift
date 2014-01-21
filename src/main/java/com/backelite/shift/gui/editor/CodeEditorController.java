@@ -159,6 +159,7 @@ public class CodeEditorController extends AbstractController implements EditorCo
         }
     }
 
+    @Override
     public void setOnCursorChanged(EventHandler<CursorChangedEvent> onCursorChanged) {
         this.onCursorChanged = onCursorChanged;
     }
@@ -168,47 +169,58 @@ public class CodeEditorController extends AbstractController implements EditorCo
         return onCursorChanged;
     }
 
+    @Override
     public void close() {
         
         document.close();
     }
 
+    @Override
     public boolean canUndo() {
         return codeEditor.getHistorySize().getUndo() > 0;
     }
 
+    @Override
     public boolean canRedo() {
         return codeEditor.getHistorySize().getRedo() > 0;
     }
 
+    @Override
     public void undo() {
         codeEditor.undo();
     }
 
+    @Override
     public void redo() {
         codeEditor.redo();
     }
 
+    @Override
     public void cut() {
         codeEditor.cut();
     }
     
+    @Override
     public void copy() {
         codeEditor.copy();
     }
 
+    @Override
     public void paste() {
         codeEditor.paste();
     }
     
+    @Override
     public void selectAll() {
        codeEditor.selectAll();
     }
     
+    @Override
     public void contentAssist() {
         codeEditor.contentAssist();
     }
 
+    @Override
     public boolean canContentAssist() {
         return codeEditor.canContentAssist();
     }
@@ -245,10 +257,12 @@ public class CodeEditorController extends AbstractController implements EditorCo
         codeEditor.replace();
     }    
     
+    @Override
     public void clearHistory() {
         codeEditor.clearHistory();
     }
 
+    @Override
     public CursorPosition getCursorPosition() {
         CodeEditor.CursorPosition position = codeEditor.getCursorPosition();
         return new CursorPosition(position.getLine(), position.getCh());

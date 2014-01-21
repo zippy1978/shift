@@ -41,12 +41,14 @@ import java.util.Map;
  */
 public class LocalWorkspace extends WeakObservable implements Workspace {
 
-    private List<Project> projects = new ArrayList<Project>();
+    private List<Project> projects = new ArrayList<>();
 
+    @Override
     public List<Project> getProjects() {
         return projects;
     }
 
+    @Override
     public Artifact findArtifactByWorkspacePath(String workspacePath) {
 
         for (Project project : projects) {
@@ -94,6 +96,7 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
         return null;
     }
 
+    @Override
     public void synchronize() throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -105,6 +108,7 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
      * @return The new project.
      * @throws IOException 
      */
+    @Override
     public Project createProject(String location, String name) throws IOException {
         
         Project newProject = new FileSystemProject(new File(location, name));
@@ -115,6 +119,7 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
     
     
 
+    @Override
     public void openProject(Project project) throws IOException {
 
         if (!this.isProjectOpened(project.getPath())) {
@@ -132,6 +137,7 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
         }
     }
 
+    @Override
     public void closeProject(Project project) throws IOException {
 
         // Remove from workspace
@@ -142,6 +148,7 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
         this.notifyObservers(project);
     }
 
+    @Override
     public boolean isProjectOpened(String path) {
 
         for (Project project : projects) {
@@ -153,16 +160,18 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
         return false;
     }
 
+    @Override
     public boolean isProjectOpened(Project project) {
         return this.isProjectOpened(project.getPath());
     }
 
+    @Override
     public void saveState(Map<String, Object> state) throws StateException {
 
         // Projects
-        List<Map<String, Object>> projectsState = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> projectsState = new ArrayList<>();
         for (Project project : projects) {
-            Map<String, Object> projectState = new HashMap<String, Object>();
+            Map<String, Object> projectState = new HashMap<>();
             projectState.put("path", project.getPath());
             projectState.put("class", project.getClass().getSimpleName());
 
@@ -173,6 +182,7 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
 
     }
 
+    @Override
     public void restoreState(Map<String, Object> state) throws StateException {
 
         // Projects
@@ -196,6 +206,7 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
         }
     }
 
+    @Override
     public String getInstanceIdentifier() {
         return null;
     }

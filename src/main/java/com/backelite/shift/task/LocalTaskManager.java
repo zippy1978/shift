@@ -40,11 +40,13 @@ public class LocalTaskManager implements TaskManager {
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
     private Set<WeakReference<TaskManagerListener>> listeners = new HashSet<WeakReference<TaskManagerListener>>();
 
+    @Override
     public void addTask(final Task task) {
 
         // Event handlers on task
 
         task.setOnRunning(new EventHandler() {
+            @Override
             public void handle(Event t) {
                 for (TaskManagerListener listener : getActiveListeners()) {
                     listener.onTaskStarted(task);
@@ -53,6 +55,7 @@ public class LocalTaskManager implements TaskManager {
         });
 
         task.setOnSucceeded(new EventHandler() {
+             @Override
              public void handle(Event t) {
                 for (TaskManagerListener listener : getActiveListeners()) {
                     listener.onTaskSucceeded(task);
@@ -62,6 +65,7 @@ public class LocalTaskManager implements TaskManager {
         
         task.setOnFailed(new EventHandler() {
 
+            @Override
             public void handle(Event t) {
                  for (TaskManagerListener listener : getActiveListeners()) {
                     listener.onTaskFailed(task);
@@ -80,6 +84,7 @@ public class LocalTaskManager implements TaskManager {
         service.start();
     }
 
+    @Override
     public void addListener(TaskManagerListener listener) {
 
         listeners.add(new WeakReference<TaskManagerListener>(listener));
@@ -101,6 +106,7 @@ public class LocalTaskManager implements TaskManager {
         return result;
     }
 
+    @Override
     public void shutdown() {
         executorService.shutdownNow();
     }

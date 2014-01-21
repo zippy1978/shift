@@ -42,6 +42,7 @@ public class GroovyProjectWizardFactory implements ProjectWizardFactory {
     /**
      * @return the name
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -56,6 +57,7 @@ public class GroovyProjectWizardFactory implements ProjectWizardFactory {
     /**
      * @return the description
      */
+    @Override
     public String getDescription() {
         return description;
     }
@@ -84,6 +86,7 @@ public class GroovyProjectWizardFactory implements ProjectWizardFactory {
     /**
      * @return the projectGenerator
      */
+    @Override
     public GroovyProjectGenerator getProjectGenerator() {
         return projectGenerator;
     }
@@ -95,6 +98,7 @@ public class GroovyProjectWizardFactory implements ProjectWizardFactory {
         this.projectGenerator = projectGenerator;
     }
    
+    @Override
      public Node newProjectWizard(FXMLLoader loader) {
         return this.getCode().call(loader);
     }

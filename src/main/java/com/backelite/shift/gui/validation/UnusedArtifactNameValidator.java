@@ -38,6 +38,7 @@ public class UnusedArtifactNameValidator implements Validator {
         this.parentFolder = parentFolder;
     }
     
+    @Override
     public ValidatorResult validate(Object input) {
         
         ValidatorResult result = new ValidatorResult();

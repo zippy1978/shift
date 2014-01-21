@@ -34,6 +34,7 @@ public class GroovyProjectGenerator implements ProjectGenerator {
 
     private Closure<Project> code;
     
+    @Override
     public Project generate(String name, Map<String, Object> attributes) {
         return this.getCode().call(name, attributes);
     }

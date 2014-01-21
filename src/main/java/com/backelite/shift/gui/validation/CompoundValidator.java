@@ -38,6 +38,7 @@ public class CompoundValidator implements Validator{
         Collections.addAll(this.validators, validators);
     }
 
+    @Override
     public ValidatorResult validate(Object input) {
         
         ValidatorResult result = new ValidatorResult();

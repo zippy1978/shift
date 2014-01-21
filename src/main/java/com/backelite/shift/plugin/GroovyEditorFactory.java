@@ -42,6 +42,7 @@ public class GroovyEditorFactory implements EditorFactory {
     /**
      * @return the name
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -56,6 +57,7 @@ public class GroovyEditorFactory implements EditorFactory {
     /**
      * @return the description
      */
+    @Override
     public String getDescription() {
         return description;
     }
@@ -70,6 +72,7 @@ public class GroovyEditorFactory implements EditorFactory {
     /**
      * @return the supportedExtensions
      */
+    @Override
     public List<String> getSupportedExtensions() {
         return supportedExtensions;
     }
@@ -95,6 +98,7 @@ public class GroovyEditorFactory implements EditorFactory {
         this.code = code;
     }
     
+    @Override
     public Node newEditor(Document document, FXMLLoader loader) {
         return getCode().call(document, loader);
     }

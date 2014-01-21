@@ -45,6 +45,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
     protected Map<String, Set<EditorFactory>> editorExtensions = new HashMap<String, Set<EditorFactory>>();
     protected Map<String, Set<PreviewFactory>> previewExtensions = new HashMap<String, Set<PreviewFactory>>();
 
+    @Override
     public Node newEditor(Document document, FXMLLoader loader) throws PluginException {
 
         try {
@@ -77,6 +78,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
         }
     }
 
+    @Override
     public boolean canPreview(Document document) {
         
         // Look for matching preview factory
@@ -90,6 +92,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
         
     }
 
+    @Override
     public List<PreviewFactory> getAvailablePreviewFactories(Document document) {
         
         List<PreviewFactory> result = new ArrayList<PreviewFactory>();
@@ -105,6 +108,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
         
     }
     
+    @Override
     public Node newPreview(Document document, FXMLLoader loader) throws PluginException {
         
         // Look for matching preview factory
@@ -118,6 +122,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
         }
     }
     
+    @Override
     public Node newPreview(PreviewFactory factory, FXMLLoader loader) throws PluginException {
 
         Node node = factory.newPreview(loader);
@@ -134,6 +139,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
         return node;
     }
     
+    @Override
     public Node newProjectWizard(ProjectWizardFactory factory, FXMLLoader loader) throws PluginException {
         
         Node node = factory.newProjectWizard(loader);
@@ -146,6 +152,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
         return node;
     }
 
+    @Override
     public List<PreviewFactory> getPreviewFactories() {
         
         List<PreviewFactory> factories = new ArrayList<PreviewFactory>();
@@ -157,6 +164,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
         return factories;
     }
     
+    @Override
     public List<ProjectWizardFactory> getProjectWizardFactories() {
         
         List<ProjectWizardFactory> factories = new ArrayList<ProjectWizardFactory>();

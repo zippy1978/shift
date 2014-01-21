@@ -29,6 +29,7 @@ package com.backelite.shift.gui.validation;
  */
 public class NotBlankValidator implements Validator{
 
+    @Override
     public ValidatorResult validate(Object input) {
                 
         ValidatorResult result = new ValidatorResult();

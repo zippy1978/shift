@@ -59,6 +59,7 @@ public class MainApp extends Application {
         launch(args);
     }
 
+    @Override
     public void start(Stage stage) throws Exception {
 
         // *** This section should be asynced and moved to splash screen
@@ -119,6 +120,7 @@ public class MainApp extends Application {
     private void registerCloseRequestHandler(final Stage stage) {
 
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
             public void handle(final WindowEvent we) {
 
                 boolean unsavedFiles = false;
@@ -151,6 +153,7 @@ public class MainApp extends Application {
         
         stage.setOnHiding(new EventHandler<WindowEvent>() {
 
+            @Override
             public void handle(WindowEvent t) {
                 stage.getOnCloseRequest().handle(t);
              

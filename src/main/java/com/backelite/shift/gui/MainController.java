@@ -315,6 +315,7 @@ public class MainController extends AbstractController {
         // File > New file
         newFileMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.file.new_file"));
         newFileMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleNewFileMenuAction();
             }
@@ -325,6 +326,7 @@ public class MainController extends AbstractController {
         // File > New folder
         newFolderMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.file.new_folder"));
         newFolderMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleNewFolderMenuAction();
             }
@@ -339,6 +341,7 @@ public class MainController extends AbstractController {
         MenuItem openProjectMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.file.open_project"));
         openProjectMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_OPEN_PROJECT));
         openProjectMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleOpenProjectMenuAction();
             }
@@ -348,6 +351,7 @@ public class MainController extends AbstractController {
         // File > Close project
         closeProjectMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.file.close_project"));
         closeProjectMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleCloseProjectMenuAction();
             }
@@ -360,6 +364,7 @@ public class MainController extends AbstractController {
         saveMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.file.save"));
         saveMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_SAVE));
         saveMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleSaveMenuAction();
             }
@@ -373,6 +378,7 @@ public class MainController extends AbstractController {
             // File > Quit 
             quitMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.file.quit"));
             quitMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
                 public void handle(ActionEvent t) {
                     ApplicationContext.getMainStage().close();
                 }
@@ -388,6 +394,7 @@ public class MainController extends AbstractController {
         undoMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_UNDO));
         undoMenuItem.setDisable(true);
         undoMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleUndoMenuAction();
             }
@@ -399,6 +406,7 @@ public class MainController extends AbstractController {
         redoMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_REDO));
         redoMenuItem.setDisable(true);
         redoMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleRedoMenuAction();
             }
@@ -413,6 +421,7 @@ public class MainController extends AbstractController {
         cutMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_CUT));
         cutMenuItem.setDisable(true);
         cutMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleCutMenuAction();
             }
@@ -424,6 +433,7 @@ public class MainController extends AbstractController {
         copyMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_COPY));
         copyMenuItem.setDisable(true);
         copyMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleCopyMenuAction();
             }
@@ -435,6 +445,7 @@ public class MainController extends AbstractController {
         pasteMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_PASTE));
         pasteMenuItem.setDisable(true);
         pasteMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handlePasteMenuAction();
             }
@@ -446,6 +457,7 @@ public class MainController extends AbstractController {
         selectAllMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_SELECT_ALL));
         selectAllMenuItem.setDisable(true);
         selectAllMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleSelectAllMenuAction();
             }
@@ -466,6 +478,7 @@ public class MainController extends AbstractController {
         contentAssistMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_CONTENT_ASSIST));
         contentAssistMenuItem.setDisable(true);
         contentAssistMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleContentAssistMenuAction();
             }
@@ -602,6 +615,7 @@ public class MainController extends AbstractController {
         newPreviewMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.window.new_preview"));
         newPreviewMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_NEW_PREVIEW));
         newPreviewMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleNewPreviewMenuAction();
             }
@@ -620,6 +634,7 @@ public class MainController extends AbstractController {
                 MenuItem item = new MenuItem(currentStage.getTitle());
                 // On click : bring window to front
                 item.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
                     public void handle(ActionEvent t) {
                         currentStage.toFront();
                         currentStage.requestFocus();
@@ -647,6 +662,7 @@ public class MainController extends AbstractController {
 
         // Update opened windows in Window menu
         Platform.runLater(new Runnable() {
+            @Override
             public void run() {
                 buildWindowMenu();
             }
@@ -699,6 +715,7 @@ public class MainController extends AbstractController {
 
                     // Display picker
                     displayPickerDialog(getResourceBundle().getString("main.preview_picker.title"), getResourceBundle().getString("main.preview_picker.text"), options, new EventHandler<PickerDialogController.SelectionEvent>() {
+                        @Override
                         public void handle(PickerDialogController.SelectionEvent t) {
 
                             // If selection : create new preview

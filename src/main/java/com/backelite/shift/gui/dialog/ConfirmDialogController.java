@@ -57,6 +57,7 @@ public class ConfirmDialogController extends AbstractDialogController {
         // Handle positive button click
         positiveButtonActionEventHandler = new EventHandler<ActionEvent>() {
 
+            @Override
             public void handle(ActionEvent t) {
                 if (onChoice != null) {
                     onChoice.handle(new ChoiceEvent(EventType.ROOT, Choice.POSITIVE));
@@ -70,6 +71,7 @@ public class ConfirmDialogController extends AbstractDialogController {
         // Handle negative button click
         negativeButtonActionEventHandler = new EventHandler<ActionEvent>() {
 
+            @Override
             public void handle(ActionEvent t) {
                 if (onChoice != null) {
                     onChoice.handle(new ChoiceEvent(EventType.ROOT, Choice.NEGATIVE));

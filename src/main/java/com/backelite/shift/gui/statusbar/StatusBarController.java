@@ -127,6 +127,7 @@ public class StatusBarController extends AbstractController implements TaskManag
         
         timeline.setOnFinished(new EventHandler<ActionEvent>() {
 
+            @Override
             public void handle(ActionEvent t) {
                 taskBox.setVisible(false);
             }

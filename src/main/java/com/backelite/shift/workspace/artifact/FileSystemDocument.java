@@ -92,6 +92,7 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
         }
     }
 
+    @Override
     public synchronized void save() throws IOException {
 
         if (content != null) {
@@ -106,18 +107,22 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
 
     }
 
+    @Override
     public void saveAll() throws IOException {
         this.save();
     }
 
+    @Override
     public void refresh() throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public Folder getParentFolder() {
         return parentFolder;
     }
 
+    @Override
     public synchronized Project getProject() {
 
         // Lazy project lookup
@@ -133,6 +138,7 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
         return project;
     }
 
+    @Override
     public void setContent(byte[] newContentBytes) {
         
         try {
@@ -164,6 +170,7 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
         
     }
 
+    @Override
     public String getContentAsString() {
         if (opened) {
             try {
@@ -176,10 +183,12 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
         }
     }
 
+    @Override
     public byte[] getContent() {
         return this.content;
     }
 
+    @Override
     public synchronized void setContentAsString(String newContent) {
         try {
             this.setContent(newContent.getBytes(ENCODING));
@@ -193,6 +202,7 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
      *
      * @throws IOException
      */
+    @Override
     public void open() throws IOException {
 
         if (!opened) {
@@ -201,6 +211,7 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
         }
     }
 
+    @Override
     public void close() {
 
         content = null;
@@ -208,14 +219,17 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
         opened = false;
     }
 
+    @Override
     public boolean isOpened() {
         return opened;
     }
 
+    @Override
     public boolean isModified() {
         return modified;
     }
 
+    @Override
     public boolean isNew() {
         return newDocument;
     }

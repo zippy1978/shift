@@ -242,6 +242,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
 
     }
 
+    @Override
     public void update(Observable o, Object arg) {
 
         boolean canRefresh = true;
@@ -322,6 +323,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
         }
     }
 
+    @Override
     public void handle(MouseEvent event) {
 
         if (event.getSource() instanceof ArtifactTreeCell) {

@@ -35,6 +35,7 @@ public abstract class BasePreferencesManager implements PreferencesManager {
 
     protected Map<String, Object> loadedValues = new HashMap<String, Object>();
 
+    @Override
     public void setInitialValue(String key, Object value) throws PreferencesException {
 
         Object existingValue = this.getValue(key);
@@ -43,6 +44,7 @@ public abstract class BasePreferencesManager implements PreferencesManager {
         }
     }
 
+    @Override
     public void mergeListValue(String key, List value) throws PreferencesException {
         
         Object existingValue = this.getValue(key);
@@ -70,6 +72,7 @@ public abstract class BasePreferencesManager implements PreferencesManager {
         
     }
 
+    @Override
     public void setInitialValues(Map<String, Object> values) throws PreferencesException {
 
         for (String key : values.keySet()) {
@@ -77,6 +80,7 @@ public abstract class BasePreferencesManager implements PreferencesManager {
         }
     }
 
+    @Override
     public void setValues(Map<String, Object> values) throws PreferencesException {
 
         for (String key : values.keySet()) {
@@ -84,10 +88,12 @@ public abstract class BasePreferencesManager implements PreferencesManager {
         }
     }
 
+    @Override
     public void setValue(String key, Object value) throws PreferencesException {
         loadedValues.put(key, value);
     }
 
+    @Override
     public Object getValue(String key) {
         return loadedValues.get(key);
     }

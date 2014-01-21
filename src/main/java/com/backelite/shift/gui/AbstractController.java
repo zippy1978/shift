@@ -329,12 +329,15 @@ public abstract class AbstractController implements Controller, Initializable, P
         return resourceBundle;
     }
 
+    @Override
     public void saveState(Map<String, Object> state) throws StateException {
     }
 
+    @Override
     public void restoreState(Map<String, Object> state) throws StateException {
     }
 
+    @Override
     public String getInstanceIdentifier() {
         return null;
     }

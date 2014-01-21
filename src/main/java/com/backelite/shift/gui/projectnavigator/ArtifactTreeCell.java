@@ -117,6 +117,7 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                 MenuItem deleteMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.artifact.menu.delete"));
                 projectContextMenu.getItems().add(deleteMenuItem);
                 deleteActionEventHandler = new EventHandler() {
+                    @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Project) {
                             projectNavigatorController.deleteArtifact(getItem());
@@ -150,6 +151,7 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                 MenuItem newFolderMenuItem = new MenuItem(projectNavigatorController.getResourceBundle().getString("project_navigator.folder.menu.new_folder"));
                 folderContextMenu.getItems().add(newFolderMenuItem);
                 newFolderActionEventHandler = new EventHandler() {
+                    @Override
                     public void handle(Event t) {
                         if (getItem() instanceof Folder) {
                             projectNavigatorController.newFolder((Folder) getItem());

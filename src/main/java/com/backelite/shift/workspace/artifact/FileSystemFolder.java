@@ -46,6 +46,7 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
         this.parentFolder = parentFolder;
     }
 
+    @Override
     public boolean isModified() {
         for (Document document : documents) {
             if (document.isModified()) {
@@ -58,6 +59,7 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
     
     
 
+    @Override
     public void save() throws IOException {
         
         // Create folder if it does not exist yet
@@ -71,6 +73,7 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
         this.notifyObservers();
     }
 
+    @Override
     public void saveAll() throws IOException {
         
         // Save folder
@@ -90,6 +93,7 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
         this.notifyObservers();
     }
 
+    @Override
     public void refresh() throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -174,18 +178,22 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
         this.notifyObservers();
     }
 
+    @Override
     public Folder getParentFolder() {
         return parentFolder;
     }
 
+    @Override
     public List<Folder> getSubFolders() {
         return subFolders;
     }
 
+    @Override
     public List<Document> getDocuments() {
         return documents;
     }
 
+    @Override
     public synchronized Project getProject() {
         
         // Lazy project lookup
@@ -201,6 +209,7 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
         return project;
     }
     
+    @Override
     public Document createDocument(String name) throws IOException {
         Document newDocument = new FileSystemDocument(this, new File(file, name));
         this.getDocuments().add(newDocument);
@@ -214,6 +223,7 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
  
     }
 
+    @Override
     public Folder createSubFolder(String name) throws IOException {
         Folder newFolder = new FileSystemFolder(this, new File(file, name));
         this.getSubFolders().add(newFolder);
@@ -226,6 +236,7 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
     
     
 
+    @Override
     public void update(Observable o, Object arg) {
         
         // On update : forward notification

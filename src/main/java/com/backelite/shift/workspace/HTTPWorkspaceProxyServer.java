@@ -105,6 +105,7 @@ public class HTTPWorkspaceProxyServer {
      */
     private class HTTPWorkspaceHandler extends AbstractHandler {
 
+        @Override
         public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 

@@ -276,6 +276,7 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
             rootContext.setContextPath("/");
             rootContext.setHandler(new AbstractHandler() {
 
+                @Override
                 public void handle(String tagret, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
                     response.sendRedirect(String.format("%s%s", WORKSPACE_CONTEXT, document.getWorkspacePath()));
                 }
@@ -350,6 +351,7 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
      */
     private class ProxyHTTPHandler extends AbstractHandler {
 
+        @Override
         public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
  
             // If root context requested : render current document anyway

@@ -28,6 +28,7 @@ package com.backelite.shift.gui.theme;
  */
 public class DefaultThemeManager implements ThemeManager {
 
+    @Override
     public String getCSS() {
         
         // For the moment : theme is hard coded

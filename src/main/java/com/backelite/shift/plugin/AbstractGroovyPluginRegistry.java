@@ -60,6 +60,7 @@ public abstract class AbstractGroovyPluginRegistry extends AbstractPluginRegistr
         return METABUILDER_INSTANCE;
     }
 
+    @Override
     public void loadPlugins() throws PluginException {
         
         // Load built in plugin

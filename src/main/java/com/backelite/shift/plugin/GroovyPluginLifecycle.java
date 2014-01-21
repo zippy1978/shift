@@ -32,6 +32,7 @@ public class GroovyPluginLifecycle implements PluginLifecycle {
 
     private Closure onLoad;
 
+    @Override
     public void load() {
 
         if (onLoad != null) {

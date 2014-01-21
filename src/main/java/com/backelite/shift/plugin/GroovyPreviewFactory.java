@@ -42,6 +42,7 @@ public class GroovyPreviewFactory implements PreviewFactory {
     /**
      * @return the name
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -56,6 +57,7 @@ public class GroovyPreviewFactory implements PreviewFactory {
     /**
      * @return the description
      */
+    @Override
     public String getDescription() {
         return description;
     }
@@ -70,6 +72,7 @@ public class GroovyPreviewFactory implements PreviewFactory {
     /**
      * @return the supportedExtensions
      */
+    @Override
     public List<String> getSupportedExtensions() {
         return supportedExtensions;
     }
@@ -95,6 +98,7 @@ public class GroovyPreviewFactory implements PreviewFactory {
         this.code = code;
     }
 
+    @Override
     public Node newPreview(FXMLLoader loader) {
         return getCode().call(loader);
     }

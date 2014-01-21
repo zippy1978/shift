@@ -43,22 +43,26 @@ public abstract class AbstractFileSystemArtifact extends WeakObservable implemen
         
     }
 
+    @Override
     public void load() throws IOException {
         if (loaded) {
             return;
         }
     }
 
+    @Override
     public String getName() {
         return file.getName();
     }
     
     public abstract Folder getParentFolder();
 
+    @Override
     public String getPath() {
         return file.getAbsolutePath();
     }
     
+    @Override
     public String getWorkspacePath() {
         
         String path = "/" + this.getName();
@@ -71,6 +75,7 @@ public abstract class AbstractFileSystemArtifact extends WeakObservable implemen
         return path;
     }
 
+    @Override
     public void rename(String newName) throws IOException {
 
         File parent = file.getParentFile();
@@ -84,6 +89,7 @@ public abstract class AbstractFileSystemArtifact extends WeakObservable implemen
 
     }
 
+    @Override
     public void delete() throws IOException {
 
         // Mark as deleted
@@ -91,6 +97,7 @@ public abstract class AbstractFileSystemArtifact extends WeakObservable implemen
         
     }
 
+    @Override
     public void moveTo(Artifact newParent) throws IOException {
 
         File destFile = new File(newParent.getPath(), file.getName());

@@ -49,6 +49,7 @@ public class LocalPreferencesManager extends BasePreferencesManager {
         }
     }
 
+    @Override
     public void commit() throws PreferencesException {
 
         File file = new File(rootDirectory, FILENAME);
@@ -60,6 +61,7 @@ public class LocalPreferencesManager extends BasePreferencesManager {
         }
     }
 
+    @Override
     public void rollback() throws PreferencesException {
         this.load();
     }

@@ -78,6 +78,7 @@ public class BasicProjectWizardController extends AbstractProjectWizardControlle
         
         nameErrorLabel.setVisible(false);
         nameTextField.validProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
             public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
 
                 okButton.setDisable(!nameTextField.isValid() || !locationTextField.isValid());
@@ -94,6 +95,7 @@ public class BasicProjectWizardController extends AbstractProjectWizardControlle
         
         locationErrorLabel.setVisible(false);
         locationTextField.validProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
             public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
 
                 okButton.setDisable(!nameTextField.isValid() || !locationTextField.isValid());
@@ -110,6 +112,7 @@ public class BasicProjectWizardController extends AbstractProjectWizardControlle
 
         // Browse button click
         browseButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleBrowseButtonAction();
             }
@@ -117,6 +120,7 @@ public class BasicProjectWizardController extends AbstractProjectWizardControlle
 
         // Cancel button click
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
             public void handle(ActionEvent t) {
                 handleCancelButtonAction();
             }
@@ -125,6 +129,7 @@ public class BasicProjectWizardController extends AbstractProjectWizardControlle
         // OK button click
         okButton.setOnAction(new EventHandler<ActionEvent>() {
 
+            @Override
             public void handle(ActionEvent t) {
                 handleOKButtonAction();
             }
