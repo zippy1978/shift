@@ -42,6 +42,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -58,6 +59,9 @@ public class ProjectNavigatorController extends AbstractController implements Ob
 
     @FXML
     private TreeView<Artifact> treeView;
+    
+    @FXML
+    private Label welcomeLabel;
     
     private TreeItem<Artifact> treeItemRoot;
     private EventHandler<OpenFileEvent> onOpenFile;
@@ -115,9 +119,17 @@ public class ProjectNavigatorController extends AbstractController implements Ob
                 }
             }
         });
+        
+        // If workspace if empty : display welcome label
+        this.refreshWelcomeMessage();
 
         // Observe workspace
         ApplicationContext.getWorkspace().addObserver(this);
+    }
+    
+    private void refreshWelcomeMessage() {
+        // If workspace if empty : display welcome label
+        welcomeLabel.setVisible(ApplicationContext.getWorkspace().getProjects().isEmpty());
     }
 
     /**
@@ -256,6 +268,9 @@ public class ProjectNavigatorController extends AbstractController implements Ob
 
         boolean canRefresh = true;
         boolean canSelect = true;
+        
+        // If workspace if empty : display welcome label
+        this.refreshWelcomeMessage();
 
         // Special case for document : no need to refresh if document is marked as modified
         Document document = null;

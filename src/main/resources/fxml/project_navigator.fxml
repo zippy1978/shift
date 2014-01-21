@@ -13,6 +13,7 @@
     <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="347.0" prefWidth="260.0">
       <children>
         <TreeView fx:id="treeView" prefHeight="511.0" prefWidth="322.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+        <Label fx:id="welcomeLabel" alignment="TOP_LEFT" prefHeight="96.0" prefWidth="232.0" text="%project_navigator.welcome.message" wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="14.0" />
       </children>
     </AnchorPane>
   </content>

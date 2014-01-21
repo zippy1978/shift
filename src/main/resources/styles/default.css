@@ -209,6 +209,10 @@
 
 /* Editors pane */
 
+#editorsPane .welcome-message{
+    -fx-text-fill: white;
+}
+
 #editorsPane .tab-pane {
     -fx-padding: 0px;
     -fx-background-insets: 0;

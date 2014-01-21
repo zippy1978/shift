@@ -98,7 +98,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 09/12/13</d> Icon
 
-<t>✘</t> Display help texts in poject navigator and editors pane when they are empty
+<d>✔ 01/21/14</d> Display help texts in poject navigator and editors pane when they are empty
 
 
 ## Backlog

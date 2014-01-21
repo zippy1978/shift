@@ -50,6 +50,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -63,6 +64,10 @@ public class EditorsPaneController extends AbstractController implements Observe
 
     @FXML
     private TabPane tabPane;
+    
+    @FXML 
+    private Label welcomeLabel;
+    
     /**
      * EventHandler in charge of notifying active document change or active
      * document updates. To track only active editor / document change consider
@@ -93,9 +98,17 @@ public class EditorsPaneController extends AbstractController implements Observe
                 }
             }
         });
+        
+        // Display welcome message if no tab opened
+        this.refreshWelcomeMessage();
 
         // Observe Worspace changes (in case a project is closed)
         ApplicationContext.getWorkspace().addObserver(this);
+    }
+    
+    private void refreshWelcomeMessage() {
+        // Display welcome message if no tab opened
+        welcomeLabel.setVisible(tabPane.getTabs().isEmpty());
     }
 
     /**
@@ -158,6 +171,8 @@ public class EditorsPaneController extends AbstractController implements Observe
                 tabPane.getTabs().add(tab);
                 SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
                 selectionModel.select(tab);
+                
+                this.refreshWelcomeMessage();
 
                 return tab;
 
@@ -194,6 +209,8 @@ public class EditorsPaneController extends AbstractController implements Observe
         controller.setOnCursorChanged(null);
         tabPane.getTabs().remove(tab);
         tab.setGraphic(null);
+        
+        this.refreshWelcomeMessage();
 
         // Notify document changed
         if (tabPane.getTabs().size() == 0) {
