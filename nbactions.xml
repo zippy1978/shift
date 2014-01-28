@@ -40,4 +40,11 @@
                 <goal>fx:signjar</goal>
             </goals>
         </action>
+        <action>
+            <actionName>CUSTOM-Native package</actionName>
+            <displayName>Native package</displayName>
+            <goals>
+                <goal>jfx:native</goal>
+            </goals>
+        </action>
     </actions>

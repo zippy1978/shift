@@ -58,19 +58,5 @@ class FileSystemProjectSpec extends Specification {
         project.subFolders.get(0).documents.size() == 1
     }
     
-    def "project is not leaking"() {
-    
-        when:
-        FileSystemProject projectRef = new FileSystemProject(projectDir)
-        projectRef.load()
-        ReferenceQueue queue = new ReferenceQueue()
-        WeakReference ref = new WeakReference(projectRef, queue)
-        projectRef = null
-        System.gc()
-        
-        then:
-        ref.isEnqueued()
-
-    }
 }
 

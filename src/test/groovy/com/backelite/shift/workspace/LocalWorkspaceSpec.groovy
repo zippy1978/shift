@@ -54,23 +54,6 @@ class LocalWorkspaceSpec extends Specification {
         
     }
     
-    def "workspace is not leaking when closing project"() {
-        
-        when:
-        LocalWorkspace workspace = new LocalWorkspace()
-        FileSystemProject projectRef = new FileSystemProject(projectDir)
-        projectRef.load()
-        workspace.openProject(projectRef)
-        workspace.closeProject(projectRef)
-        ReferenceQueue queue = new ReferenceQueue()
-        WeakReference ref = new WeakReference(projectRef, queue)
-        projectRef = null
-        System.gc()
-        
-        then:
-        ref.isEnqueued()
-    }
-    
     def "find artifact by workspace path"() {
         
         when:
