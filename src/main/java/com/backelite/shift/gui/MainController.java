@@ -105,6 +105,8 @@ public class MainController extends AbstractController {
     private MenuItem contentAssistMenuItem;
     private Menu windowMenu;
     private MenuItem newPreviewMenuItem;
+    private Menu helpMenu;
+    private MenuItem aboutMenuItem;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -217,7 +219,7 @@ public class MainController extends AbstractController {
 
         FXMLLoader loader = FXMLLoaderFactory.newInstance();
         try {
-            Stage stage = this.newDecoratedWindow(getResourceBundle().getString("welcome.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/welcome.fxml")));
+            Stage stage = this.newDecoratedWindow(getResourceBundle().getString("welcome.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/welcome_dialog.fxml")));
             DialogController controller = (DialogController) loader.getController();
             controller.setStage(stage);
             stage.setResizable(false);
@@ -496,12 +498,26 @@ public class MainController extends AbstractController {
         // Window menu
         windowMenu = new Menu(this.getResourceBundle().getString("main.menu.window"));
         this.buildWindowMenu();
+        
+        // Help menu
+        helpMenu = new Menu(this.getResourceBundle().getString("main.menu.help"));
+        
+        // Help > About
+        aboutMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.help.about"));
+        aboutMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                handleHelpMenuAction();
+            }
+        });
+        helpMenu.getItems().add(aboutMenuItem);
 
         // Add root menus to menu bar
         menuBar.getMenus().add(fileMenu);
         menuBar.getMenus().add(editMenu);
         menuBar.getMenus().add(windowMenu);
-
+        menuBar.getMenus().add(helpMenu);
 
         // Refresh states
         this.refreshFileMenu();
@@ -863,6 +879,21 @@ public class MainController extends AbstractController {
         EditorController editorController = editorsPaneController.getActiveEditorController();
         if (editorController != null && editorController.canContentAssist() && ApplicationContext.getMainStage().isFocused()) {
             editorController.contentAssist();
+        }
+    }
+    
+    private void handleHelpMenuAction() {
+        
+        try {
+            FXMLLoader loader = FXMLLoaderFactory.newInstance();
+            Stage stage = newModalWindow(getResourceBundle().getString("main.about.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/about_dialog.fxml")));
+            DialogController controller = (DialogController) loader.getController();
+            controller.setStage(stage);
+            stage.setResizable(false);
+            stage.setFullScreen(false);
+            stage.showAndWait();
+        } catch (IOException ex) {
+            this.displayErrorDialog(ex);
         }
     }
 

@@ -26,8 +26,6 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 01/21/14</d> 'Rename' on all items    
 
-<t>✘</t> 'Refresh' on all items
-
 ### Editors pane
 
 <d>✔ 08/16/13</d> Add confirmation dialog on editor closing if file is not saved.
@@ -43,7 +41,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 <d>✔ 12/20/13</d> Finish HTML5 project wizard  
 
-<t>✘</t> Add an [Initializr](http://www.initializr.com/) project wizard
+<d>✔ 01/28/14</d> Add an [Initializr](http://www.initializr.com/) project wizard
 
 #### HTML Preview
 
@@ -92,7 +90,7 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 
 ### Packaging
 
-<t>✘</t> About window  
+<d>✔ 01/28/14</d> About window  
 
 <d>✔ 01/20/14</d> Welcome window display
 
@@ -144,7 +142,10 @@ The purpose of this release is to provide a first stable and usable (but yet sim
 ### Project Navigator
 
 <t>✘</t> Drag n drop to move file and folders (from within the same project)
-<t>x</t> 'Duplicate' on all items
+
+<t>✘</t> 'Duplicate' on all items
+
+<t>✘</t> 'Refresh' on all items
 
 ### Preprocessor
 

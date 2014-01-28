@@ -23,7 +23,6 @@ package com.backelite.shift.gui.dialog;
  */
 import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.Constants;
-import com.backelite.shift.gui.control.CodeEditor;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
@@ -37,7 +36,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.web.WebView;
-import netscape.javascript.JSObject;
 
 /**
  *
@@ -49,7 +47,7 @@ public class WelcomeDialogController extends AbstractDialogController {
     private WebView webView;
     @FXML
     private Button closeButton;
-    @FXML 
+    @FXML
     private Label infoLabel;
     private EventHandler<ActionEvent> closeButtonActionEventHandler;
     private ChangeListener<Worker.State> webViewStateChangeListener;
