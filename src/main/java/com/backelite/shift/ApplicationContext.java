@@ -182,13 +182,13 @@ public class ApplicationContext {
 
     /**
      * Return the application data directory.
-     *
-     * @return
+     * Creates the directory if it does not exist on first call.
+     * @return Data dir
      */
-    public static File getApplicationDataDirectory() {
+    public static synchronized File getApplicationDataDirectory() {
 
         String userHome = System.getProperty("user.home");
-        File applicationDataDirectory = new File(userHome, ".shift");
+        File applicationDataDirectory = new File(userHome, String.format(".%s", getProperties().getProperty(Constants.PROPERTY_APPLICATION_NAME).toLowerCase()));
 
         if (!applicationDataDirectory.exists()) {
             applicationDataDirectory.mkdirs();
@@ -198,6 +198,23 @@ public class ApplicationContext {
         }
 
         return applicationDataDirectory;
+    }
+    
+    /**
+     * Return the application temp directory
+     * Creates the directory if it does not exist on first call.
+     * @return Temp dir
+     */
+    public static synchronized File getApplicationTempDirectory() {
+        
+        String tempDir = System.getProperty("java.io.tmpdir");
+        File applicationTempDirectory = new File(tempDir, getProperties().getProperty(Constants.PROPERTY_APPLICATION_NAME).toLowerCase());
+
+        if (!applicationTempDirectory.exists()) {
+            applicationTempDirectory.mkdirs();;
+        }
+        
+        return applicationTempDirectory;
     }
 
     public static synchronized Properties getProperties() {

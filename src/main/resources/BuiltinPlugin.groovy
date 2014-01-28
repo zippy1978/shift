@@ -28,6 +28,7 @@ import com.backelite.shift.workspace.artifact.FileSystemProject
 import com.backelite.shift.workspace.artifact.Project
 import com.backelite.shift.workspace.artifact.Document
 import com.backelite.shift.workspace.artifact.Folder
+import com.backelite.shift.util.FileUtils
 
 plugin {
     uid = "com.backelite.shift.plugin.builtin"
@@ -292,6 +293,49 @@ plugin {
     }
     
     projectWizardFactories {
+        
+        // Initializr
+        projectWizardFactory {
+            name = "Initializr Project"
+            description = "Builtin Initializr Project"
+            code = {loader ->
+                Node node = (Node) loader.load(getClass().getResourceAsStream("/fxml/initializr_projectwizard.fxml"))
+                return node
+            }
+            projectGenerator{
+                code = {name, attributes ->   
+                    
+                    // Create temp dir for download
+                    File downloadDir = FileUtils.createUniqueDirectory(ApplicationContext.getApplicationTempDirectory())
+                    
+                    // Determine flavor URL
+                    def address = 'http://www.initializr.com/builder?h5bp-content&modernizr&jquerymin&h5bp-iecond&h5bp-chromeframe&h5bp-analytics&h5bp-htaccess&h5bp-favicon&h5bp-appletouchicons&h5bp-scripts&h5bp-robots&h5bp-humans&h5bp-404&h5bp-adobecrossdomain&h5bp-css&h5bp-csshelpers&h5bp-mediaqueryprint&h5bp-mediaqueries'
+                    if (attributes.flavor == 'Bootstrap') {
+                        address = 'http://www.initializr.com/builder?boot-hero&jquerymin&h5bp-iecond&h5bp-chromeframe&h5bp-analytics&h5bp-favicon&h5bp-appletouchicons&modernizrrespond&izr-emptyscript&boot-css&boot-scripts'
+                    }
+                    
+                    // Download package
+                    def file = new File(downloadDir, 'initializr.zip')
+                    def fos = new FileOutputStream(file)
+                    def out = new BufferedOutputStream(fos)
+                    out << new URL(address).openStream()
+                    out.close()
+                    
+                    // Unzip
+                    File unzipDir = new File(downloadDir, 'unzip')
+                    unzipDir.mkdirs()
+                    FileUtils.unzipFile(file, unzipDir)
+                    
+                    // Import unzipped project
+                    Project project = ApplicationContext.getWorkspace().importProjectFromDirectory(new File(unzipDir, 'initializr'), attributes.location, name)
+                    
+                    // Delete download dir
+                    FileUtils.deleteDirectory(downloadDir)
+                    
+                    return project
+                }
+            }
+        }
         
         // HTML5 project
         projectWizardFactory {

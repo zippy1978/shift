@@ -152,10 +152,10 @@ public class BasicProjectWizardController extends AbstractProjectWizardControlle
         }
     }
 
-    private void handleOKButtonAction() {
+    protected void handleOKButtonAction() {
         
         // Create project and import into workspace
-        final Map<String, Object> attributes = new HashMap<String, Object>();
+        final Map<String, Object> attributes = new HashMap<>();
         attributes.put("location", locationTextField.getText());
         ApplicationContext.getTaskManager().addTask(new Task() {
 

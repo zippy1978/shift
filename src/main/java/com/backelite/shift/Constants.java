@@ -50,4 +50,9 @@ public interface Constants {
     public static final String SHORTCUT_CONTENT_ASSIST = "content_assist";
     public static final String SHORTCUT_NEW_PREVIEW = "new_preview";
     
+    public static final String PROPERTY_APPLICATION_NAME = "application.name";
+    public static final String PROPERTY_APPLICATION_VERSION_CODE = "application.version.code";
+    public static final String PROPERTY_APPLICATION_VERSION_NAME = "application.version.name";
+    public static final String PROPERTY_APPLICATION_BUILD_NUMBER = "application.build.number";
+    
 }

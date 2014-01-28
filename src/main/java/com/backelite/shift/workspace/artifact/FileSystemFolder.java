@@ -165,7 +165,7 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
         super.delete();
         
         // Delete
-        if (!FileUtils.deleteFolder(file)) {
+        if (!FileUtils.deleteDirectory(file)) {
             throw new IOException(String.format("Failed to delete %s ", file.getAbsolutePath()));
         }
         

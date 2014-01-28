@@ -28,6 +28,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.UUID;
+import org.apache.ant.compress.taskdefs.Unzip;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -95,12 +97,12 @@ public class FileUtils {
         }
     }
 
-    public static boolean deleteFolder(File folder) {
-        File[] files = folder.listFiles();
+    public static boolean deleteDirectory(File directory) {
+        File[] files = directory.listFiles();
         if (files != null) {
             for (File f : files) {
                 if (f.isDirectory()) {
-                    boolean deleted = deleteFolder(f);
+                    boolean deleted = deleteDirectory(f);
                     if (!deleted) {
                         return false;
                     }
@@ -109,6 +111,34 @@ public class FileUtils {
                 }
             }
         }
-        return folder.delete();
+        return directory.delete();
+    }
+
+    /**
+     * Create a directory with a unique name inside a given parnet directory.
+     *
+     * @param parent Parent directory
+     * @return Newly created directory
+     */
+    public static File createUniqueDirectory(File parent) {
+
+        String uniqueName = UUID.randomUUID().toString();
+
+        File directory = new File(parent, uniqueName);
+        directory.mkdirs();
+
+        return directory;
+    }
+
+    /**
+     * Unzip ZIP file to a target directory.
+     * @param zipFile Source zip file
+     * @param destinationDirectory Destination directory
+     */
+    public static void unzipFile(File zipFile, File destinationDirectory) {
+        Unzip unzipper = new Unzip();
+        unzipper.setSrc(zipFile);
+        unzipper.setDest(destinationDirectory);
+        unzipper.execute();
     }
 }

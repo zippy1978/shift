@@ -22,6 +22,7 @@ package com.backelite.shift.gui.dialog;
  * #L%
  */
 import com.backelite.shift.ApplicationContext;
+import com.backelite.shift.Constants;
 import com.backelite.shift.gui.control.CodeEditor;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -69,8 +70,8 @@ public class WelcomeDialogController extends AbstractDialogController {
         closeButton.setOnAction(new WeakEventHandler<>(closeButtonActionEventHandler));
 
 
-        final String versionName = (String) ApplicationContext.getProperties().get("application.version.name");
-        final String buildNumber = (String) ApplicationContext.getProperties().get("application.build.number");
+        final String versionName = ApplicationContext.getProperties().getProperty(Constants.PROPERTY_APPLICATION_VERSION_NAME);
+        final String buildNumber = ApplicationContext.getProperties().getProperty(Constants.PROPERTY_APPLICATION_BUILD_NUMBER);
         // Wait for the HTML to load
         webViewStateChangeListener = new ChangeListener<Worker.State>() {
             @Override

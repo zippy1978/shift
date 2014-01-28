@@ -25,6 +25,7 @@ package com.backelite.shift.workspace;
 import com.backelite.shift.workspace.artifact.Artifact;
 import com.backelite.shift.workspace.artifact.Project;
 import com.backelite.shift.state.PersistableState;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Observer;
@@ -46,6 +47,8 @@ public interface Workspace extends PersistableState {
     public void openProject(Project project) throws IOException;
     
     public Project createProject(String location, String name) throws IOException;
+    
+    public Project importProjectFromDirectory(File sourceDirectory, String location, String name) throws IOException;
     
     public void closeProject(Project project) throws IOException;
     

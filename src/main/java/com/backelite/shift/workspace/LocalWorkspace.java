@@ -27,6 +27,7 @@ import com.backelite.shift.workspace.artifact.Folder;
 import com.backelite.shift.workspace.artifact.FileSystemProject;
 import com.backelite.shift.workspace.artifact.Project;
 import com.backelite.shift.state.StateException;
+import com.backelite.shift.util.FileUtils;
 import com.backelite.shift.util.WeakObservable;
 import java.io.File;
 import java.io.IOException;
@@ -116,7 +117,35 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
         
         return newProject;
     }
+
+    @Override
+    public Project importProjectFromDirectory(File sourceDirectory, String location, String name) throws IOException {
     
+        Project project = this.createProject(location, name);
+        
+        this.importFolderFromDirectory(sourceDirectory, project);
+        
+        return project;
+        
+    }
+    
+    private void importFolderFromDirectory(File sourceDirectory, Folder folder) throws IOException {
+        
+        // Browse source dir
+        File[] files = sourceDirectory.listFiles();
+        for(File file : files) {
+            if (file.isDirectory()) {
+                Folder newFolder = folder.createSubFolder(file.getName());
+                newFolder.save();
+                this.importFolderFromDirectory(file, newFolder);
+            } else {
+                Document newDocument = folder.createDocument(file.getName());
+                newDocument.setContent(FileUtils.getFileContent(file));
+                newDocument.save();
+                
+            }
+        }
+    }
     
 
     @Override
