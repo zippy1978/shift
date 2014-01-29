@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
 
-<AnchorPane minHeight="119.0" minWidth="400.0" prefHeight="226.0" prefWidth="434.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.projectwizard.InitializrProjectWizardController">
+<AnchorPane minHeight="119.0" minWidth="400.0" prefHeight="241.0" prefWidth="434.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.projectwizard.InitializrProjectWizardController">
   <children>
     <ValidatedTextField fx:id="nameTextField" layoutX="92.0" layoutY="19.0" prefWidth="228.0" />
     <ValidatedTextField fx:id="locationTextField" editable="false" layoutX="92.0" layoutY="68.0" prefWidth="228.0" />
@@ -33,5 +33,6 @@
         </FXCollections>
       </items>
     </ChoiceBox>
+    <Label alignment="CENTER" layoutX="92.0" layoutY="174.0" prefWidth="227.99990000000253" text="%builtin.plugin.project_wizard.initializr.connection_warning" />
   </children>
 </AnchorPane>
