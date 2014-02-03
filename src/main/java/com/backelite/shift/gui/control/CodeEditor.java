@@ -519,8 +519,14 @@ public class CodeEditor extends AnchorPane {
             if (cmInstance != null) {
                 JSObject document = (JSObject) cmInstance.call("getDoc");
                 CursorPosition cursorPosition = this.getCursorPosition();
-                JSObject position = (JSObject) webView.getEngine().executeScript(String.format("endPos = {ch: %d, line: %d}", cursorPosition.getCh() - 1, cursorPosition.getLine() - 1));
-                document.call("replaceRange", content, position);
+                Boolean selected = (Boolean) document.call("somethingSelected");
+                if (selected) {
+                    // If something is selected : replace selection
+                    document.call("replaceSelection", content);
+                } else {
+                    JSObject position = (JSObject) webView.getEngine().executeScript(String.format("endPos = {ch: %d, line: %d}", cursorPosition.getCh() - 1, cursorPosition.getLine() - 1));
+                    document.call("replaceRange", content, position);
+                }
             }
         }
     }
