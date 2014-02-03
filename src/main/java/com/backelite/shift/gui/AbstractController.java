@@ -64,6 +64,20 @@ public abstract class AbstractController implements Controller {
     public void initialize(URL url, ResourceBundle rb) {
 
         resourceBundle = rb;
+        
+        // Children windows listeners
+        closeChildrenWindowEventHandler = new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                onChildWindowRemoved((Stage) t.getSource());
+            }
+        };
+        shownChildrenWindowEventHandler = new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                onChildWindowAdded((Stage) t.getSource());
+            }
+        };
     }
 
     @Override
@@ -232,7 +246,7 @@ public abstract class AbstractController implements Controller {
      */
     public Stage newWindow(String title, Parent rootNode, StageStyle style, boolean alwaysOnTop) {
 
-        Stage newStage = new Stage();
+        final Stage newStage = new Stage();
         newStage.initStyle(style);
         Scene scene = new Scene(rootNode);
         scene.getStylesheets().add(ApplicationContext.getThemeManager().getCSS());
@@ -244,21 +258,16 @@ public abstract class AbstractController implements Controller {
         }
 
         // Register listeners
-        closeChildrenWindowEventHandler = new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent t) {
-                onChildWindowRemoved((Stage) t.getSource());
-            }
-        };
         newStage.setOnCloseRequest(new WeakEventHandler<>(closeChildrenWindowEventHandler));
+        newStage.setOnShown(new WeakEventHandler<>(shownChildrenWindowEventHandler));
+        newStage.setOnHiding(new EventHandler<WindowEvent>() {
 
-        shownChildrenWindowEventHandler = new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
-                onChildWindowAdded((Stage) t.getSource());
+                newStage.getOnCloseRequest().handle(t);
+             
             }
-        };
-        newStage.setOnShown(new WeakEventHandler<>(shownChildrenWindowEventHandler));
+        });
 
         return newStage;
     }

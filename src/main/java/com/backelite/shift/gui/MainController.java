@@ -222,6 +222,7 @@ public class MainController extends AbstractController {
             Stage stage = this.newDecoratedWindow(getResourceBundle().getString("welcome.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/welcome_dialog.fxml")));
             DialogController controller = (DialogController) loader.getController();
             controller.setStage(stage);
+            controller.setParentController(this);
             stage.setResizable(false);
             stage.showAndWait();
         } catch (IOException ex) {
@@ -644,6 +645,7 @@ public class MainController extends AbstractController {
                 handleNewPreviewMenuAction();
             }
         });
+        newPreviewMenuItem.setDisable(true);
 
         windowMenu.getItems().add(newPreviewMenuItem);
 

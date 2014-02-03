@@ -37,8 +37,6 @@ public interface DialogController extends Controller {
     
     public Stage getStage();
     public void setStage(Stage stage);
-    @Override
-    public void close();
     public void setUserData(Object userData);
     public Object getUserData();
 }
