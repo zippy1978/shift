@@ -1095,4 +1095,5 @@ public class MainController extends AbstractController {
         editorsPaneController.restoreState(editorsPaneState);
 
     }
+    
 }

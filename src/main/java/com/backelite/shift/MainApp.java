@@ -143,6 +143,8 @@ public class MainApp extends Application {
                                 // Consume event to stop propagation and prevent close
                                 we.consume();
                             } else {
+                                
+                                mainController.close();
                                 stage.setOnCloseRequest(null);
                                 stage.setOnHiding(null);
                             }

@@ -30,6 +30,7 @@ import com.backelite.shift.state.StateException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -206,7 +207,15 @@ public abstract class AbstractController implements Controller {
 
     @Override
     public void close() {
-
+        
+        // Close children
+        List<Controller> controllerstoRemove = new ArrayList<>(childrenControllers);
+        for (Controller childController : controllerstoRemove) {
+            childController.close();
+        }
+        childrenControllers.removeAll(childrenWindows);
+        
+        
         // Remove parent controller
         this.setParentController(null);
     }
