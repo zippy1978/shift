@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package com.bakelite.shift.preferences
+package com.backelite.shift.preferences
 
 import com.backelite.shift.preferences.BasePreferencesManager
 import spock.lang.Specification

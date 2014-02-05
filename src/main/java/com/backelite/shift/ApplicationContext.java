@@ -243,10 +243,11 @@ public class ApplicationContext {
     
     /**
      * Check if the current application release is a SNAPSHOT.
+     * A SNAPSHOT is a version number with 4 parts
      * @return true / false
      */
     public static boolean isSnapshotRelease() {
         String versionName = getProperties().getProperty(Constants.PROPERTY_APPLICATION_VERSION_NAME);
-        return versionName.contains("-");
+        return versionName.split(".").length > 3;
     }
 }
