@@ -150,6 +150,8 @@ public class MainApp extends Application {
                             }
                         }
                     });
+                } else {
+                    mainController.close();
                 }
                 
             }
