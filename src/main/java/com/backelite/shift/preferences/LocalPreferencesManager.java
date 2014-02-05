@@ -53,7 +53,6 @@ public class LocalPreferencesManager extends BasePreferencesManager {
     public void commit() throws PreferencesException {
 
         File file = new File(rootDirectory, FILENAME);
-        ObjectMapper mapper = new ObjectMapper();
         try {
             mapper.writeValue(file, loadedValues);
         } catch (Exception ex) {
