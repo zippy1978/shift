@@ -27,6 +27,7 @@ import com.backelite.shift.gui.dialog.ErrorDialogController;
 import com.backelite.shift.gui.dialog.InfoDialogController;
 import com.backelite.shift.gui.dialog.PickerDialogController;
 import com.backelite.shift.state.StateException;
+import com.backelite.shift.util.PlatformUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.fxml.FXMLLoader;
@@ -114,7 +116,7 @@ public abstract class AbstractController implements Controller {
     protected boolean supportsApplicationWideMenu() {
 
         // Only Mac OS supports menu outside window
-        return System.getProperty("os.name").toLowerCase().contains("mac");
+        return PlatformUtils.isMacOSX();
     }
 
     public void displayInfoDialog(String title, String message) {
@@ -220,9 +222,16 @@ public abstract class AbstractController implements Controller {
 
     }
 
-    public void onChildWindowAdded(Stage stage) {
+    public void onChildWindowAdded(final Stage stage) {
         this.childrenWindows.add(stage);
 
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                stage.toFront();
+            }
+        });
     }
 
     @Override
@@ -325,7 +334,9 @@ public abstract class AbstractController implements Controller {
     public Stage newModalWindow(String title, Parent rootNode) {
 
         Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
+        if (!PlatformUtils.isMacOSX()) {
+            stage.initModality(Modality.APPLICATION_MODAL);
+        }
         stage.initOwner(ApplicationContext.getMainStage());
         Scene scene = new Scene(rootNode);
         scene.getStylesheets().add(ApplicationContext.getThemeManager().getCSS());

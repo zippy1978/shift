@@ -832,6 +832,7 @@ public class MainController extends AbstractController {
         }
 
         previewStage.show();
+        
     }
 
     private void handleUndoMenuAction() {
