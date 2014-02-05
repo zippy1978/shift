@@ -233,7 +233,20 @@ public class ApplicationContext {
         return PROPERTIES_INSTANCE;
     }
     
+    /**
+     * Check is it's the first application launch.
+     * @return true / false
+     */
     public static boolean isFirstLaunch() {
         return FIRST_LAUNCH;
+    }
+    
+    /**
+     * Check if the current application release is a SNAPSHOT.
+     * @return true / false
+     */
+    public static boolean isSnapshotRelease() {
+        String versionName = getProperties().getProperty(Constants.PROPERTY_APPLICATION_VERSION_NAME);
+        return versionName.contains("-");
     }
 }

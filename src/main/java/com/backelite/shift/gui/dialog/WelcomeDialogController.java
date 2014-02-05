@@ -79,7 +79,7 @@ public class WelcomeDialogController extends AbstractDialogController {
                 if (newState == Worker.State.SUCCEEDED) {
 
                     // Display warning note if application is SNAPSHOT
-                    if (versionName.contains("SNAPSHOT")) {
+                    if (ApplicationContext.isSnapshotRelease()) {
                         webView.getEngine().executeScript("document.getElementById('snapshot_warning').style.display = 'block'");
                     }
                 }
