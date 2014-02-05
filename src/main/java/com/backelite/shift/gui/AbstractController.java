@@ -64,18 +64,22 @@ public abstract class AbstractController implements Controller {
     public void initialize(URL url, ResourceBundle rb) {
 
         resourceBundle = rb;
-        
+
         // Children windows listeners
         closeChildrenWindowEventHandler = new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
-                onChildWindowRemoved((Stage) t.getSource());
+        
+                Stage stage = (Stage) t.getSource();
+                onChildWindowRemoved(stage);
             }
         };
         shownChildrenWindowEventHandler = new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
-                onChildWindowAdded((Stage) t.getSource());
+                
+                Stage stage = (Stage) t.getSource();
+                onChildWindowAdded(stage);
             }
         };
     }
@@ -213,23 +217,25 @@ public abstract class AbstractController implements Controller {
 
     public void onChildWindowRemoved(Stage stage) {
         this.childrenWindows.remove(stage);
+
     }
 
     public void onChildWindowAdded(Stage stage) {
         this.childrenWindows.add(stage);
+
     }
 
     @Override
     public void close() {
-        
+
         // Close children
         List<Controller> controllerstoRemove = new ArrayList<>(childrenControllers);
         for (Controller childController : controllerstoRemove) {
             childController.close();
         }
         childrenControllers.removeAll(childrenWindows);
-        
-        
+
+
         // Remove parent controller
         this.setParentController(null);
     }
@@ -261,14 +267,13 @@ public abstract class AbstractController implements Controller {
         newStage.setOnCloseRequest(new WeakEventHandler<>(closeChildrenWindowEventHandler));
         newStage.setOnShown(new WeakEventHandler<>(shownChildrenWindowEventHandler));
         newStage.setOnHiding(new EventHandler<WindowEvent>() {
-
             @Override
             public void handle(WindowEvent t) {
                 newStage.getOnCloseRequest().handle(t);
-             
+
             }
         });
-
+        
         return newStage;
     }
 

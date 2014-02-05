@@ -14,6 +14,12 @@
 
 <d>✔ 0.1.1</d> In code editor : when paste on selected text, selected text should be replaced by pasted one.
 
+<d>✔ 0.1.1</d> HTTP Workspace proxy cannot serve file with spaces in path.
+
+<t>✘</t> Opened preview windows get focus after action on project navigator.
+
+<t>✘</t> Entries of HTML preview device list are doubled at every launch.
+
 ## Windows
 
 <t>✘</t> Missing icon on main window.

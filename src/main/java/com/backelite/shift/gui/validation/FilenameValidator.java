@@ -28,7 +28,7 @@ package com.backelite.shift.gui.validation;
  */
 public class FilenameValidator implements Validator {
     
-    private static final String FILENAME_MATCH = "^[^*&%:\\\\/\\s]+$";
+    private static final String FILENAME_MATCH = "^[^*&%:\\\\/]+$";
 
     @Override
     public ValidatorResult validate(Object input) {

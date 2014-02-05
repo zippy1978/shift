@@ -374,7 +374,7 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
             } else {
 
                 HttpClient client = new HttpClient();
-                HttpMethod method = new GetMethod(String.format("http://localhost:%s%s", ApplicationContext.getHTTPWorkspaceProxyServer().getPort(), target.replaceFirst(WORKSPACE_CONTEXT, "")));
+                HttpMethod method = new GetMethod(String.format("http://localhost:%s%s", ApplicationContext.getHTTPWorkspaceProxyServer().getPort(), target.replaceFirst(WORKSPACE_CONTEXT, "").replaceAll(" ", "+")));
                 int statusCode = client.executeMethod(method);
 
                 // Set staus

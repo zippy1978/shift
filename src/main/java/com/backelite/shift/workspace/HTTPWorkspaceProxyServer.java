@@ -115,7 +115,7 @@ public class HTTPWorkspaceProxyServer {
 
 
             // Search for artifact matching path
-            Artifact artifact = workspace.findArtifactByWorkspacePath(request.getPathInfo());
+            Artifact artifact = workspace.findArtifactByWorkspacePath(request.getPathInfo().replaceAll("\\+", " "));
 
             if (artifact != null) {
                 // Only render documents.

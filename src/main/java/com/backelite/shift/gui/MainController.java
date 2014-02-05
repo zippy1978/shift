@@ -670,6 +670,9 @@ public class MainController extends AbstractController {
             }
 
         }
+        
+        // refresh state
+        this.refreshWindowMenu();
     }
 
     @Override
@@ -677,8 +680,11 @@ public class MainController extends AbstractController {
 
         super.onChildWindowRemoved(stage);
 
+        
         // Update opened windows in Window menu
         this.buildWindowMenu();
+        
+        
     }
 
     @Override
