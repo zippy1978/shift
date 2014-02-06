@@ -18,7 +18,7 @@
 
 <d>✔ 0.1.1</d> Entries of HTML preview device list are doubled at every launch.
 
-<t>✘</t> Display bug on project navigator.
+<d>✔ 0.1.1</d> Display bug on project navigator.
 
 <d>✔ 0.1.1</d> Opened preview windows get focus after action on project navigator.
 

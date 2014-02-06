@@ -65,7 +65,7 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
         // Retrieve parent controller from user data
         this.projectNavigatorController = (ProjectNavigatorController) this.getUserData();
 
-        if (!empty) {
+        if (!empty && artifact != null) {
             setContentDisplay(ContentDisplay.LEFT);
             setText(artifact.getName());
 
@@ -331,6 +331,12 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
             } else {
                 this.getStyleClass().remove("folder");
             }
+            
+        } else {
+            
+            // If cell is empty : clear it (for reuse)
+            setText(null);
+            setTextFill(null);
         }
 
     }

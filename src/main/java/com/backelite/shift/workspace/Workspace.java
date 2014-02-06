@@ -55,4 +55,10 @@ public interface Workspace extends PersistableState {
     public boolean isProjectOpened(String path);
     
     public boolean isProjectOpened(Project project);
+    
+    /**
+     * Check if at least one artifact was modified in the workspace.
+     * @return 
+     */
+    public boolean isModified();
 }

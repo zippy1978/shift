@@ -21,6 +21,7 @@ package com.backelite.shift.workspace;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
+import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.workspace.artifact.Artifact;
 import com.backelite.shift.workspace.artifact.Document;
 import com.backelite.shift.workspace.artifact.Folder;
@@ -103,37 +104,40 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
     }
 
     /**
-     * Create a new project. The new project is not automatically added to the workspace.
-     * @param location Project location. At the moment only file system path is supported.
+     * Create a new project. The new project is not automatically added to the
+     * workspace.
+     *
+     * @param location Project location. At the moment only file system path is
+     * supported.
      * @param name Name of the project
      * @return The new project.
-     * @throws IOException 
+     * @throws IOException
      */
     @Override
     public Project createProject(String location, String name) throws IOException {
-        
+
         Project newProject = new FileSystemProject(new File(location, name));
         newProject.save();
-        
+
         return newProject;
     }
 
     @Override
     public Project importProjectFromDirectory(File sourceDirectory, String location, String name) throws IOException {
-    
+
         Project project = this.createProject(location, name);
-        
+
         this.importFolderFromDirectory(sourceDirectory, project);
-        
+
         return project;
-        
+
     }
-    
+
     private void importFolderFromDirectory(File sourceDirectory, Folder folder) throws IOException {
-        
+
         // Browse source dir
         File[] files = sourceDirectory.listFiles();
-        for(File file : files) {
+        for (File file : files) {
             if (file.isDirectory()) {
                 Folder newFolder = folder.createSubFolder(file.getName());
                 newFolder.save();
@@ -142,11 +146,10 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
                 Document newDocument = folder.createDocument(file.getName());
                 newDocument.setContent(FileUtils.getFileContent(file));
                 newDocument.save();
-                
+
             }
         }
     }
-    
 
     @Override
     public void openProject(Project project) throws IOException {
@@ -192,6 +195,18 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
     @Override
     public boolean isProjectOpened(Project project) {
         return this.isProjectOpened(project.getPath());
+    }
+
+    @Override
+    public boolean isModified() {
+
+        for (Project project : projects) {
+            if (project.isModified()) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     @Override

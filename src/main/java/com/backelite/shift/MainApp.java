@@ -125,16 +125,7 @@ public class MainApp extends Application {
             @Override
             public void handle(final WindowEvent we) {
 
-                boolean unsavedFiles = false;
-                List<Project> projects = ApplicationContext.getWorkspace().getProjects();
-                for (Project project : projects) {
-                    if (project.isModified()) {
-                        unsavedFiles = true;
-                        break;
-                    }
-                }
-
-                if (unsavedFiles) {
+                if (ApplicationContext.getWorkspace().isModified()) {
                     mainController.displayConfirmDialog(mainController.getResourceBundle().getString("dialog.confirm.close_app.unsaved.title"), mainController.getResourceBundle().getString("dialog.confirm.close_app.unsaved.text"), new EventHandler<ConfirmDialogController.ChoiceEvent>() {
                         @Override
                         public void handle(ConfirmDialogController.ChoiceEvent t) {
