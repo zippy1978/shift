@@ -20,7 +20,7 @@
 
 <t>✘</t> Display bug on project navigator.
 
-<t>✘</t> Opened preview windows get focus after action on project navigator.
+<d>✔ 0.1.1</d> Opened preview windows get focus after action on project navigator.
 
 ## Windows
 
@@ -31,3 +31,5 @@
 ## Mac OSX
 
 ## Linux
+
+<t>✘</t> Cannot bring window to front from 'Window' menu.
