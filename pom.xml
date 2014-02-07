@@ -126,8 +126,46 @@
                 <version>1.4</version>
                 <configuration>
                     <providerSelection>2.0</providerSelection>
+                    <source>
+                                
+                                /* Move file to a given dir */
+                                def moveFile = {file, destDir ->
+                                    file.renameTo(new File(destDir, file.getName()));
+                                }
+                                
+                                /* Get build info */
+                                def outPath = project.basedir.getAbsolutePath() + File.separator + 'target' + File.separator + 'output'
+                                def os = System.getProperty("os.name").toLowerCase().split(" ").first()
+                                def arch = System.getProperty("os.arch").toLowerCase()
+                                def channel = project.version.split('\\.').length > 2 ? 'snapshots' : 'releases'
+                                def timestamp = project.properties['timestamp']
+                                
+                                /* Get bundles dir */
+                                def bundlesDir = new File(project.basedir, 'target' + File.separator + 'jfx' + File.separator + 'native' + File.separator + 'bundles')
+                                if (!bundlesDir.exists()) {
+                                    println "Cannot prepare output because bundles directory is missing : make sure jfx:native was run first"
+                                    return
+                                }
+                                
+                                /* Create target dir */
+                                def targetDir = new File(outPath, channel + File.separator + os + File.separator + arch + File.separator + timestamp)
+                                targetDir.mkdirs()
+                                
+                                
+                                /* Move packages to output dir */
+                                bundlesDir.eachFile {
+                                    // Copy files with extension only
+                                    if (it.file) {
+                                        if (it.name.contains('.')) {
+                                            moveFile(it, targetDir)
+                                        }
+                                    }
+                                }
+                                
+                    </source>
                 </configuration>
                 <executions>
+                    <!-- Compile -->
                     <execution>
                         <goals>
                             <goal>compile</goal>
@@ -171,17 +209,7 @@
 
 
     <dependencies>
-        
-        <!-- JavaFX -->
-        
-        <!--        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>javafx</artifactId>
-            <version>2.2</version>
-            <systemPath>${java.home}/lib/jfxrt.jar</systemPath>
-            <scope>system</scope>
-        </dependency>-->
-    
+       
         <!-- MigLayout -->
 
         <dependency>
