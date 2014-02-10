@@ -134,10 +134,10 @@
                                 }
                                 
                                 /* Get build info */
-                                def outPath = project.basedir.getAbsolutePath() + File.separator + 'target' + File.separator + 'output'
-                                def os = System.getProperty("os.name").toLowerCase().split(" ").first()
-                                def arch = System.getProperty("os.arch").toLowerCase()
-                                def channel = project.version.split('\\.').length > 2 ? 'snapshots' : 'releases'
+                                def outPath = project.basedir.getAbsolutePath() + File.separator + 'target' + File.separator + 'upload'
+                                def opSys = System.getProperty("os.name").toLowerCase().split(" ").first()
+                                def architecture = System.getProperty("os.arch").toLowerCase()
+                                def chan = project.version.split('\\.').length > 2 ? 'snapshots' : 'releases'
                                 def timestamp = project.properties['timestamp']
                                 
                                 /* Get bundles dir */
@@ -146,12 +146,56 @@
                                     println "Cannot prepare output because bundles directory is missing : make sure jfx:native was run first"
                                     return
                                 }
+                        
                                 
                                 /* Create target dir */
-                                def targetDir = new File(outPath, channel + File.separator + os + File.separator + arch + File.separator + timestamp)
+                                def targetDir = new File(outPath, timestamp)
                                 targetDir.mkdirs()
+                        
+                                /* Rename package files */
+                                /*bundlesDir.eachFile {
+                                    if (it.file) {
+                                        if (it.name.contains('.')) {
+                                            def format = it.name.split('\\.').last()
+                                            switch(format) {
+                                                case 'dmg':
+                                                    
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }*/
+                        
+                                /* Gather packages info */
+                                def pkgs = []
+                                bundlesDir.eachFile {
+                                    if (it.file) {
+                                        if (it.name.contains('.')) {
+                                            def n = it.name
+                                            def f = it.name.split('\\.').last()
+                                            def s = it.size()
+                        
+                                            pkgs.add({
+                                                name n
+                                                format f
+                                                size s
+                                            })
+                                        }
+                                    }
+                                }
                                 
-                                
+                                /* Write info.json */
+                                def jsonBuilder = new groovy.json.JsonBuilder()
+                                jsonBuilder {
+                                    buildNumber timestamp
+                                    os System.getProperty("os.name").toLowerCase().split(" ").first()
+                                    arch System.getProperty("os.arch").toLowerCase()
+                                    channel project.version.split('\\.').length > 2 ? 'snapshots' : 'releases'
+                                    version project.version
+                                    packages pkgs
+                                }
+                                new File(targetDir, 'info.json').withWriter{ it <![CDATA[<<]]> jsonBuilder.toString()}
+                        
                                 /* Move packages to output dir */
                                 bundlesDir.eachFile {
                                     // Copy files with extension only
