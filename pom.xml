@@ -153,18 +153,29 @@
                                 targetDir.mkdirs()
                         
                                 /* Rename package files */
-                                /*bundlesDir.eachFile {
+                                bundlesDir.eachFile {
                                     if (it.file) {
                                         if (it.name.contains('.')) {
                                             def format = it.name.split('\\.').last()
+                                            def newName = null
                                             switch(format) {
+                                                case 'rpm':
+                                                    newName = it.name.toLowerCase()
+                                                    break
+                                                case 'deb':
+                                                    newName = it.name.toLowerCase().replaceAll('\\.deb', '.' + architecture + '.deb')
+                                                    break
                                                 case 'dmg':
-                                                    
-                                                    break;
+                                                    newName = it.name.replaceAll('\\.dmg', '-' + project.version + '.dmg')
+                                                       break
+                                            }
+                        
+                                            if (newName) {
+                                                it.renameTo(new File(bundlesDir, newName))
                                             }
                                         }
                                     }
-                                }*/
+                                }
                         
                                 /* Gather packages info */
                                 def pkgs = []
