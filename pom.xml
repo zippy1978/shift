@@ -149,7 +149,7 @@
                         
                                 
                                 /* Create target dir */
-                                def targetDir = new File(outPath, chan + File.separator + timestamp)
+                                def targetDir = new File(outPath, timestamp)
                                 targetDir.mkdirs()
                         
                                 /* Rename package files */
