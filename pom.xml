@@ -80,7 +80,7 @@
                 <configuration>
                     <descriptionTemplate>${basedir}/src/license/descriptionTemplate.ftl</descriptionTemplate>
                     <verbose>false</verbose>
-                    <licenseName>lgpl_v3</licenseName>
+                    <licenseName>mit</licenseName>
                 </configuration>
                 <executions>
                     <execution>

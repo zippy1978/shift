@@ -22,6 +22,8 @@
 
 <d>✔ 0.1.1</d> Opened preview windows get focus after action on project navigator.
 
+<t>✘</t> Cannot paste text into code editor search field.
+
 ## Windows
 
 <t>✘</t> Missing icon on main window.
