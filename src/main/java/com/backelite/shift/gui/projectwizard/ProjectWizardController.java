@@ -3,7 +3,6 @@ package com.backelite.shift.gui.projectwizard;
 
 import com.backelite.shift.gui.dialog.DialogController;
 import com.backelite.shift.plugin.ProjectGenerator;
-import javafx.stage.Stage;
 
 /*
  * #%L

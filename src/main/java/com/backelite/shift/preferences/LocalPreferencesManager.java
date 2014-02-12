@@ -26,8 +26,6 @@ package com.backelite.shift.preferences;
  * #L%
  */
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;

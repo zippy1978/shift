@@ -26,9 +26,9 @@ package com.backelite.shift.workspace;
  * #L%
  */
 
+import com.backelite.shift.state.PersistableState;
 import com.backelite.shift.workspace.artifact.Artifact;
 import com.backelite.shift.workspace.artifact.Project;
-import com.backelite.shift.state.PersistableState;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;

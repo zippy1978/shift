@@ -28,7 +28,6 @@ package com.backelite.shift.workspace.artifact;
 
 import java.io.IOException;
 import java.util.Observer;
-import javafx.scene.image.Image;
 
 /**
  * Abstract representation of an item of the workspace (file, folder, project ...)

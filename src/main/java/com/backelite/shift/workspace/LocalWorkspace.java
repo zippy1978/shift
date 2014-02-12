@@ -25,15 +25,14 @@ package com.backelite.shift.workspace;
  * THE SOFTWARE.
  * #L%
  */
-import com.backelite.shift.ApplicationContext;
-import com.backelite.shift.workspace.artifact.Artifact;
-import com.backelite.shift.workspace.artifact.Document;
-import com.backelite.shift.workspace.artifact.Folder;
-import com.backelite.shift.workspace.artifact.FileSystemProject;
-import com.backelite.shift.workspace.artifact.Project;
 import com.backelite.shift.state.StateException;
 import com.backelite.shift.util.FileUtils;
 import com.backelite.shift.util.WeakObservable;
+import com.backelite.shift.workspace.artifact.Artifact;
+import com.backelite.shift.workspace.artifact.Document;
+import com.backelite.shift.workspace.artifact.FileSystemProject;
+import com.backelite.shift.workspace.artifact.Folder;
+import com.backelite.shift.workspace.artifact.Project;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

@@ -26,10 +26,8 @@ package com.backelite.shift.gui.projectwizard;
  * #L%
  */
 
-import com.backelite.shift.gui.AbstractController;
 import com.backelite.shift.gui.dialog.AbstractDialogController;
 import com.backelite.shift.plugin.ProjectGenerator;
-import javafx.stage.Stage;
 
 /**
  *

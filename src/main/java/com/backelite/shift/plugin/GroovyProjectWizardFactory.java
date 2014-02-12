@@ -26,9 +26,7 @@ package com.backelite.shift.plugin;
  * #L%
  */
 
-import com.backelite.shift.workspace.artifact.Project;
 import groovy.lang.Closure;
-import java.util.Map;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 

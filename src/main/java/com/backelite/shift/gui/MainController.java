@@ -25,18 +25,15 @@ package com.backelite.shift.gui;
  * THE SOFTWARE.
  * #L%
  */
-import com.backelite.shift.gui.dialog.ConfirmDialogController;
-import com.backelite.shift.gui.dialog.DialogController;
-import com.backelite.shift.gui.editor.EditorsPaneController;
-import com.backelite.shift.gui.projectnavigator.ProjectNavigatorController;
-import com.backelite.shift.workspace.artifact.Document;
-import com.backelite.shift.workspace.artifact.FileSystemProject;
-import com.backelite.shift.workspace.artifact.Project;
 import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.Constants;
+import com.backelite.shift.gui.dialog.ConfirmDialogController;
+import com.backelite.shift.gui.dialog.DialogController;
 import com.backelite.shift.gui.dialog.PickerDialogController;
 import com.backelite.shift.gui.editor.EditorController;
+import com.backelite.shift.gui.editor.EditorsPaneController;
 import com.backelite.shift.gui.preview.PreviewController;
+import com.backelite.shift.gui.projectnavigator.ProjectNavigatorController;
 import com.backelite.shift.gui.projectwizard.ProjectWizardController;
 import com.backelite.shift.gui.statusbar.StatusBarController;
 import com.backelite.shift.plugin.PluginException;
@@ -45,7 +42,10 @@ import com.backelite.shift.plugin.ProjectWizardFactory;
 import com.backelite.shift.state.StateException;
 import com.backelite.shift.util.FileUtils;
 import com.backelite.shift.workspace.artifact.Artifact;
+import com.backelite.shift.workspace.artifact.Document;
+import com.backelite.shift.workspace.artifact.FileSystemProject;
 import com.backelite.shift.workspace.artifact.Folder;
+import com.backelite.shift.workspace.artifact.Project;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

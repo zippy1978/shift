@@ -25,12 +25,9 @@ package com.backelite.shift.gui.dialog;
  * THE SOFTWARE.
  * #L%
  */
-
 import com.backelite.shift.gui.AbstractController;
-import java.lang.ref.WeakReference;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -42,7 +39,7 @@ public abstract class AbstractDialogController extends AbstractController implem
 
     private Stage stage;
     private Object userData;
-    
+
     private EventHandler<WindowEvent> closeWindowEventHandler;
 
     @Override
@@ -52,19 +49,19 @@ public abstract class AbstractDialogController extends AbstractController implem
 
     @Override
     public void setStage(Stage stage) {
-         this.stage = stage;
-         
-         // Set close window listener to track when stage closes
-         if (stage != null) {
-             closeWindowEventHandler = new EventHandler<WindowEvent>() {
+        this.stage = stage;
 
-                 @Override
-                 public void handle(WindowEvent t) {
-                     close();
-                 }
-             };
-             stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new WeakEventHandler<>(closeWindowEventHandler));
-         }
+        // Set close window listener to track when stage closes
+        if (stage != null) {
+            closeWindowEventHandler = new EventHandler<WindowEvent>() {
+
+                @Override
+                public void handle(WindowEvent t) {
+                    close();
+                }
+            };
+            stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new WeakEventHandler<>(closeWindowEventHandler));
+        }
     }
 
     @Override
@@ -76,7 +73,7 @@ public abstract class AbstractDialogController extends AbstractController implem
     public void setUserData(Object userData) {
         this.userData = userData;
     }
-    
+
     @Override
     public void close() {
         super.close();

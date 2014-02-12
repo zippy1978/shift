@@ -8,4 +8,5 @@
 * [FIX] HTML Preview and Remote HTML Preview cannot display pages when file path contains spaces.
 * [FIX] Duplicate entries appearing in device list of HTML Preview.
 * [FIX] Display glitches in project navigator.
-* [FIX] Opened preview windows should not get focus after any action in projetc navigator.
+* [FIX] Opened preview windows should not get focus after any action in project navigator.
+* [FEAT] Added 'Import...' feature into project navigator context menu: this allows importing local files into the workspace.

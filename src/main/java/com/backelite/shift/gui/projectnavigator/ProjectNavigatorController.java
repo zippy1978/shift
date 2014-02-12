@@ -25,14 +25,14 @@ package com.backelite.shift.gui.projectnavigator;
  * THE SOFTWARE.
  * #L%
  */
+import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.gui.AbstractController;
+import com.backelite.shift.state.StateException;
 import com.backelite.shift.workspace.artifact.Artifact;
-import com.backelite.shift.workspace.artifact.PlaceHolderArtifact;
 import com.backelite.shift.workspace.artifact.Document;
 import com.backelite.shift.workspace.artifact.Folder;
+import com.backelite.shift.workspace.artifact.PlaceHolderArtifact;
 import com.backelite.shift.workspace.artifact.Project;
-import com.backelite.shift.ApplicationContext;
-import com.backelite.shift.state.StateException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;

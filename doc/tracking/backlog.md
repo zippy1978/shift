@@ -21,6 +21,8 @@
 
 <t>✘</t> Simple image viewer (no edit possible but ability to see jpg/png/gif)
 
+<t>✘</t> Code formatting / indentation
+
 ## Menu
 
 <t>✘</t> Search file by name

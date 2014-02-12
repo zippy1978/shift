@@ -25,10 +25,9 @@ package com.backelite.shift.workspace;
  * THE SOFTWARE.
  * #L%
  */
-import com.backelite.shift.ApplicationContext;
+import com.backelite.shift.util.NetworkUtils;
 import com.backelite.shift.workspace.artifact.Artifact;
 import com.backelite.shift.workspace.artifact.Document;
-import com.backelite.shift.util.NetworkUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URLConnection;

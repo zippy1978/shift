@@ -25,7 +25,6 @@ package com.backelite.shift.gui.preview;
  * THE SOFTWARE.
  * #L%
  */
-import com.backelite.shift.gui.AbstractController;
 import com.backelite.shift.gui.dialog.AbstractDialogController;
 import com.backelite.shift.gui.editor.EditorController;
 import com.backelite.shift.plugin.PreviewFactory;
@@ -37,7 +36,6 @@ import java.util.Observer;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.stage.Stage;
 
 /**
  * Abstract base implementaiton of PreviewController.

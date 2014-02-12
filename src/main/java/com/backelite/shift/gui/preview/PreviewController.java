@@ -29,14 +29,11 @@ package com.backelite.shift.gui.preview;
  * THE SOFTWARE.
  * #L%
  */
-import com.backelite.shift.gui.Controller;
 import com.backelite.shift.gui.dialog.DialogController;
 import com.backelite.shift.gui.editor.EditorController;
 import com.backelite.shift.plugin.PreviewFactory;
 import com.backelite.shift.workspace.artifact.Document;
 import javafx.beans.value.ChangeListener;
-import javafx.scene.control.Tab;
-import javafx.stage.Stage;
 
 /**
  * Preview controller interface. All preview controllers must implement this
