@@ -6,19 +6,23 @@ package com.backelite.shift.gui;
  * %%
  * Copyright (C) 2013 Gilles Grousset
  * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as 
- * published by the Free Software Foundation, either version 3 of the 
- * License, or (at your option) any later version.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Lesser Public License for more details.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  * 
- * You should have received a copy of the GNU General Lesser Public 
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * #L%
  */
 import com.backelite.shift.gui.dialog.ConfirmDialogController;
@@ -39,6 +43,7 @@ import com.backelite.shift.plugin.PluginException;
 import com.backelite.shift.plugin.PreviewFactory;
 import com.backelite.shift.plugin.ProjectWizardFactory;
 import com.backelite.shift.state.StateException;
+import com.backelite.shift.util.FileUtils;
 import com.backelite.shift.workspace.artifact.Artifact;
 import com.backelite.shift.workspace.artifact.Folder;
 import java.io.File;
@@ -67,6 +72,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,6 +161,15 @@ public class MainController extends AbstractController {
             @Override
             public void handle(ProjectNavigatorController.NewFolderEvent t) {
                 handleNewFolderMenuAction();
+            }
+        });
+        
+        // Register import artifacts action on project navigator
+        projectNavigatorController.setOnImportArtifacts(new EventHandler<ProjectNavigatorController.ImportArtifactsEvent>() {
+
+            @Override
+            public void handle(ProjectNavigatorController.ImportArtifactsEvent t) {
+                handleImportArtifactsMenuAction();
             }
         });
         
@@ -992,6 +1007,50 @@ public class MainController extends AbstractController {
                     }
                 }
             });
+        }
+    }
+    
+    private void handleImportArtifactsMenuAction() {
+        // For the moment the action is not bound to any menu item
+        // But in the future maybe...
+        
+        final Artifact artifact = projectNavigatorController.getSelectedArtifact();
+
+        if (artifact != null) {
+            
+            // Display file chooser
+            FileChooser fileChooser = new FileChooser();
+            
+            fileChooser.setTitle(this.getResourceBundle().getString("main.import.title"));
+            final List<File> selectedFiles = fileChooser.showOpenMultipleDialog(null);
+            
+            if (selectedFiles != null) {
+                ApplicationContext.getTaskManager().addTask(new Task() {
+
+                    @Override
+                    protected Object call() throws Exception {
+
+                        int i = 1;
+                        for(File file : selectedFiles) {
+
+                            updateTitle(String.format(getResourceBundle().getString("task.importing_artifact"), file.getName()));
+
+                            if (artifact instanceof Folder) {
+                                Folder folder = (Folder)artifact;
+                                Document newDocument = folder.createDocument(file.getName());
+                                newDocument.setContent(FileUtils.getFileContent(file));
+                                newDocument.save();
+                            }
+
+                            updateProgress(i, selectedFiles.size());
+
+                            i++;
+                        }
+
+                        return true;
+                    }
+                });
+            }
         }
     }
 
