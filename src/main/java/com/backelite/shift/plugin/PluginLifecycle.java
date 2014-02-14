@@ -33,4 +33,6 @@ package com.backelite.shift.plugin;
 public interface PluginLifecycle {
     
     public void load();
+    
+    public void unload();
 }

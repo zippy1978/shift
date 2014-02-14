@@ -71,6 +71,20 @@ public abstract class AbstractGroovyPluginRegistry extends AbstractPluginRegistr
         this.loadPlugin(FileUtils.getFileContentAsStringFromClasspathResource("/BuiltinPlugin.groovy"));
     }
 
+    @Override
+    public void unloadPlugins() throws PluginException {
+        
+        // Call unload on every plugin
+        for (Plugin plugin : plugins) {
+            if (plugin.getLifecycle() != null) {
+                plugin.getLifecycle().unload();
+            }
+        }
+        
+    }
+    
+    
+
     protected void loadPlugin(String groovyScript) throws PluginException {
 
         // Run plugin script

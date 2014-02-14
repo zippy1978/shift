@@ -43,6 +43,8 @@ public interface PluginRegistry {
     
     public void loadPlugins() throws PluginException;
     
+    public void unloadPlugins() throws PluginException;
+    
     /**
      * Create a new editor for the given document.
      * @param document Document

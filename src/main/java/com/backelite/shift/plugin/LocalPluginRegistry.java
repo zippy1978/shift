@@ -38,4 +38,11 @@ public class LocalPluginRegistry extends AbstractGroovyPluginRegistry {
         // TODO : load external plugins from here !
     }
 
+    @Override
+    public void unloadPlugins() throws PluginException {
+        super.unloadPlugins();
+    }
+    
+    
+
 }

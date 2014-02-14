@@ -3,6 +3,7 @@ package com.backelite.shift;
 import com.backelite.shift.gui.theme.DefaultThemeManager;
 import com.backelite.shift.gui.theme.ThemeManager;
 import com.backelite.shift.plugin.LocalPluginRegistry;
+import com.backelite.shift.plugin.PluginException;
 import com.backelite.shift.plugin.PluginRegistry;
 import com.backelite.shift.preferences.LocalPreferencesManager;
 import com.backelite.shift.preferences.PreferencesManager;
@@ -17,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.logging.Level;
 import javafx.application.HostServices;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -142,11 +144,19 @@ public class ApplicationContext {
         log.debug("Destroying application context");
 
         WORKSPACE_INSTANCE = null;
-        PLUGIN_REGISTRY_INSTANCE = null;
         STATE_MANAGER_INSTANCE = null;
         PREFERENCES_MANAGER_INSTANCE = null;
         THEME_MANAGER_INSTANCE = null;
         HOST_SERVICES = null;
+        
+        if (PLUGIN_REGISTRY_INSTANCE != null) {
+            try {
+                PLUGIN_REGISTRY_INSTANCE.unloadPlugins();
+            } catch (PluginException ex) {
+                log.error("Failed to unload plugins");
+            }
+        }
+        PLUGIN_REGISTRY_INSTANCE = null;
 
         if (TASK_MANAGER_INSTANCE != null) {
             TASK_MANAGER_INSTANCE.shutdown();

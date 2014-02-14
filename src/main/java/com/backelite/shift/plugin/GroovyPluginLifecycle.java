@@ -35,6 +35,7 @@ import groovy.lang.Closure;
 public class GroovyPluginLifecycle implements PluginLifecycle {
 
     private Closure onLoad;
+    private Closure onUnload;
 
     @Override
     public void load() {
@@ -43,6 +44,16 @@ public class GroovyPluginLifecycle implements PluginLifecycle {
             onLoad.call();
         }
     }
+
+    @Override
+    public void unload() {
+        
+        if (onUnload != null) {
+            onUnload.call();
+        }
+    }
+    
+    
 
     /**
      * @return the onLoad
@@ -56,5 +67,19 @@ public class GroovyPluginLifecycle implements PluginLifecycle {
      */
     public void setOnLoad(Closure onLoad) {
         this.onLoad = onLoad;
+    }
+
+    /**
+     * @return the onUnload
+     */
+    public Closure getOnUnload() {
+        return onUnload;
+    }
+
+    /**
+     * @param onUnload the onUnload to set
+     */
+    public void setOnUnload(Closure onUnload) {
+        this.onUnload = onUnload;
     }
 }
