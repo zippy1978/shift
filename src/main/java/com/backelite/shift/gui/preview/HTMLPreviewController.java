@@ -56,14 +56,7 @@ import org.slf4j.LoggerFactory;
 public class HTMLPreviewController extends AbstractPreviewController {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(HTMLPreviewController.class);
-    /**
-     * Shared HTML server.
-     */
-    private static Server HTML_SERVER;
-    /**
-     * HTML server port : starts at 9000 until a free port is found.
-     */
-    private static int HTML_SERVER_PORT = 9000;
+
     @FXML
     private AnchorPane rootPane;
     @FXML
