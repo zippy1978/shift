@@ -1,4 +1,4 @@
-package com.backelite.shift.gui.preview;
+package com.backelite.shift.gui.preview.html;
 
 /*
  * #%L
@@ -25,7 +25,9 @@ package com.backelite.shift.gui.preview;
  * THE SOFTWARE.
  * #L%
  */
+
 import com.backelite.shift.ApplicationContext;
+import com.backelite.shift.gui.preview.AbstractPreviewController;
 import com.backelite.shift.util.FileUtils;
 import com.backelite.shift.util.MemoryUtils;
 import com.backelite.shift.util.NetworkUtils;

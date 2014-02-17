@@ -1,4 +1,4 @@
-package com.backelite.shift.gui.preview;
+package com.backelite.shift.gui.preview.html;
 
 /*
  * #%L

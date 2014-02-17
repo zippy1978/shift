@@ -22,7 +22,6 @@
 import javafx.scene.Node
 import com.backelite.shift.ApplicationContext
 import com.backelite.shift.gui.editor.CodeEditorController
-import com.backelite.shift.gui.preview.HTMLPreviewController
 import com.backelite.shift.preferences.PreferencesManager
 import com.backelite.shift.workspace.artifact.FileSystemProject
 import com.backelite.shift.workspace.artifact.Project

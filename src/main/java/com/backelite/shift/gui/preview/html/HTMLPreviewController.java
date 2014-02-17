@@ -1,4 +1,4 @@
-package com.backelite.shift.gui.preview;
+package com.backelite.shift.gui.preview.html;
 
 /*
  * #%L
@@ -26,6 +26,7 @@ package com.backelite.shift.gui.preview;
  * #L%
  */
 import com.backelite.shift.ApplicationContext;
+import com.backelite.shift.gui.preview.AbstractPreviewController;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;

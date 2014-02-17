@@ -64,7 +64,7 @@ public abstract class AbstractPreviewController extends AbstractDialogController
             public void changed(ObservableValue<? extends EditorController> ov, EditorController t, EditorController t1) {
                 
                 // Set new document
-                if (activeDocumentTrackingEnabled && isDocumentSupported(t1.getDocument())) {
+                if (activeDocumentTrackingEnabled && t1 != null && t1.getDocument() != null && isDocumentSupported(t1.getDocument())) {
                     setDocument(t1.getDocument());
                 }
             }
