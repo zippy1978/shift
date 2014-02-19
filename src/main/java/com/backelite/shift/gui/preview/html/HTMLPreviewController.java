@@ -59,27 +59,27 @@ public class HTMLPreviewController extends AbstractPreviewController {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(HTMLPreviewController.class);
 
     @FXML
-    private AnchorPane rootPane;
+    protected AnchorPane rootPane;
     @FXML
-    private AnchorPane topToolBar;
+    protected AnchorPane topToolBar;
     @FXML
-    private AnchorPane bottomToolBar;
+    protected AnchorPane bottomToolBar;
     @FXML
-    private WebView webView;
+    protected WebView webView;
     @FXML
-    private ToggleButton orientationToggleButton;
+    protected ToggleButton orientationToggleButton;
     @FXML
-    private ToggleButton trackActiveFileToggleButton;
+    protected ToggleButton trackActiveFileToggleButton;
     @FXML
-    private Button resetButton;
+    protected Button resetButton;
     @FXML
-    private ChoiceBox<String> presetChoice;
+    protected ChoiceBox<String> presetChoice;
     List<Map<String, Object>> presets;
     
-    private ChangeListener<String> presetChoiceChangeListener;
-    private ChangeListener<Boolean> orientationChangeListener;
-    private ChangeListener<Boolean> trackActiveFileChangeListener;
-    private EventHandler<ActionEvent> resetActionEventHandler;
+    protected ChangeListener<String> presetChoiceChangeListener;
+    protected ChangeListener<Boolean> orientationChangeListener;
+    protected ChangeListener<Boolean> trackActiveFileChangeListener;
+    protected EventHandler<ActionEvent> resetActionEventHandler;
     
     public HTMLPreviewController() {
         super();
@@ -98,51 +98,33 @@ public class HTMLPreviewController extends AbstractPreviewController {
 
         // Populate preset combo
         this.populatePresetCombo();
-        presetChoiceChangeListener = new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
-
-                // Apply new preset
-                applyPreset(presets.get(presetChoice.getSelectionModel().getSelectedIndex()));
-            }
+        presetChoiceChangeListener = (ObservableValue<? extends String> ov, String t, String t1) -> {
+            applyPreset(presets.get(presetChoice.getSelectionModel().getSelectedIndex()));
         };
         presetChoice.valueProperty().addListener(new WeakChangeListener<>(presetChoiceChangeListener));
 
         // Handle orientation change
-        orientationChangeListener =  new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
-                // Apply preset
-                applyPreset(presets.get(presetChoice.getSelectionModel().getSelectedIndex()));
-            }
+        orientationChangeListener =  (ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) -> {
+            applyPreset(presets.get(presetChoice.getSelectionModel().getSelectedIndex()));
         };
         orientationToggleButton.selectedProperty().addListener(new WeakChangeListener<>(orientationChangeListener));
 
         // Bind tracking button state
-        trackActiveFileChangeListener = new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
-                setActiveDocumentTrackingEnabled(t1);
-            }
+        trackActiveFileChangeListener = (ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) -> {
+            setActiveDocumentTrackingEnabled(t1);
         };
         trackActiveFileToggleButton.selectedProperty().addListener(new WeakChangeListener<>(trackActiveFileChangeListener));
         trackActiveFileToggleButton.setSelected(true);
 
         // Handle reset
-        resetActionEventHandler = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                refresh();
-            }
+        resetActionEventHandler = (ActionEvent t) -> {
+            refresh();
         };
         resetButton.setOnAction(new WeakEventHandler<>(resetActionEventHandler));
 
         // Later ...
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-
-                // Title
+        Platform.runLater(() -> {
+            if (getStage() != null) {
                 getStage().setTitle(getResourceBundle().getString("builtin.plugin.preview.html.title"));
             }
         });

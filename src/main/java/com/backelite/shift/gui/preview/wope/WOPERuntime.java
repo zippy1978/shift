@@ -1,5 +1,14 @@
 package com.backelite.shift.gui.preview.wope;
 
+import com.backelite.shift.ApplicationContext;
+import com.backelite.shift.util.FileUtils;
+import com.backelite.shift.util.NetworkUtils;
+import com.backelite.shift.workspace.HTTPWorkspaceProxyServer;
+import java.io.File;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
+import org.slf4j.LoggerFactory;
+
 /*
  * #%L
  * WOPERuntime.java - Shift - 2013
@@ -25,52 +34,128 @@ package com.backelite.shift.gui.preview.wope;
  * THE SOFTWARE.
  * #L%
  */
-
 /**
  * Represents a WOPE runtime.
+ *
  * @author ggrousset
  */
 public class WOPERuntime {
-    
+
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(WOPERuntime.class);
     /**
      * Instance name.
      */
     private String name;
-    
+
     /**
      * Instance path.
      */
     private String path;
-    
+
     /**
      * Instance HTTP port.
      */
     private int port = 0;
-    
+
     /**
      * Indicates is the instance is running.
      */
     private boolean started = false;
+
+    /**
+     * Holds the number of 'started' method calls.
+     */
+    private int startedCount = 0;
+
+    /**
+     * HTTP server instance.
+     */
+    private Server server;
+
+    public WOPERuntime(String name, String path) {
+        this.name = name;
+        this.path = path;
+    }
     
     /**
      * Starts the current instance.
      */
-    public void start() {
-        
+    protected void start() {
+
         if (!started) {
-            
+
+            try {
+                
+                started = true;
+
+                // Start Workspace HTTP server (if not done yet)
+                HTTPWorkspaceProxyServer workspaceServer = ApplicationContext.getHTTPWorkspaceProxyServer();
+                workspaceServer.start();
+
+                // Find free port to start the server on ...
+                port = NetworkUtils.findAvailablePort("localhost", workspaceServer.getPort() + 1, workspaceServer.getPort() + 1001);
+
+                // Get wope.ini file
+                System.setProperty("wopeConfig", WOPERuntimeManager.getInstance().getInitFilePath());
+
+                
+                // FIXME : fucking issue here
+                // Seems that Spring 3.2 (used for WOPE) does not support Java 8
+                // See : https://jira.springsource.org/browse/SPR-10292?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel
+                
+                // Start HTTP server
+                server = new Server(port);
+                WebAppContext webApp = new WebAppContext();
+                webApp.setContextPath("/");
+                webApp.setWar(this.path);
+                server.setHandler(webApp);
+
+                server.start();
+
+                log.debug(String.format("Starting WOPE runtime %s (port %d)", this.name, this.port));
+
+            } catch (Exception ex) {
+                log.error("Failed to start remote HTTP preview server", ex);
+            }
         }
+
+        startedCount++;
     }
-    
+
     /**
      * Stops the current instance.
      */
-    public void stop() {
+    protected void stop() {
+
+        if (startedCount > 0) {
+            startedCount--;
+        }
+
+        // Shutdown on last release
+        if (started && startedCount == 0) {
+
+            this.shutdown();
+        }
+
+    }
+    
+    protected void shutdown() {
         
         if (started) {
-            
+            if (server != null) {
+                try {
+                    log.debug(String.format("Stopping WOPE runtime %s", this.name));
+                    server.stop();
+                    started = false;
+                    server = null;
+                } catch (Exception ex) {
+                    log.error("Failed to stop WOPE runtime", ex);
+                }
+            }
         }
     }
+
+    
 
     /**
      * @return the name
