@@ -32,6 +32,7 @@ package com.backelite.shift.gui.preview.wope;
  */
 import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.gui.preview.html.HTMLPreviewController;
+import com.backelite.shift.task.TaskManagerListener;
 import com.backelite.shift.util.MemoryUtils;
 import java.net.URL;
 import java.util.List;
@@ -41,6 +42,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WeakChangeListener;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.Stage;
@@ -50,18 +52,18 @@ import javafx.stage.Stage;
  *
  * @author ggrousset
  */
-public class WOPEPreviewController extends HTMLPreviewController {
+public class WOPEPreviewController extends HTMLPreviewController implements TaskManagerListener {
 
     @FXML
     protected ChoiceBox<String> runtimeChoice;
-    
+
     protected ChangeListener<String> runtimeChoiceChangeListener;
-    
+
     /**
      * Holds the previous selected runtime.
      */
     protected WOPERuntime previousRuntime;
-    
+
     /**
      * Holds the currently selected WOPE runtime.
      */
@@ -70,16 +72,17 @@ public class WOPEPreviewController extends HTMLPreviewController {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        
         super.initialize(url, rb);
+        
+        ApplicationContext.getTaskManager().addListener(this);
 
         // Populate runtime choice
         this.populateRuntimes();
         runtimeChoiceChangeListener = (ObservableValue<? extends String> ov, String t, String t1) -> {
-            
+
             previousRuntime = WOPERuntimeManager.getInstance().getRuntimeByName(t);
             currentRuntime = WOPERuntimeManager.getInstance().getRuntimeByName(t1);
-            
+
             applyRuntime();
         };
         runtimeChoice.valueProperty().addListener(new WeakChangeListener<>(runtimeChoiceChangeListener));
@@ -110,19 +113,31 @@ public class WOPEPreviewController extends HTMLPreviewController {
             runtimeChoice.getItems().add(runtime.getName());
         }
     }
-    
+
     private void applyRuntime() {
-        
-        if (previousRuntime != null) {
-            WOPERuntimeManager.getInstance().stopRuntime(previousRuntime);
-        }
-        
-        WOPERuntimeManager.getInstance().startRuntime(currentRuntime);
-        
-        this.refresh();
+
+        Task task = new Task() {
+            @Override
+            protected Object call() throws Exception {
+
+                // Set title
+                updateTitle(String.format(getResourceBundle().getString("builtin.plugin.preview.wope.task.starting_runtime"), currentRuntime.getName()));
+
+                if (previousRuntime != null) {
+                    WOPERuntimeManager.getInstance().stopRuntime(previousRuntime);
+                }
+
+                WOPERuntimeManager.getInstance().startRuntime(currentRuntime);
+
+                return true;
+            }
+        };
+
+        ApplicationContext.getTaskManager().addTask(task);
+
     }
-    
-     @Override
+
+    @Override
     protected void refresh() {
 
         synchronized (document) {
@@ -133,7 +148,7 @@ public class WOPEPreviewController extends HTMLPreviewController {
             }
         }
     }
-    
+
     @Override
     public void setStage(Stage parentStage) {
         super.setStage(parentStage);
@@ -141,15 +156,34 @@ public class WOPEPreviewController extends HTMLPreviewController {
         // Apply first runtime
         runtimeChoice.getSelectionModel().select(0);
     }
-    
-     @Override
+
+    @Override
     public void close() {
         super.close();
-        
+
         if (currentRuntime != null) {
             WOPERuntimeManager.getInstance().stopRuntime(currentRuntime);
         }
+
+    }
+
+    @Override
+    public void onTaskFailed(Task task) {
         
+    }
+
+    @Override
+    public void onTaskStarted(Task task) {
+        
+        // Display loading page
+        this.webView.getEngine().load(getClass().getResource("/wope_starting.html").toExternalForm());
+    }
+
+    @Override
+    public void onTaskSucceeded(Task task) {
+
+        // Refresh
+        this.refresh();
     }
 
 }

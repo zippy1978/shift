@@ -27,6 +27,7 @@ package com.backelite.shift.gui.preview.wope;
  */
 
 import com.backelite.shift.ApplicationContext;
+import com.backelite.shift.task.LocalTaskManager;
 import com.backelite.shift.util.FileUtils;
 import java.io.File;
 import java.io.IOException;
@@ -155,6 +156,10 @@ public class WOPERuntimeManager {
         for(WOPERuntime runtime : runtimes) {
             runtime.shutdown();
         }
+        
+        // Delete ini file
+        File initFile = new File(this.getInitFilePath());
+        initFile.deleteOnExit();
         
     }
     

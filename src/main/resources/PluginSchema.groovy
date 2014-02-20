@@ -83,7 +83,7 @@ metaBuilder.define {
     lifecycle(factory: com.backelite.shift.plugin.GroovyPluginLifecycle) {
         properties {
             onLoad(req: false)
-            onUnLoad(req: false)
+            onUnload(req: false)
         }
     }
 }

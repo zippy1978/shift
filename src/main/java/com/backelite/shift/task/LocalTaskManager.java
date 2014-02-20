@@ -26,7 +26,9 @@ package com.backelite.shift.task;
  * #L%
  */
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -98,14 +100,16 @@ public class LocalTaskManager implements TaskManager {
 
         Set<TaskManagerListener> result = new HashSet<TaskManagerListener>();
 
+        List<WeakReference<TaskManagerListener>> listenersToRemove = new ArrayList<>();
         for (WeakReference<TaskManagerListener> listenerRef : listeners) {
             if (listenerRef.get() != null) {
                 result.add(listenerRef.get());
             } else {
                 // Clean up null references for next call
-                listeners.remove(listenerRef);
+                listenersToRemove.add(listenerRef);
             }
         }
+        listeners.removeAll(listenersToRemove);
 
         return result;
     }

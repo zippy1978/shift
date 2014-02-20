@@ -66,6 +66,7 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
         
         super.updateItem(artifact, empty);
 
+        this.getStyleClass().remove("folder");
         
         // Retrieve parent controller from user data
         this.projectNavigatorController = (ProjectNavigatorController) this.getUserData();
@@ -253,7 +254,7 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
                 importActionEventHandler = new EventHandler() {
                     @Override
                     public void handle(Event t) {
-                        if (getItem() instanceof Project) {
+                        if (getItem() instanceof Folder) {
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
@@ -369,8 +370,6 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
 
                 this.getStyleClass().add("folder");
 
-            } else {
-                this.getStyleClass().remove("folder");
             }
             
         } else {
@@ -378,7 +377,7 @@ public class ArtifactTreeCell extends TreeCell<Artifact> {
             // If cell is empty : clear it (for reuse)
             setText(null);
             setTextFill(null);
-            this.getStyleClass().remove("folder");
+            
         }
 
     }

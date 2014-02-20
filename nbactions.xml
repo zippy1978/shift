@@ -7,7 +7,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath com.backelite.shift.MainApp</exec.args>
+                <exec.args>-Xms384m -Xmx2048m -classpath %classpath com.backelite.shift.MainApp</exec.args>
                 <exec.executable>java</exec.executable>
                 <file.encoding>UTF-8</file.encoding>
             </properties>
@@ -46,5 +46,34 @@
             <goals>
                 <goal>jfx:native</goal>
             </goals>
+        </action>
+        <action>
+            <actionName>debug</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -Xms384m -Xmx2048m -classpath %classpath com.backelite.shift.MainApp</exec.args>
+                <exec.executable>java</exec.executable>
+                <jpda.listen>true</jpda.listen>
+            </properties>
+        </action>
+        <action>
+            <actionName>profile</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-Xms384m -Xmx2048m -classpath %classpath com.backelite.shift.MainApp</exec.args>
+                <exec.executable>java</exec.executable>
+            </properties>
         </action>
     </actions>

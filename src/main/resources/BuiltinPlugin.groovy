@@ -28,6 +28,7 @@ import com.backelite.shift.workspace.artifact.Project
 import com.backelite.shift.workspace.artifact.Document
 import com.backelite.shift.workspace.artifact.Folder
 import com.backelite.shift.util.FileUtils
+import com.backelite.shift.gui.preview.wope.WOPERuntimeManager
 
 plugin {
     uid = "com.backelite.shift.plugin.builtin"
@@ -163,6 +164,11 @@ plugin {
             )
         
             preferencesManager.commit()
+        }
+        
+        onUnload = {
+            
+            WOPERuntimeManager.getInstance().shutdownAllRuntimes()
         }
     }
     
