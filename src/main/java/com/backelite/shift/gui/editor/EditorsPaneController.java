@@ -266,7 +266,6 @@ public class EditorsPaneController extends AbstractController implements Observe
 
                         // Clear editor history
                         EditorController editorController = (EditorController) tab.getUserData();
-                        editorController.clearHistory();
 
                         // If document is deleted : mark tab to removal
                         if (document.isDeleted()) {

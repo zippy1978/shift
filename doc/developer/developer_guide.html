@@ -97,62 +97,60 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#themes"><span class="toc-section-number">3.5</span> Themes</a></li>
 </ul></li>
 <li><a href="#user-interface"><span class="toc-section-number">4</span> User interface</a><ul>
-<li><a href="#general-notice-on-object-cleanup-and-memory-leaks"><span class="toc-section-number">4.1</span> General notice on object cleanup and memory leaks</a><ul>
-<li><a href="#listeners-and-eventhandlers"><span class="toc-section-number">4.1.1</span> Listeners and EventHandlers</a></li>
-<li><a href="#tableview"><span class="toc-section-number">4.1.2</span> TableView</a></li>
+<li><a href="#concepts"><span class="toc-section-number">4.1</span> Concepts</a></li>
+<li><a href="#general-notice-on-object-cleanup-and-memory-leaks"><span class="toc-section-number">4.2</span> General notice on object cleanup and memory leaks</a><ul>
+<li><a href="#listeners-and-eventhandlers"><span class="toc-section-number">4.2.1</span> Listeners and EventHandlers</a></li>
+<li><a href="#tableview"><span class="toc-section-number">4.2.2</span> TableView</a></li>
 </ul></li>
-<li><a href="#abstractcontroller-and-abstractdialogcontroller"><span class="toc-section-number">4.2</span> AbstractController and AbstractDialogController</a></li>
-<li><a href="#main-window"><span class="toc-section-number">4.3</span> Main window</a><ul>
-<li><a href="#menu"><span class="toc-section-number">4.3.1</span> Menu</a></li>
-<li><a href="#project-navigator"><span class="toc-section-number">4.3.2</span> Project navigator</a></li>
-<li><a href="#editors-pane"><span class="toc-section-number">4.3.3</span> Editors pane</a></li>
-<li><a href="#status-bar"><span class="toc-section-number">4.3.4</span> Status bar</a></li>
+<li><a href="#abstractcontroller-and-abstractdialogcontroller"><span class="toc-section-number">4.3</span> AbstractController and AbstractDialogController</a></li>
+<li><a href="#main-window"><span class="toc-section-number">4.4</span> Main window</a><ul>
+<li><a href="#menu"><span class="toc-section-number">4.4.1</span> Menu</a></li>
+<li><a href="#project-navigator"><span class="toc-section-number">4.4.2</span> Project navigator</a></li>
+<li><a href="#editors-pane"><span class="toc-section-number">4.4.3</span> Editors pane</a></li>
+<li><a href="#status-bar"><span class="toc-section-number">4.4.4</span> Status bar</a></li>
 </ul></li>
-<li><a href="#validation"><span class="toc-section-number">4.4</span> Validation</a><ul>
-<li><a href="#compoundvalidator"><span class="toc-section-number">4.4.1</span> CompoundValidator</a></li>
-<li><a href="#validation-result"><span class="toc-section-number">4.4.2</span> Validation result</a></li>
+<li><a href="#validation"><span class="toc-section-number">4.5</span> Validation</a><ul>
+<li><a href="#compoundvalidator"><span class="toc-section-number">4.5.1</span> CompoundValidator</a></li>
+<li><a href="#validation-result"><span class="toc-section-number">4.5.2</span> Validation result</a></li>
 </ul></li>
-<li><a href="#custom-controls"><span class="toc-section-number">4.5</span> Custom controls</a></li>
+<li><a href="#custom-controls"><span class="toc-section-number">4.6</span> Custom controls</a></li>
 </ul></li>
 </ul>
 </div>
-<h1 id="getting-started"><a href="#getting-started"><span class="header-section-number">1</span> Getting started</a></h1>
-<h2 id="required-skills"><a href="#required-skills"><span class="header-section-number">1.1</span> Required skills</a></h2>
+<h1 id="getting-started"><span class="header-section-number">1</span> Getting started</h1>
+<h2 id="required-skills"><span class="header-section-number">1.1</span> Required skills</h2>
 <p>The application is developped using Java and JavaFX, Maven is used for building.</p>
 <p>Thereby a good knowledge of Java and Object Oriented Programming is required, as well as Asynchronous Programmation.</p>
-<h2 id="technical-setup-and-tools"><a href="#technical-setup-and-tools"><span class="header-section-number">1.2</span> Technical setup and tools</a></h2>
-<h3 id="java"><a href="#java"><span class="header-section-number">1.2.1</span> Java</a></h3>
-<p>The required JDK version is 1.7 (a recent official Oracle version with JavaFX 2.2 included but not higher than update 21, because JavaFX has a <a href="https://javafx-jira.kenai.com/browse/RT-32415">bug</a>).</p>
-<p>However, due to some limitations with Java 1.7, Java 1.8 will be used as soon as it will be available.</p>
-<p>The current limitations on Java 1.7 are:</p>
-<ul>
-<li>High-density screens (such as MacBook Pro Retina) are not supported: this results in blurry windows on those screens.</li>
-<li>JavaFX <code>WebView</code> does not allow the change of the user agent: this could be a limitation for previewing HTML pages in the future.</li>
-</ul>
-<h3 id="maven"><a href="#maven"><span class="header-section-number">1.2.2</span> Maven</a></h3>
+<h2 id="technical-setup-and-tools"><span class="header-section-number">1.2</span> Technical setup and tools</h2>
+<h3 id="java"><span class="header-section-number">1.2.1</span> Java</h3>
+<p>The required JDK version is 1.8 (at least build 120).</p>
+<h3 id="maven"><span class="header-section-number">1.2.2</span> Maven</h3>
 <p>Maven 3 and the <a href="https://github.com/zonski/javafx-maven-plugin">javafx-maven-plugin</a> are used to run and package the application.</p>
-<p>When using the plugin form the first time, remember to fix your current JRE classpath with the folling command:</p>
-<pre><code>mvn jfx:fix-classpath</code></pre>
-<h3 id="ide"><a href="#ide"><span class="header-section-number">1.2.3</span> IDE</a></h3>
+<h3 id="ide"><span class="header-section-number">1.2.3</span> IDE</h3>
 <p>Any IDE can be used for development, however Netbeans is recommended as it has the best JavaFX support at the moment.</p>
-<h2 id="building-from-sources"><a href="#building-from-sources"><span class="header-section-number">1.3</span> Building from sources</a></h2>
-<h3 id="running-the-application"><a href="#running-the-application"><span class="header-section-number">1.3.1</span> Running the application</a></h3>
+<h2 id="building-from-sources"><span class="header-section-number">1.3</span> Building from sources</h2>
+<h3 id="running-the-application"><span class="header-section-number">1.3.1</span> Running the application</h3>
 <p>In order to run the application use:</p>
 <pre><code>mvn jfx:run</code></pre>
-<h3 id="packaging-the-application"><a href="#packaging-the-application"><span class="header-section-number">1.3.2</span> Packaging the application</a></h3>
+<h3 id="packaging-the-application"><span class="header-section-number">1.3.2</span> Packaging the application</h3>
 <p>Packaging means : building the application and a native installer for it. The format depends on the operating system and additional tools may be installed prior to creating the package.</p>
 <p>Read <a href="http://zenjava.com/javafx/maven/native-bundle.html">Building a Native Installer</a> for more information.</p>
 <p>The command for packaging is:</p>
 <pre><code>mvn clean jfx:native</code></pre>
-<h2 id="conventions"><a href="#conventions"><span class="header-section-number">1.4</span> Conventions</a></h2>
-<h3 id="coding-conventions"><a href="#coding-conventions"><span class="header-section-number">1.4.1</span> Coding conventions</a></h3>
+<h4 id="linux"><span class="header-section-number">1.3.2.1</span> Linux</h4>
+<p>In order to build native packages as <em>.deb</em> and <em>.rpm</em> from Ubuntu / Debian, make sure all the required tools are installed.</p>
+<p>To install required packages use:</p>
+<pre><code>sudo apt-get install build-essential
+sudo apt-get install rpm</code></pre>
+<h2 id="conventions"><span class="header-section-number">1.4</span> Conventions</h2>
+<h3 id="coding-conventions"><span class="header-section-number">1.4.1</span> Coding conventions</h3>
 <p>Generic Oracle Java conventions are used for the project: <a href="http://www.oracle.com/technetwork/java/javase/documentation/codeconvtoc-136057.html">Code Conventions for the Java TM Programming Language</a></p>
-<h3 id="naming-conventions"><a href="#naming-conventions"><span class="header-section-number">1.4.2</span> Naming conventions</a></h3>
-<h4 id="fxml"><a href="#fxml"><span class="header-section-number">1.4.2.1</span> FXML</a></h4>
+<h3 id="naming-conventions"><span class="header-section-number">1.4.2</span> Naming conventions</h3>
+<h4 id="fxml"><span class="header-section-number">1.4.2.1</span> FXML</h4>
 <p>FXML files are located into <code>fxml</code> resource package and named using the underscore convention.</p>
 <p>FXML file name must be the same as its controller class.</p>
 <p>For example, the FXML file name for <code>HTMLPreviewController</code>is <code>html_preview.fxml</code></p>
-<h4 id="css"><a href="#css"><span class="header-section-number">1.4.2.2</span> CSS</a></h4>
+<h4 id="css"><span class="header-section-number">1.4.2.2</span> CSS</h4>
 <p>CSS class names must use dashes and ids use the CamelCase.</p>
 <p>Example:</p>
 <pre><code>#projectNavigator {
@@ -162,8 +160,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
 .text-input .invalid {
     ...
 }</code></pre>
-<h2 id="overview-concepts"><a href="#overview-concepts"><span class="header-section-number">1.5</span> Overview &amp; concepts</a></h2>
-<h3 id="model-and-managers"><a href="#model-and-managers"><span class="header-section-number">1.5.1</span> Model and managers</a></h3>
+<h2 id="overview-concepts"><span class="header-section-number">1.5</span> Overview &amp; concepts</h2>
+<h3 id="model-and-managers"><span class="header-section-number">1.5.1</span> Model and managers</h3>
 <p>The application is built around code editor / IDE core concepts:</p>
 <ul>
 <li><strong>Workspace</strong>: the place where every artifact lives. An artifact can be any piece of data that can be edited or created from the application : a project is an artifact, a folder or a source file is also an artifact.</li>
@@ -173,7 +171,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><strong>Plugins</strong>: to make the application extensible.</li>
 <li><strong>Themes</strong>: look and feel management.</li>
 </ul>
-<h3 id="gui"><a href="#gui"><span class="header-section-number">1.5.2</span> GUI</a></h3>
+<h3 id="gui"><span class="header-section-number">1.5.2</span> GUI</h3>
 <p>The user interface (GUI) is built upon (in a same main window):</p>
 <ul>
 <li><strong>Menu</strong>: application main menu.</li>
@@ -182,9 +180,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><strong>Status bar</strong>: gives information about task being performed, current document…</li>
 </ul>
 <p>Child windows can be opened from the main windows, such as : preview windows, wizard windows, new file / folder window…</p>
-<h2 id="application-lifecycle"><a href="#application-lifecycle"><span class="header-section-number">1.6</span> Application lifecycle</a></h2>
+<h2 id="application-lifecycle"><span class="header-section-number">1.6</span> Application lifecycle</h2>
 <p>The application is started by the <code>com.backelite.shift.MainApp</code> class (<code>start(…)</code> method). When it is shuting down, the method <code>stop(…)</code>of the same class is called.</p>
-<h3 id="startup-sequence"><a href="#startup-sequence"><span class="header-section-number">1.6.1</span> Startup sequence</a></h3>
+<h3 id="startup-sequence"><span class="header-section-number">1.6.1</span> Startup sequence</h3>
 <div class="figure">
 <img src="img/startup_diagram.png" alt="Startup sequence diagram" /><p class="caption">Startup sequence diagram</p>
 </div>
@@ -192,24 +190,24 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>After that it loads plugins. See <a href="#plugins">Plugins</a> section for more information.</p>
 <p>Then it restores the workspace state. See <a href="#states">States</a> section for more informations.</p>
 <p>And finally, it brings up the main window interface and restore its state as well.</p>
-<h3 id="shutdown-sequence"><a href="#shutdown-sequence"><span class="header-section-number">1.6.2</span> Shutdown sequence</a></h3>
+<h3 id="shutdown-sequence"><span class="header-section-number">1.6.2</span> Shutdown sequence</h3>
 <div class="figure">
 <img src="img/shutdown_diagram.png" alt="Shutdown sequence diagram" /><p class="caption">Shutdown sequence diagram</p>
 </div>
 <p>At shutdown, the workspace state is saved, the main controller state is saved and the <code>ApplicationContext</code> is destroyed.</p>
-<h3 id="applicationcontext"><a href="#applicationcontext"><span class="header-section-number">1.6.3</span> ApplicationContext</a></h3>
+<h3 id="applicationcontext"><span class="header-section-number">1.6.3</span> ApplicationContext</h3>
 <p><code>com.backelite.shift.ApplicationContext</code> is the main entry point to access application centralized components.</p>
 <p>It acts as a holder for storing singleton instances of application components, such as the workspace, the plugin manager, …</p>
 <p>For example, it is possible to access the plugin manager like this from anywhere in the application:</p>
 <pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getPluginManager</span>();</code></pre>
-<h1 id="the-workspace"><a href="#the-workspace"><span class="header-section-number">2</span> The workspace</a></h1>
+<h1 id="the-workspace"><span class="header-section-number">2</span> The workspace</h1>
 <p>Classes related to the workspace are located in <code>com.backelite.shift.workspace</code>.</p>
 <p>The workspace is represented by the <code>Workspace</code> interface. The default workspace implementation is <code>LocalWorkspace</code>.</p>
 <p>This implementation manages artifacts from the local file system.</p>
 <p><code>Workspace</code> extends the <code>PersistableState</code> interface in order to be able to save / restore the current workspace on application exit / restart.</p>
 <p>The application only holds one workspace (singleton). It can be accessed using <code>com.backelite.shift.ApplicationContext</code> static method:</p>
 <pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getWorkspace</span>();</code></pre>
-<h2 id="http-proxy"><a href="#http-proxy"><span class="header-section-number">2.1</span> HTTP Proxy</a></h2>
+<h2 id="http-proxy"><span class="header-section-number">2.1</span> HTTP Proxy</h2>
 <p>When required (usually by previewers), the <code>HTTPWorkspaceProxyServer</code> (singleton) can be started in order to serve workspace artifacts on the HTTP protocol.</p>
 <p>The HTTP proxy can be accessed using <code>com.backelite.shift.ApplicationContext</code> static method:</p>
 <pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getHTTPWorkspaceProxyServer</span>();</code></pre>
@@ -218,7 +216,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>It can be stopped with (automatically stopped at application shutdown):</p>
 <pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getHTTPWorkspaceProxyServer</span>().<span class="fu">stop</span>();</code></pre>
 <p>The port of the server is determined at runtime (on start) depending on port number availability (see <code>com.backelite.shift.util.NetworkUtil.findAvailablePort(…)</code> for more information).</p>
-<h2 id="artifacts"><a href="#artifacts"><span class="header-section-number">2.2</span> Artifacts</a></h2>
+<h2 id="artifacts"><span class="header-section-number">2.2</span> Artifacts</h2>
 <p>Classes related to workspace artifacts are located in <code>com.backelite.shift.workspace.artifact</code>.</p>
 <div class="figure">
 <img src="img/artifact_uml.jpg" alt="Artifact inheritance diagram" /><p class="caption">Artifact inheritance diagram</p>
@@ -229,7 +227,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <blockquote>
 <p><em>Note: a file is referred as a <code>Document</code> artifact to avoid the confusion with <code>java.io.File</code>, in the GUI layer however it is designated as file to follow editors / IDE conventions.</em></p>
 </blockquote>
-<h2 id="observing-the-workspace"><a href="#observing-the-workspace"><span class="header-section-number">2.3</span> Observing the workspace</a></h2>
+<h2 id="observing-the-workspace"><span class="header-section-number">2.3</span> Observing the workspace</h2>
 <p>In order to make the GUI reflect workspace updates (new folder created, document modified…), every <code>Workspace</code> or <code>Artifact</code> implementation is observable which mean that they inherit <code>fr.grousset.util.WeakObservable</code> object.</p>
 <p><code>WeakObservable</code> is an enhanced implementation of the original <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Observable.html"><code>java.util.Observable</code></a> but that does not require to unregister observers as they are kept as weak references.</p>
 <p>For instance, when a GUI controller needs to be notified of an artifact update it only needs to implements the <code>java.util.Observer</code> interface and register itself as observer on the artifact:</p>
@@ -238,7 +236,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">update</span>(Observable o, Object arg) {
   <span class="co">// Handle change here</span>
 }</code></pre>
-<h3 id="artifact-case"><a href="#artifact-case"><span class="header-section-number">2.3.1</span> Artifact case</a></h3>
+<h3 id="artifact-case"><span class="header-section-number">2.3.1</span> Artifact case</h3>
 <p>In the artifact case, the <code>Observable</code> object is the artifact that was updated (the source) and the arg <code>Object</code> (not always defined) is the original source.</p>
 <p>For example, the original source is set in case of a <code>Document</code> artifact : when it changes, it notifies its observers, but also triggers a notification from its parent folder.</p>
 <p>When a <code>Folder</code> receives a notification, it forwards the notification with the original source to its observers (at least its parent folder, a <code>Folder</code> always observes its children).</p>
@@ -279,9 +277,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </tr>
 </tbody>
 </table>
-<h3 id="workspace-case"><a href="#workspace-case"><span class="header-section-number">2.3.2</span> Workspace case</a></h3>
+<h3 id="workspace-case"><span class="header-section-number">2.3.2</span> Workspace case</h3>
 <p>In the workspace case it is simplier: the <code>Observable</code> object is always the <code>Workspace</code> and the arg <code>Object</code> is always the <code>Project</code> that was modified.</p>
-<h3 id="knowing-what-changed-on-the-observable"><a href="#knowing-what-changed-on-the-observable"><span class="header-section-number">2.3.3</span> Knowing what changed on the observable</a></h3>
+<h3 id="knowing-what-changed-on-the-observable"><span class="header-section-number">2.3.3</span> Knowing what changed on the observable</h3>
 <p>When <code>java.util.Observer.update(…)</code> method is called it is possible to know which artifact changed, but not directly what changed.</p>
 <p>To do so, here are some snippet to detect changes:</p>
 <ul>
@@ -323,14 +321,14 @@ code > span.er { color: #ff0000; font-weight: bold; }
             }
         }
 }</code></pre>
-<h1 id="managers"><a href="#managers"><span class="header-section-number">3</span> Managers</a></h1>
+<h1 id="managers"><span class="header-section-number">3</span> Managers</h1>
 <p>This part deals with services / managers common to the whole application.</p>
-<h2 id="preferences"><a href="#preferences"><span class="header-section-number">3.1</span> Preferences</a></h2>
+<h2 id="preferences"><span class="header-section-number">3.1</span> Preferences</h2>
 <p>Preferences are used to manage application settings across the application.</p>
 <p>Classes related to preferences are located inside <code>com.backelite.shift.preferences</code>.</p>
 <p>The heart of the preferences system is the <code>PreferencesManager</code>interface: it defines methods to store and retrieve preferences (<code>setValue(…)</code>, <code>getValue(…)</code>).</p>
 <p>The default (and unique) implementation of <code>PreferencesManager</code>, at the moment, is <code>LocalPreferencesManager</code>: this implementation is designed to store preferences as a JSON file <em>preferences.json</em> in a local directory.</p>
-<h3 id="transactions"><a href="#transactions"><span class="header-section-number">3.1.1</span> Transactions</a></h3>
+<h3 id="transactions"><span class="header-section-number">3.1.1</span> Transactions</h3>
 <p><code>PreferencesManager</code> is transactionnal, which means that the <code>commit()</code>method must be called to persist modifications. If modifications must be reverted to the last commit, the method <code>rollback()</code> can be used.</p>
 <p>A singleton <code>PreferencesManager</code>instance is used for the whole application and can be accessed from the <code>ApplicationContext</code>:</p>
 <pre class="sourceCode java"><code class="sourceCode java">PreferencesManager preferencesManager = ApplicationContext.<span class="fu">getPreferencesManager</span>();
@@ -342,12 +340,12 @@ preferencesManager.<span class="fu">commit</span>();
 
 <span class="co">// Read a value</span>
 String value = (String)preferencesManager.<span class="fu">getValue</span>(<span class="st">&quot;key3&quot;</span>);</code></pre>
-<h3 id="setting-initial-values"><a href="#setting-initial-values"><span class="header-section-number">3.1.2</span> Setting initial values</a></h3>
+<h3 id="setting-initial-values"><span class="header-section-number">3.1.2</span> Setting initial values</h3>
 <p>When the application (or a plugin) starts form the first time: it needs to set initial values into preferences, but must no erase existing values if they are already set.</p>
 <p>To do so, the <code>PreferencesManager</code> exposes the <code>setInitialValue(…)</code>(to set a single value) and <code>setInitialValues(…)</code> (to set several values at the same time).</p>
 <p>When the application starts it checks and initializes initial values with thoses methods. The code is located inside <code>com.backelite.shift.MainApp.initializePreferences()</code> and it is called from <code>com.backelite.shift.MainApp.start(…)</code>.</p>
 <p>See <a href="#application-lifecycle">Application lifecycle</a> for more informations about the application startup sequence.</p>
-<h2 id="states"><a href="#states"><span class="header-section-number">3.2</span> States</a></h2>
+<h2 id="states"><span class="header-section-number">3.2</span> States</h2>
 <p>States are used to save and restore application components states between application restarts.</p>
 <p>Classes relating to states management are located inside <code>com.backelite.shift.state</code>.</p>
 <p>Any object of the application can be persisted, it just needs to implement the <code>PersistableState</code> interface.</p>
@@ -355,7 +353,7 @@ String value = (String)preferencesManager.<span class="fu">getValue</span>(<span
 <p>The default (and only one at the moment) concrete implementation of <code>StateManager</code> is the <code>LocalStateManager</code>: an implementation that stores states as JSON files into a directory.</p>
 <p>The default instance of the <code>StateManager</code> can be accessed from the <code>ApplicaitonContext</code>:</p>
 <pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getStateManager</span>();</code></pre>
-<h3 id="saving-state"><a href="#saving-state"><span class="header-section-number">3.2.1</span> Saving state</a></h3>
+<h3 id="saving-state"><span class="header-section-number">3.2.1</span> Saving state</h3>
 <p>Saving a state consists of populating a <code>Map&lt;String, Object&gt;</code> object with all the values required to restore the current object state:</p>
 <pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">saveState</span>(Map&lt;String, Object&gt; state) <span class="kw">throws</span> StateException {
 
@@ -363,7 +361,7 @@ String value = (String)preferencesManager.<span class="fu">getValue</span>(<span
         state.<span class="fu">put</span>(<span class="st">&quot;value2&quot;</span>, <span class="kw">this</span>.<span class="fu">value2</span>);
         ...
 }</code></pre>
-<h3 id="restoring-state"><a href="#restoring-state"><span class="header-section-number">3.2.2</span> Restoring state</a></h3>
+<h3 id="restoring-state"><span class="header-section-number">3.2.2</span> Restoring state</h3>
 <p>Restoring a state consists of reading a <code>Map&lt;String, Object&gt;</code> object in order to restore the current object state:</p>
 <pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">restoreState</span>(Map&lt;String, Object&gt; state) <span class="kw">throws</span> StateException {
 
@@ -371,24 +369,24 @@ String value = (String)preferencesManager.<span class="fu">getValue</span>(<span
     String value2 = (String)state.<span class="fu">get</span>(<span class="st">&quot;value2&quot;</span>);
     ...
 }</code></pre>
-<h3 id="instances-identification"><a href="#instances-identification"><span class="header-section-number">3.2.3</span> Instances identification</a></h3>
+<h3 id="instances-identification"><span class="header-section-number">3.2.3</span> Instances identification</h3>
 <p>The <code>PersistableState</code>interface provides a method named <code>getInstanceIdentifier()</code> and is used to identify a given object instance.</p>
 <p>If this method returns <code>null</code>, a single state is maintianed for all instances of the class. For example, with the <code>LocalStateManager</code> saving an object called <code>MyObject</code> without providing an identifier will result into a state file name <code>myobject.json</code>.</p>
 <p>However, if the <code>getInstanceIdentifier()</code> returns a value, a state will be maintaned for every instance of the class. In the case of the <code>LocalStateManager</code>the state file name for a given instance of <code>MyObject</code> will be named <code>myobjectMYID.json</code> (where <em>MYID</em> is the identifier returned by the instance).</p>
-<h2 id="tasks"><a href="#tasks"><span class="header-section-number">3.3</span> Tasks</a></h2>
+<h2 id="tasks"><span class="header-section-number">3.3</span> Tasks</h2>
 <p>Tasks are used in the application to handle asynchronous processing. They are commonly used to handle time consuming operations without blocking the user interface.</p>
 <p>Class relating to tasks and task management are located inside the <code>com.backelite.shift.task</code>.</p>
 <p>Tasks used are common <code>javafx.concurrent.Task</code> objects. There are processed by a <code>TaskManager</code>.</p>
 <p>The <code>TaskManager</code> holds a task queue where new tasks can be added. The sate of a <code>TaskManager</code>can be listened by adding a <code>TaskManagerListener</code> on it.</p>
 <p>The default concrete implementation of <code>TaskManager</code>is <code>LocalTaskManager</code>.</p>
-<h3 id="shared-taskmanager"><a href="#shared-taskmanager"><span class="header-section-number">3.3.1</span> Shared TaskManager</a></h3>
+<h3 id="shared-taskmanager"><span class="header-section-number">3.3.1</span> Shared TaskManager</h3>
 <p>A shared <code>TaskManager</code> can be accessed using <code>com.backelite.shift.ApplicationContext</code> static method:</p>
 <pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getTaskManager</span>();</code></pre>
 <p>This <code>TaskManager</code>must be used as much as possible to run tasks: as the central <code>TaskManager</code>it is linked to the <a href="#status_bar">Status bar GUI element</a> and state (name and progress) of the current running task is displayed on it.</p>
-<h3 id="creating-a-taskmanager"><a href="#creating-a-taskmanager"><span class="header-section-number">3.3.2</span> Creating a TaskManager</a></h3>
+<h3 id="creating-a-taskmanager"><span class="header-section-number">3.3.2</span> Creating a TaskManager</h3>
 <p>If for some reasons, a task needs to run outside the sahre <code>TaskManager</code> (to run a background download without preventing the user to work), it is possible to create a <code>LocalTaskManager</code> like this (usually in a controller class):</p>
 <pre class="sourceCode java"><code class="sourceCode java">TaskManager taskManager = <span class="kw">new</span> <span class="fu">LocalTaskManager</span>();</code></pre>
-<h3 id="creating-a-new-task"><a href="#creating-a-new-task"><span class="header-section-number">3.3.3</span> Creating a new task</a></h3>
+<h3 id="creating-a-new-task"><span class="header-section-number">3.3.3</span> Creating a new task</h3>
 <p>Adding a task to a <code>TaskManager</code> can be done like this:</p>
 <pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getTaskManager</span>().<span class="fu">addTask</span>(<span class="kw">new</span> <span class="fu">Task</span>() {
     <span class="fu">@Override</span>
@@ -414,7 +412,7 @@ String value = (String)preferencesManager.<span class="fu">getValue</span>(<span
 });</code></pre>
 <p>The <code>updateTitle(…)</code> method can be called to give the task a name. If the shared <code>TaskManager</code>is used, this name will be displayed in the status bar while the task is running.</p>
 <p>The <code>updateProgress(…)</code> gives the ability to track the task progress. Once again: if the shared <code>TaskManager</code>is used, the progress will be displayed as a progress bar in tge status bar while the task is running.</p>
-<h3 id="listening-to-a-taskmanager"><a href="#listening-to-a-taskmanager"><span class="header-section-number">3.3.4</span> Listening to a TaskManager</a></h3>
+<h3 id="listening-to-a-taskmanager"><span class="header-section-number">3.3.4</span> Listening to a TaskManager</h3>
 <p>A <code>TaskManager</code>can be listen to by implementening the <code>TaskManagerListener</code>, and registering the listener on the <code>TaskManager</code>.</p>
 <p>A <code>TaskManagerListener</code> gets notified when:</p>
 <ul>
@@ -435,7 +433,7 @@ ApplicationContext.<span class="fu">getTaskManager</span>().<span class="fu">add
         ...
     }
 }</code></pre>
-<h2 id="plugins"><a href="#plugins"><span class="header-section-number">3.4</span> Plugins</a></h2>
+<h2 id="plugins"><span class="header-section-number">3.4</span> Plugins</h2>
 <p>As many code editors / IDE these days, many features of the application are provided by plugins.</p>
 <p>At the moment, a plugin can provide the following items:</p>
 <ul>
@@ -453,7 +451,7 @@ ApplicationContext.<span class="fu">getTaskManager</span>().<span class="fu">add
 <p><code>AbstractPluginRegistry</code> is the base implementation class. However, to leave the possibility to support other languages than Groovy for plugin declaration in the future, Groovy releated code is encapsulated inside the <code>AbstractGroovyPluginRegistry</code>.</p>
 <p>The singleton instance of the <code>PluginRegistry</code> can be accessed from the <code>com.backelite.shift.ApplicationContext</code> this way:</p>
 <pre class="sourceCode java"><code class="sourceCode java">ApplicationContext.<span class="fu">getPluginRegistry</span>();</code></pre>
-<h3 id="plugins-loading"><a href="#plugins-loading"><span class="header-section-number">3.4.1</span> Plugins loading</a></h3>
+<h3 id="plugins-loading"><span class="header-section-number">3.4.1</span> Plugins loading</h3>
 <p>Plugins are loaded at application startup as explained in <a href="#application-lifecycle">Application lifecycle</a>.</p>
 <p>Loading plugins involves:</p>
 <ul>
@@ -464,7 +462,7 @@ ApplicationContext.<span class="fu">getTaskManager</span>().<span class="fu">add
 <blockquote>
 <p><em>Note: at the moment, the external plugin loading feature is not implemented and the <code>PluginManager</code> loads the built-in plugin only.</em></p>
 </blockquote>
-<h3 id="groovy-dsl-declaration"><a href="#groovy-dsl-declaration"><span class="header-section-number">3.4.2</span> Groovy DSL (declaration)</a></h3>
+<h3 id="groovy-dsl-declaration"><span class="header-section-number">3.4.2</span> Groovy DSL (declaration)</h3>
 <p>A plugin is declared using a Groovy file, and can define the following:</p>
 <ul>
 <li>Plugin general info: such as identifier, name, version…</li>
@@ -545,7 +543,7 @@ metaBuilder.<span class="fu">define</span> {
 }
 
 <span class="kw">return</span> metaBuilder</code></pre>
-<h3 id="editors"><a href="#editors"><span class="header-section-number">3.4.3</span> Editors</a></h3>
+<h3 id="editors"><span class="header-section-number">3.4.3</span> Editors</h3>
 <p>Editors are the corner stone of the application: they provide a UI component to view and edit workspace documents.</p>
 <p>To declare a new editor type in a plugin declaration file, a factory closure must be provided. Here is an example to declare a HTML editor (taken from <code>BuiltinPlugin.groovy</code>):</p>
 <pre class="sourceCode java"><code class="sourceCode java"> editorFactory {
@@ -582,16 +580,18 @@ metaBuilder.<span class="fu">define</span> {
         <span class="kw">return</span> node
     }
 }</code></pre>
-<h3 id="project-wizards"><a href="#project-wizards"><span class="header-section-number">3.4.4</span> Project wizards</a></h3>
+<h3 id="project-wizards"><span class="header-section-number">3.4.4</span> Project wizards</h3>
 <p>TODO</p>
-<h3 id="previews"><a href="#previews"><span class="header-section-number">3.4.5</span> Previews</a></h3>
+<h3 id="previews"><span class="header-section-number">3.4.5</span> Previews</h3>
 <p>TODO</p>
-<h2 id="themes"><a href="#themes"><span class="header-section-number">3.5</span> Themes</a></h2>
+<h2 id="themes"><span class="header-section-number">3.5</span> Themes</h2>
 <p>TODO</p>
-<h1 id="user-interface"><a href="#user-interface"><span class="header-section-number">4</span> User interface</a></h1>
-<h2 id="general-notice-on-object-cleanup-and-memory-leaks"><a href="#general-notice-on-object-cleanup-and-memory-leaks"><span class="header-section-number">4.1</span> General notice on object cleanup and memory leaks</a></h2>
+<h1 id="user-interface"><span class="header-section-number">4</span> User interface</h1>
+<h2 id="concepts"><span class="header-section-number">4.1</span> Concepts</h2>
+<p>TODO</p>
+<h2 id="general-notice-on-object-cleanup-and-memory-leaks"><span class="header-section-number">4.2</span> General notice on object cleanup and memory leaks</h2>
 <p>When working with JavaFX it is really easy to endup with a lot of leaked objects. Here are a set of best practices to avoid those leaks.</p>
-<h3 id="listeners-and-eventhandlers"><a href="#listeners-and-eventhandlers"><span class="header-section-number">4.1.1</span> Listeners and EventHandlers</a></h3>
+<h3 id="listeners-and-eventhandlers"><span class="header-section-number">4.2.1</span> Listeners and EventHandlers</h3>
 <p>Listeners and EventHandlers is the first cause of memory leak: it is important to declare them as class members but use a weak reference when setting them.</p>
 <p>Here is an example with a <em>ChangeListener</em>:</p>
 <pre class="sourceCode java"><code class="sourceCode java"><span class="co">// Initialize change listener (class member)</span>
@@ -605,32 +605,44 @@ presetChoiceChangeListener = <span class="kw">new</span> ChangeListener&lt;Strin
 <span class="co">// Add the listener using a WeakChangeListener</span>
 presetChoice.<span class="fu">valueProperty</span>().<span class="fu">addListener</span>(<span class="kw">new</span> WeakChangeListener&lt;&gt;(presetChoiceChangeListener));</code></pre>
 <p>And an example with a <em>EventHandler</em>:</p>
-<h3 id="tableview"><a href="#tableview"><span class="header-section-number">4.1.2</span> TableView</a></h3>
-<h2 id="abstractcontroller-and-abstractdialogcontroller"><a href="#abstractcontroller-and-abstractdialogcontroller"><span class="header-section-number">4.2</span> AbstractController and AbstractDialogController</a></h2>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="co">// Initialize event handler (class member)</span>
+resetActionEventHandler = <span class="kw">new</span> EventHandler&lt;ActionEvent&gt;() {
+    <span class="fu">@Override</span>
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">handle</span>(ActionEvent t) {
+        <span class="co">// ...</span>
+    }
+};
+
+<span class="co">// Set event handler using a WeakEventHandler</span>
+resetButton.<span class="fu">setOnAction</span>(<span class="kw">new</span> WeakEventHandler&lt;&gt;(resetActionEventHandler));</code></pre>
+<h3 id="tableview"><span class="header-section-number">4.2.2</span> TableView</h3>
+<p><em>TableView</em> objects are hard to clean up: there are several operations to perform to ensure it is garbage collected when not needed anymore.</p>
+<p>To clean up such objects it is recommanded to use the utility method <em>MemoryUtils.cleanUpTableView(…)</em> when the object is not needed anymore (usually called in <em>Controller.close()</em> method).</p>
+<h2 id="abstractcontroller-and-abstractdialogcontroller"><span class="header-section-number">4.3</span> AbstractController and AbstractDialogController</h2>
 <p>TODO</p>
-<h2 id="main-window"><a href="#main-window"><span class="header-section-number">4.3</span> Main window</a></h2>
+<h2 id="main-window"><span class="header-section-number">4.4</span> Main window</h2>
 <p>TODO</p>
-<h3 id="menu"><a href="#menu"><span class="header-section-number">4.3.1</span> Menu</a></h3>
+<h3 id="menu"><span class="header-section-number">4.4.1</span> Menu</h3>
 <p>TODO</p>
-<h3 id="project-navigator"><a href="#project-navigator"><span class="header-section-number">4.3.2</span> Project navigator</a></h3>
+<h3 id="project-navigator"><span class="header-section-number">4.4.2</span> Project navigator</h3>
 <p>TODO</p>
-<h3 id="editors-pane"><a href="#editors-pane"><span class="header-section-number">4.3.3</span> Editors pane</a></h3>
+<h3 id="editors-pane"><span class="header-section-number">4.4.3</span> Editors pane</h3>
 <p>TODO</p>
-<h3 id="status-bar"><a href="#status-bar"><span class="header-section-number">4.3.4</span> Status bar</a></h3>
+<h3 id="status-bar"><span class="header-section-number">4.4.4</span> Status bar</h3>
 <p>TODO</p>
-<h2 id="validation"><a href="#validation"><span class="header-section-number">4.4</span> Validation</a></h2>
+<h2 id="validation"><span class="header-section-number">4.5</span> Validation</h2>
 <p>Unfortunately, JavaFX does not provide any input validation system at the time. That is why the application uses its own.</p>
 <p>Classes related to validation are located in <code>com.backelite.shift.gui.validation</code>.</p>
 <p>The validation mechanism is pretty basic: it exposes a <code>Validator</code> interface with a single <code>validate(…)</code> method and a set of implementations to perform common validations : not blank, filename…</p>
 <p>Validators are used in <a href="#custom-controls">Custom controls</a>.</p>
-<h3 id="compoundvalidator"><a href="#compoundvalidator"><span class="header-section-number">4.4.1</span> CompoundValidator</a></h3>
+<h3 id="compoundvalidator"><span class="header-section-number">4.5.1</span> CompoundValidator</h3>
 <p>The <code>CompoundValidator</code> is a special validator that can run several validators at the same time. It can be built like this:</p>
 <pre class="sourceCode java"><code class="sourceCode java">Validator validator = <span class="kw">new</span> <span class="fu">CompoundValidator</span>(<span class="kw">new</span> <span class="fu">NotBlankValidator</span>(), 
 <span class="kw">new</span> <span class="fu">FilenameValidator</span>());</code></pre>
-<h3 id="validation-result"><a href="#validation-result"><span class="header-section-number">4.4.2</span> Validation result</a></h3>
+<h3 id="validation-result"><span class="header-section-number">4.5.2</span> Validation result</h3>
 <p>The <code>validate(…)</code> method of <code>Validator</code>interface returns a <code>ValidatorResult</code> object. This object is composed of a <code>valid</code> attribute and a list of error messages (many messages can be returned with the <code>CompoundValidator</code>).</p>
 <p>Error messages are simple strings formatted as property key, so that it can be localized in a properties file. Example: the <code>NotBlankValidator</code> returns the following message: <em>validator.not.blank</em>.</p>
-<h2 id="custom-controls"><a href="#custom-controls"><span class="header-section-number">4.5</span> Custom controls</a></h2>
+<h2 id="custom-controls"><span class="header-section-number">4.6</span> Custom controls</h2>
 <p>TODO</p>
 </body>
 </html>
