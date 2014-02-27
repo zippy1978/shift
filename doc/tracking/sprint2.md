@@ -11,10 +11,6 @@
 
 <d>✔ 02/12/13</d> 'Import' on projects and folders : to import local files into the workspace.
 
-## Code editors
-
-<t>✘</t> Support for .jade files
-
 ## Packaging
 
 <t>✘</t> Better welcome window (inspired by website)

@@ -11,3 +11,4 @@
 * [FIX] Opened preview windows should not get focus after any action in project navigator.
 * [FEAT] Added 'Import...' feature into project navigator context menu: this allows importing local files into the workspace.
 * [FIX] Error message when closing last editor tab and a preview windows is opened.
+* [FEAT] Edit history is not cleared anymore on file save.
