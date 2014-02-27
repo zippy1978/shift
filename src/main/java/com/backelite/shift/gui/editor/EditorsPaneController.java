@@ -264,9 +264,6 @@ public class EditorsPaneController extends AbstractController implements Observe
                         // Update name without a star
                         tab.setText(document.getName());
 
-                        // Clear editor history
-                        EditorController editorController = (EditorController) tab.getUserData();
-
                         // If document is deleted : mark tab to removal
                         if (document.isDeleted()) {
                             tabsToRemove.add(tab);
