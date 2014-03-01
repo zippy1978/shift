@@ -220,34 +220,25 @@ public class CodeEditor extends AnchorPane {
         AnchorPane.setBottomAnchor(webView, 0.0);
         AnchorPane.setLeftAnchor(webView, 0.0);
         AnchorPane.setRightAnchor(webView, 0.0);
-        webViewStateChangeListener = new ChangeListener<State>() {
-            @Override
-            public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
-
-
-                if (newState == State.SUCCEEDED) {
-
-                    // Inject bridge object
-                    JSObject jsobj = (JSObject) webView.getEngine().executeScript("window");
-                    jsobj.setMember("bridge", new JSBridge());
-
-                    // If content was set before page is ready : apply it now
-                    if (initialContent != null) {
-                        setContent(initialContent);
-                    }
+        webViewStateChangeListener = (ObservableValue<? extends State> ov, State oldState, State newState) -> {
+            if (newState == State.SUCCEEDED) {
+                
+                // Inject bridge object
+                JSObject jsobj = (JSObject) webView.getEngine().executeScript("window");
+                jsobj.setMember("bridge", new JSBridge());
+                
+                // If content was set before page is ready : apply it now
+                if (initialContent != null) {
+                    setContent(initialContent);
                 }
             }
         };
         webView.getEngine().getLoadWorker().stateProperty().addListener(new WeakChangeListener<>(webViewStateChangeListener));
 
         // Consume default clipboard shortcuts to prevent double call
-        webViewKeyEventHandler = new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-
-                if ((keyEvent.getCode() == KeyCode.V || keyEvent.getCode() == KeyCode.C || keyEvent.getCode() == KeyCode.X) && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
-                    keyEvent.consume();
-                }
+        webViewKeyEventHandler = (KeyEvent keyEvent) -> {
+            if ((keyEvent.getCode() == KeyCode.V || keyEvent.getCode() == KeyCode.C || keyEvent.getCode() == KeyCode.X) && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
+                keyEvent.consume();
             }
         };
         this.webView.addEventFilter(KeyEvent.ANY, new WeakEventHandler<>(webViewKeyEventHandler));

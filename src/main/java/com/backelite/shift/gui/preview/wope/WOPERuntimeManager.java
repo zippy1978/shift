@@ -55,7 +55,7 @@ public class WOPERuntimeManager {
     
     private static WOPERuntimeManager INSTANCE;
     
-    private List<WOPERuntime> runtimes = new ArrayList<WOPERuntime>();
+    private List<WOPERuntime> runtimes = new ArrayList<>();
     
     public static synchronized WOPERuntimeManager getInstance() {
         

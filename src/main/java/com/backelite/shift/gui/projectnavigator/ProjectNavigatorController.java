@@ -87,41 +87,31 @@ public class ProjectNavigatorController extends AbstractController implements Ob
         super.initialize(url, rb);
         
         // Build root
-        treeItemRoot = new TreeItem<Artifact>(new PlaceHolderArtifact(this.getResourceBundle().getString("project_navigator.root.title")));
+        treeItemRoot = new TreeItem<>(new PlaceHolderArtifact(this.getResourceBundle().getString("project_navigator.root.title")));
         treeView.setRoot(treeItemRoot);
         treeView.setShowRoot(false);
         treeItemRoot.setExpanded(true);
-        treeView.setCellFactory(new Callback<TreeView<Artifact>, TreeCell<Artifact>>() {
-            @Override
-            public TreeCell<Artifact> call(TreeView<Artifact> treeView) {
-
-                TreeCell<Artifact> cell = new ArtifactTreeCell();
-                cell.setOnMouseClicked(ProjectNavigatorController.this);
-                cell.setUserData(ProjectNavigatorController.this);
-
-                return cell;
-
-            }
+        treeView.setCellFactory((TreeView<Artifact> treeView) -> {
+            TreeCell<Artifact> cell = new ArtifactTreeCell();
+            cell.setOnMouseClicked(ProjectNavigatorController.this);
+            cell.setUserData(ProjectNavigatorController.this);
+            
+            return cell;
         });
 
         // Position
         AnchorPane.setTopAnchor(treeView, 0.0);
 
         // Listen to selection change
-        treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Artifact>>() {
-            @Override
-            public void changed(ObservableValue<? extends TreeItem<Artifact>> ov, TreeItem<Artifact> t, TreeItem<Artifact> t1) {
-                
-                // Notify artifact selection (any kind)
-                if (t1 != null) {
-                    Artifact artifact = (Artifact) t1.getValue();
-                    lastSelectedArtifact = artifact;
-                    if (getOnArtifactSelected() != null) {
-                        getOnArtifactSelected().handle(new ArtifactSelectedEvent(EventType.ROOT, artifact));
-                    }
-                } else {
-                    lastSelectedArtifact = null;
+        treeView.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends TreeItem<Artifact>> ov, TreeItem<Artifact> t, TreeItem<Artifact> t1) -> {
+            if (t1 != null) {
+                Artifact artifact = (Artifact) t1.getValue();
+                lastSelectedArtifact = artifact;
+                if (getOnArtifactSelected() != null) {
+                    getOnArtifactSelected().handle(new ArtifactSelectedEvent(EventType.ROOT, artifact));
                 }
+            } else {
+                lastSelectedArtifact = null;
             }
         });
         
@@ -221,7 +211,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
 
     private void addProjectNode(Project project) {
 
-        TreeItem<Artifact> projectNode = new TreeItem<Artifact>(project);
+        TreeItem<Artifact> projectNode = new TreeItem<>(project);
         treeItemRoot.getChildren().add(projectNode);
 
         // Restore expanded state
@@ -246,7 +236,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
 
     private void addFolderNode(TreeItem<Artifact> parentNode, Folder folder) {
 
-        TreeItem<Artifact> folderNode = new TreeItem<Artifact>(folder);
+        TreeItem<Artifact> folderNode = new TreeItem<>(folder);
         parentNode.getChildren().add(folderNode);
 
         // Restore expanded state
@@ -269,7 +259,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
 
     private void addDocumentNode(TreeItem<Artifact> parentNode, Document document) {
 
-        TreeItem<Artifact> documentNode = new TreeItem<Artifact>(document);
+        TreeItem<Artifact> documentNode = new TreeItem<>(document);
         parentNode.getChildren().add(documentNode);
 
     }

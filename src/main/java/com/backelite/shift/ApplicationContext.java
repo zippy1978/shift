@@ -236,9 +236,9 @@ public class ApplicationContext {
         if (PROPERTIES_INSTANCE == null) {
             try {
                 PROPERTIES_INSTANCE = new Properties();
-                InputStream in = ApplicationContext.class.getResourceAsStream("/application.properties");
-                PROPERTIES_INSTANCE.load(in);
-                in.close();
+                try (InputStream in = ApplicationContext.class.getResourceAsStream("/application.properties")) {
+                    PROPERTIES_INSTANCE.load(in);
+                }
             } catch (IOException ex) {
                 log.error(String.format("Unable to read application.properties : %s", ex.getMessage()));
             }

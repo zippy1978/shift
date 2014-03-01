@@ -42,9 +42,9 @@ public class Plugin {
     private int versionCode;
     private String versionName;
     private PluginLifecycle lifecycle;
-    private List<EditorFactory> editorFactories = new ArrayList<EditorFactory>();
-    private List<PreviewFactory> previewFactories = new ArrayList<PreviewFactory>();
-    private List<ProjectWizardFactory> projectWizardFactories = new ArrayList<ProjectWizardFactory>();
+    private List<EditorFactory> editorFactories = new ArrayList<>();
+    private List<PreviewFactory> previewFactories = new ArrayList<>();
+    private List<ProjectWizardFactory> projectWizardFactories = new ArrayList<>();
 
      /**
      * @return the uid

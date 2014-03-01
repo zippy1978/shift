@@ -53,7 +53,7 @@ public class LocalStateManager implements StateManager {
 
         log.debug(String.format("Saving %s state", object.getClass().getSimpleName()));
         
-        Map<String, Object> state = new HashMap<String, Object>();
+        Map<String, Object> state = new HashMap<>();
         object.saveState(state);
 
         // Store to file

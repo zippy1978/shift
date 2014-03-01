@@ -37,7 +37,7 @@ import java.util.List;
 public class ValidatorResult {
 
     private boolean valid;
-    private List<String> errorMessages = new ArrayList<String>();
+    private List<String> errorMessages = new ArrayList<>();
 
     public ValidatorResult() {
         valid = true;

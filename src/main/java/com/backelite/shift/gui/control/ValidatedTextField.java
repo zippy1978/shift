@@ -65,11 +65,8 @@ public class ValidatedTextField extends TextField {
         
         updateValid();
 
-        textChangeListener = new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
-                updateValid();
-            }
+        textChangeListener = (ObservableValue<? extends String> ov, String t, String t1) -> {
+            updateValid();
         };
         this.textProperty().addListener(new WeakChangeListener<>(textChangeListener));
 

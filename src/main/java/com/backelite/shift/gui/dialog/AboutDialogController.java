@@ -3,6 +3,7 @@ package com.backelite.shift.gui.dialog;
 import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.Constants;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
@@ -53,24 +54,19 @@ public class AboutDialogController extends AbstractDialogController {
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
         
-        webView.getEngine().load(getClass().getResource("/about.html").toExternalForm());
+        webView.getEngine().load(getClass().getResource("/webcontent/about.html").toExternalForm());
         
         // Open external links in native browser
-        locationChangeListener = new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+        locationChangeListener = (ObservableValue<? extends String> ov, String t, String t1) -> {
+            try {
                 
-                try {
-                    
-                    URI address = new URI(ov.getValue());
-                    if (address.toString().startsWith("http")) {
-                        ApplicationContext.getHostServices().showDocument(address.toString());
-                        close();
-                    }
-                } catch (Exception ex) {
-                    displayErrorDialog(ex);
+                URI address = new URI(ov.getValue());
+                if (address.toString().startsWith("http")) {
+                    ApplicationContext.getHostServices().showDocument(address.toString());
+                    close();
                 }
-                
+            } catch (URISyntaxException ex) {                
+                displayErrorDialog(ex);
             }
         };
         webView.getEngine().locationProperty().addListener(new WeakChangeListener<>(locationChangeListener));

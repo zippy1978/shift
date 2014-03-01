@@ -44,38 +44,28 @@ import javafx.event.EventHandler;
 public class LocalTaskManager implements TaskManager {
 
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private Set<WeakReference<TaskManagerListener>> listeners = new HashSet<WeakReference<TaskManagerListener>>();
+    private Set<WeakReference<TaskManagerListener>> listeners = new HashSet<>();
 
     @Override
     public void addTask(final Task task) {
 
         // Event handlers on task
 
-        task.setOnRunning(new EventHandler() {
-            @Override
-            public void handle(Event t) {
-                for (TaskManagerListener listener : getActiveListeners()) {
-                    listener.onTaskStarted(task);
-                }
+        task.setOnRunning((Event t) -> {
+            for (TaskManagerListener listener : getActiveListeners()) {
+                listener.onTaskStarted(task);
             }
         });
 
-        task.setOnSucceeded(new EventHandler() {
-             @Override
-             public void handle(Event t) {
-                for (TaskManagerListener listener : getActiveListeners()) {
-                    listener.onTaskSucceeded(task);
-                }
+        task.setOnSucceeded((Event t) -> {
+            for (TaskManagerListener listener : getActiveListeners()) {
+                listener.onTaskSucceeded(task);
             }
         });
         
-        task.setOnFailed(new EventHandler() {
-
-            @Override
-            public void handle(Event t) {
-                 for (TaskManagerListener listener : getActiveListeners()) {
-                    listener.onTaskFailed(task);
-                }
+        task.setOnFailed((Event t) -> {
+            for (TaskManagerListener listener : getActiveListeners()) {
+                listener.onTaskFailed(task);
             }
         });
 
@@ -93,12 +83,12 @@ public class LocalTaskManager implements TaskManager {
     @Override
     public void addListener(TaskManagerListener listener) {
 
-        listeners.add(new WeakReference<TaskManagerListener>(listener));
+        listeners.add(new WeakReference<>(listener));
     }
 
     protected synchronized Set<TaskManagerListener> getActiveListeners() {
 
-        Set<TaskManagerListener> result = new HashSet<TaskManagerListener>();
+        Set<TaskManagerListener> result = new HashSet<>();
 
         List<WeakReference<TaskManagerListener>> listenersToRemove = new ArrayList<>();
         for (WeakReference<TaskManagerListener> listenerRef : listeners) {

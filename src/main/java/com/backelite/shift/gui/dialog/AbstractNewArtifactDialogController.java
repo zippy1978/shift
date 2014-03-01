@@ -69,39 +69,28 @@ public abstract class AbstractNewArtifactDialogController extends AbstractDialog
        
         // Listen to input validity
         okButton.setDisable(!nameTextField.isValid());
-        nameChangeListener = new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
-
-                okButton.setDisable(!nameTextField.isValid());
-                
-                if (nameTextField.isValid()) {
-                    nameErrorLabel.setVisible(false);
-                } else {
-                    nameErrorLabel.setVisible(true);
-                    nameErrorLabel.setText(getResourceBundle().getString(nameTextField.getLastValidatorResult().getErrorMessages().get(0)));
-                }
-
+        nameChangeListener = (ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) -> {
+            okButton.setDisable(!nameTextField.isValid());
+            
+            if (nameTextField.isValid()) {
+                nameErrorLabel.setVisible(false);
+            } else {
+                nameErrorLabel.setVisible(true);
+                nameErrorLabel.setText(getResourceBundle().getString(nameTextField.getLastValidatorResult().getErrorMessages().get(0)));
             }
         };
         nameTextField.validProperty().addListener(new WeakChangeListener<>(nameChangeListener));
 
         // Cancel button click
-        cancelActionEventHandler = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                handleCancelButtonAction();
-            }
+        cancelActionEventHandler = (ActionEvent t) -> {
+            handleCancelButtonAction();
         };
         cancelButton.setOnAction(new WeakEventHandler<>(cancelActionEventHandler));
         
 
         // OK button click
-        okActionEventHandler = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                handleOKButtonAction();
-            }
+        okActionEventHandler = (ActionEvent t) -> {
+            handleOKButtonAction();
         };
         okButton.setOnAction(new WeakEventHandler<>(okActionEventHandler));
 

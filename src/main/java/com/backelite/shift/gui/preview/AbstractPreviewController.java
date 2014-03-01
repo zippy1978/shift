@@ -58,15 +58,9 @@ public abstract class AbstractPreviewController extends AbstractDialogController
         super.initialize(url, rb);
         
         // Editor change listener
-        editorChangeListener = new ChangeListener<EditorController>() {
-
-            @Override
-            public void changed(ObservableValue<? extends EditorController> ov, EditorController t, EditorController t1) {
-                
-                // Set new document
-                if (activeDocumentTrackingEnabled && t1 != null && t1.getDocument() != null && isDocumentSupported(t1.getDocument())) {
-                    setDocument(t1.getDocument());
-                }
+        editorChangeListener = (ObservableValue<? extends EditorController> ov, EditorController t, EditorController t1) -> {
+            if (activeDocumentTrackingEnabled && t1 != null && t1.getDocument() != null && isDocumentSupported(t1.getDocument())) {
+                setDocument(t1.getDocument());
             }
         };
     }

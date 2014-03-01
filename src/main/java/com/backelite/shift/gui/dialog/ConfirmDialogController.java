@@ -59,40 +59,29 @@ public class ConfirmDialogController extends AbstractDialogController {
         super.initialize(url, rb);
         
         // Handle positive button click
-        positiveButtonActionEventHandler = new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent t) {
-                if (onChoice != null) {
-                    onChoice.handle(new ChoiceEvent(EventType.ROOT, Choice.POSITIVE));
-                }
-                
-                close();
+        positiveButtonActionEventHandler = (ActionEvent t) -> {
+            if (onChoice != null) {
+                onChoice.handle(new ChoiceEvent(EventType.ROOT, Choice.POSITIVE));
             }
+            
+            close();
         };
         positiveButton.setOnAction(new WeakEventHandler<>(positiveButtonActionEventHandler));
         
         // Handle negative button click
-        negativeButtonActionEventHandler = new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent t) {
-                if (onChoice != null) {
-                    onChoice.handle(new ChoiceEvent(EventType.ROOT, Choice.NEGATIVE));
-                }
-                
-                close();
+        negativeButtonActionEventHandler = (ActionEvent t) -> {
+            if (onChoice != null) {
+                onChoice.handle(new ChoiceEvent(EventType.ROOT, Choice.NEGATIVE));
             }
+            
+            close();
         };
         negativeButton.setOnAction(new WeakEventHandler<>(negativeButtonActionEventHandler));
         
         // Default focus on negative button
-        Platform.runLater(new Runnable() {
-        @Override
-        public void run() {
+        Platform.runLater(() -> {
             negativeButton.requestFocus();
-        }
-    });
+        });
     }
     
     public void setPositiveButtonText(String text) {

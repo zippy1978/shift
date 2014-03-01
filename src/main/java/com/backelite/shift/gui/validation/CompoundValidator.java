@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class CompoundValidator implements Validator{
 
-    private List<Validator> validators = new ArrayList<Validator>();
+    private List<Validator> validators = new ArrayList<>();
 
     public CompoundValidator(Validator... validators) {
         Collections.addAll(this.validators, validators);

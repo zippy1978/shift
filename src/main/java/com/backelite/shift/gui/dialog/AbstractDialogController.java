@@ -53,12 +53,8 @@ public abstract class AbstractDialogController extends AbstractController implem
 
         // Set close window listener to track when stage closes
         if (stage != null) {
-            closeWindowEventHandler = new EventHandler<WindowEvent>() {
-
-                @Override
-                public void handle(WindowEvent t) {
-                    close();
-                }
+            closeWindowEventHandler = (WindowEvent t) -> {
+                close();
             };
             stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new WeakEventHandler<>(closeWindowEventHandler));
         }

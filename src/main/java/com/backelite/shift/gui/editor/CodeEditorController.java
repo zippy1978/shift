@@ -69,29 +69,18 @@ public class CodeEditorController extends AbstractController implements EditorCo
         }
         
         // Content changed event
-        codeEditorContentChangedEventHandler = new EventHandler<CodeEditor.ContentChangedEvent>() {
-
-                @Override
-                public void handle(CodeEditor.ContentChangedEvent event) {
-                    
-                    String newContent = codeEditor.getContent();
-                    if (newContent != null) {
-                        document.setContentAsString(newContent);
-                    }
-                    
-                }
-            
+        codeEditorContentChangedEventHandler = (CodeEditor.ContentChangedEvent event) -> {
+            String newContent = codeEditor.getContent();
+            if (newContent != null) {
+                document.setContentAsString(newContent);
+            }
         };
         codeEditor.setOnContentChanged(new WeakEventHandler<>(codeEditorContentChangedEventHandler));
         
         // Cursor changed event (forward event)
-        codeEditorCursorChangedEventHandler = new EventHandler<CodeEditor.CursorChangedEvent>() {
-
-            @Override
-            public void handle(CodeEditor.CursorChangedEvent t) {
-                if (getOnCursorChanged() != null) {
-                    getOnCursorChanged().handle(new CursorChangedEvent(EventType.ROOT));
-                }
+        codeEditorCursorChangedEventHandler = (CodeEditor.CursorChangedEvent t) -> {
+            if (getOnCursorChanged() != null) {
+                getOnCursorChanged().handle(new CursorChangedEvent(EventType.ROOT));
             }
         };
         codeEditor.setOnCursorChanged(new WeakEventHandler<>(codeEditorCursorChangedEventHandler));

@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 public class RemoteHTMLPreviewWebSocket {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(RemoteHTMLPreviewWebSocket.class);
-    private static final ConcurrentLinkedQueue<RemoteHTMLPreviewWebSocket> BROADCAST = new ConcurrentLinkedQueue<RemoteHTMLPreviewWebSocket>();
+    private static final ConcurrentLinkedQueue<RemoteHTMLPreviewWebSocket> BROADCAST = new ConcurrentLinkedQueue<>();
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String MESSAGE_TYPE_BROWSER_INFO = "BROWSER_INFO";
     private static final String MESSAGE_TYPE_SESSION_INFO = "SESSION_INFO";
@@ -81,33 +81,29 @@ public class RemoteHTMLPreviewWebSocket {
         try {
 
             if (messageType != null) {
-
                 // Browser info
-                if (MESSAGE_TYPE_BROWSER_INFO.equals(messageType)) {
-
-                    // Store browser info
-                    browserInfo = OBJECT_MAPPER.readValue(message, BrowserInfo.class);
-
-                    // Send back session info if not provided in browser info
-                    if (browserInfo.getSessionInfo() == null) {
-                        SessionInfo sessionInfo = new SessionInfo();
-                        sessionInfo.setSessionId(session.hashCode());
-                        browserInfo.setSessionInfo(sessionInfo);
-                        String jsonMessage = OBJECT_MAPPER.writeValueAsString(sessionInfo);
-                        session.getRemote().sendStringByFuture(jsonMessage);
-                    }
-
-                    log.debug(String.format("New browser connected %s", browserInfo.getUserAgent()));
-
+                switch (messageType) {
+                    case MESSAGE_TYPE_BROWSER_INFO:
+                        // Store browser info
+                        browserInfo = OBJECT_MAPPER.readValue(message, BrowserInfo.class);
+                        // Send back session info if not provided in browser info
+                        if (browserInfo.getSessionInfo() == null) {
+                            SessionInfo sessionInfo = new SessionInfo();
+                            sessionInfo.setSessionId(session.hashCode());
+                            browserInfo.setSessionInfo(sessionInfo);
+                            String jsonMessage = OBJECT_MAPPER.writeValueAsString(sessionInfo);
+                            session.getRemote().sendStringByFuture(jsonMessage);
+                        }   log.debug(String.format("New browser connected %s", browserInfo.getUserAgent()));
+                    
                     // Rendering time
-                } else if (MESSAGE_TYPE_RENDERING_TIME.equals(messageType)) {
-
-                    Map<String, Object> messageMap = OBJECT_MAPPER.readValue(message, Map.class);
-
-                    this.monitoringInfo.setRenderingTime((Integer) messageMap.get("value"));
-
-                } else {
-                    log.error("Unrecognized message received");
+                        break;
+                    case MESSAGE_TYPE_RENDERING_TIME:
+                        Map<String, Object> messageMap = OBJECT_MAPPER.readValue(message, Map.class);
+                        this.monitoringInfo.setRenderingTime((Integer) messageMap.get("value"));
+                        break;
+                    default:
+                        log.error("Unrecognized message received");
+                        break;
                 }
 
                 // Notify
@@ -345,7 +341,7 @@ public class RemoteHTMLPreviewWebSocket {
     public static class Command {
 
         private String name;
-        private Map<String, String> parameters = new HashMap<String, String>();
+        private Map<String, String> parameters = new HashMap<>();
         private String type = MESSAGE_TYPE_COMMAND;
 
         /**

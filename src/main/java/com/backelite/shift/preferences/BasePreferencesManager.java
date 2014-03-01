@@ -38,7 +38,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public abstract class BasePreferencesManager implements PreferencesManager {
 
-    protected Map<String, Object> loadedValues = new HashMap<String, Object>();
+    protected Map<String, Object> loadedValues = new HashMap<>();
     protected ObjectMapper mapper = new ObjectMapper();
 
     @Override

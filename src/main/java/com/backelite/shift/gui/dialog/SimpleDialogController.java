@@ -53,12 +53,8 @@ public class SimpleDialogController extends AbstractDialogController {
         super.initialize(url, rb);
         
         // Close dialog on close button click
-        closeButtonActionEventHandler = new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent t) {
-                close();
-            }
+        closeButtonActionEventHandler = (ActionEvent t) -> {
+            close();
         };
         closeButton.setOnAction(new WeakEventHandler<>(closeButtonActionEventHandler));
     }

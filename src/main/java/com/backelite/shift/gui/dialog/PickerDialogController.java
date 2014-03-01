@@ -67,30 +67,22 @@ public class PickerDialogController extends AbstractDialogController {
         super.initialize(url, rb);
         
          // Handle ok button click
-        okButtonActionEventHandler = new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent t) {
-                if (onSelection != null) {
-                    onSelection.handle(new SelectionEvent(EventType.ROOT, selectorChoice.getSelectionModel().getSelectedIndex()));
-                }
-                
-                close();
+        okButtonActionEventHandler = (ActionEvent t) -> {
+            if (onSelection != null) {
+                onSelection.handle(new SelectionEvent(EventType.ROOT, selectorChoice.getSelectionModel().getSelectedIndex()));
             }
+            
+            close();
         };
         okButton.setOnAction(new WeakEventHandler<>(okButtonActionEventHandler));
         
         // Handle cancel button click
-        cancelButtonActionEventHandler = new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent t) {
-                if (onSelection != null) {
-                    onSelection.handle(new SelectionEvent(EventType.ROOT, -1));
-                }
-                
-                close();
+        cancelButtonActionEventHandler = (ActionEvent t) -> {
+            if (onSelection != null) {
+                onSelection.handle(new SelectionEvent(EventType.ROOT, -1));
             }
+            
+            close();
         };
         cancelButton.setOnAction(new WeakEventHandler<>(cancelButtonActionEventHandler));
         

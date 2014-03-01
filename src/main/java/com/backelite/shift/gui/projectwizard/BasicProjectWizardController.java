@@ -79,62 +79,42 @@ public class BasicProjectWizardController extends AbstractProjectWizardControlle
         okButton.setDisable(!nameTextField.isValid() || !locationTextField.isValid());
         
         nameErrorLabel.setVisible(false);
-        nameTextField.validProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
-
-                okButton.setDisable(!nameTextField.isValid() || !locationTextField.isValid());
-                
-                if (nameTextField.isValid()) {
-                    nameErrorLabel.setVisible(false);
-                } else {
-                    nameErrorLabel.setVisible(true);
-                    nameErrorLabel.setText(getResourceBundle().getString(nameTextField.getLastValidatorResult().getErrorMessages().get(0)));
-                }
-
+        nameTextField.validProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) -> {
+            okButton.setDisable(!nameTextField.isValid() || !locationTextField.isValid());
+            
+            if (nameTextField.isValid()) {
+                nameErrorLabel.setVisible(false);
+            } else {
+                nameErrorLabel.setVisible(true);
+                nameErrorLabel.setText(getResourceBundle().getString(nameTextField.getLastValidatorResult().getErrorMessages().get(0)));
             }
         });
         
         locationErrorLabel.setVisible(false);
-        locationTextField.validProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
-
-                okButton.setDisable(!nameTextField.isValid() || !locationTextField.isValid());
-                
-                if (locationTextField.isValid()) {
-                    locationErrorLabel.setVisible(false);
-                } else {
-                    locationErrorLabel.setVisible(true);
-                    locationErrorLabel.setText(getResourceBundle().getString(locationTextField.getLastValidatorResult().getErrorMessages().get(0)));
-                }
-
+        locationTextField.validProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) -> {
+            okButton.setDisable(!nameTextField.isValid() || !locationTextField.isValid());
+            
+            if (locationTextField.isValid()) {
+                locationErrorLabel.setVisible(false);
+            } else {
+                locationErrorLabel.setVisible(true);
+                locationErrorLabel.setText(getResourceBundle().getString(locationTextField.getLastValidatorResult().getErrorMessages().get(0)));
             }
         });
 
         // Browse button click
-        browseButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                handleBrowseButtonAction();
-            }
+        browseButton.setOnAction((ActionEvent t) -> {
+            handleBrowseButtonAction();
         });
 
         // Cancel button click
-        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                handleCancelButtonAction();
-            }
+        cancelButton.setOnAction((ActionEvent t) -> {
+            handleCancelButtonAction();
         });
         
         // OK button click
-        okButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent t) {
-                handleOKButtonAction();
-            }
+        okButton.setOnAction((ActionEvent t) -> {
+            handleOKButtonAction();
         });
        
     }

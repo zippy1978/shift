@@ -118,12 +118,8 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
         
         if (started) {
             displayInfoDialog(getResourceBundle().getString("builtin.plugin.preview.remote_html.title"), getResourceBundle().getString("builtin.plugin.preview.remote_html.already_running.text"));
-            Platform.runLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    close();
-                }
+            Platform.runLater(() -> {
+                close();
             });
             
             
@@ -133,12 +129,8 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
             startServer();
             
             // URL click
-            urlLinkActionEventHandler = new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent t) {
-                    ApplicationContext.getHostServices().showDocument(urlLink.getText());
-                }
+            urlLinkActionEventHandler = (ActionEvent t) -> {
+                ApplicationContext.getHostServices().showDocument(urlLink.getText());
             };
             urlLink.setOnAction(new WeakEventHandler<>(urlLinkActionEventHandler));
             
@@ -146,12 +138,8 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
             this.setupConnectionTable();
             
             // Bind tracking button state
-            trackActiveFileChangeListener = new ChangeListener<Boolean>() {
-
-                @Override
-                public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
-                    setActiveDocumentTrackingEnabled(t1);
-                }
+            trackActiveFileChangeListener = (ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) -> {
+                setActiveDocumentTrackingEnabled(t1);
             };
             trackActiveFileToggleButton.selectedProperty().addListener(new WeakChangeListener<>(trackActiveFileChangeListener));
             trackActiveFileToggleButton.setSelected(true);
@@ -160,13 +148,8 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
 
         
         // Later ...
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-
-                // Title
-                getStage().setTitle(getResourceBundle().getString("builtin.plugin.preview.remote_html.title"));
-            }
+        Platform.runLater(() -> {
+            getStage().setTitle(getResourceBundle().getString("builtin.plugin.preview.remote_html.title"));
         });
     }
     
@@ -174,50 +157,43 @@ public class RemoteHTMLPreviewController extends AbstractPreviewController imple
     private void setupConnectionTable() {
         
         // Cell click handler
-        tableCellMouseEventHandler = new EventHandler<MouseEvent>() {
-
-                    @Override
-                    public void handle(MouseEvent t) {
-                        TableCell c = (TableCell) t.getSource();
-                        int index = c.getIndex();
-                        
-                        // Send ping request on double click
-                        if (t.getClickCount() == 2) {
-                            tableModel.get(index).ping();
-                        }
-                    }
-                };
+        tableCellMouseEventHandler = (MouseEvent t) -> {
+            TableCell c = (TableCell) t.getSource();
+            int index = c.getIndex();
+            
+            // Send ping request on double click
+            if (t.getClickCount() == 2) {
+                tableModel.get(index).ping();
+            }
+        };
         
         // Cell factory
         Callback<TableColumn, TableCell> cellFactory =
-                new Callback<TableColumn, TableCell>() {
-            @Override
-            public TableCell call(TableColumn p) {
-                TextFieldTableCell cell = new TextFieldTableCell();
-                cell.addEventFilter(MouseEvent.MOUSE_CLICKED, new WeakEventHandler<>(tableCellMouseEventHandler));
-                return cell;
-            }
+                (TableColumn p) -> {
+                    TextFieldTableCell cell = new TextFieldTableCell();
+                    cell.addEventFilter(MouseEvent.MOUSE_CLICKED, new WeakEventHandler<>(tableCellMouseEventHandler));
+                    return cell;
         };
         
         
         // Remote address
         TableColumn remoteAddressCol = new TableColumn(getResourceBundle().getString("builtin.plugin.preview.remote_html.remote_address"));
         remoteAddressCol.setMinWidth(100);
-        remoteAddressCol.setCellValueFactory(new PropertyValueFactory<RemoteHTMLPreviewWebSocket, String>("remoteAddress"));
+        remoteAddressCol.setCellValueFactory(new PropertyValueFactory<>("remoteAddress"));
         remoteAddressCol.setCellFactory(cellFactory);
         connectionTable.getColumns().add(remoteAddressCol);
         
         // User agent
         TableColumn userAgentCol = new TableColumn(getResourceBundle().getString("builtin.plugin.preview.remote_html.user_agent"));
         userAgentCol.setMinWidth(200);
-        userAgentCol.setCellValueFactory(new PropertyValueFactory<RemoteHTMLPreviewWebSocket, String>("userAgent"));
+        userAgentCol.setCellValueFactory(new PropertyValueFactory<>("userAgent"));
         userAgentCol.setCellFactory(cellFactory);
         connectionTable.getColumns().add(userAgentCol);
         
         // Rendering time
         TableColumn renderingTimeCol = new TableColumn(getResourceBundle().getString("builtin.plugin.preview.remote_html.rendering_time"));
         renderingTimeCol.setMinWidth(200);
-        renderingTimeCol.setCellValueFactory(new PropertyValueFactory<RemoteHTMLPreviewWebSocket, Integer>("renderingTime"));
+        renderingTimeCol.setCellValueFactory(new PropertyValueFactory<>("renderingTime"));
         renderingTimeCol.setCellFactory(cellFactory);
         connectionTable.getColumns().add(renderingTimeCol);
         

@@ -60,14 +60,11 @@ public class WelcomeDialogController extends AbstractDialogController {
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
 
-        webView.getEngine().load(getClass().getResource("/welcome.html").toExternalForm());
+        webView.getEngine().load(getClass().getResource("/webcontent/welcome.html").toExternalForm());
 
         // Close button click
-        closeButtonActionEventHandler = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                close();
-            }
+        closeButtonActionEventHandler = (ActionEvent t) -> {
+            close();
         };
         closeButton.setOnAction(new WeakEventHandler<>(closeButtonActionEventHandler));
 
@@ -75,17 +72,12 @@ public class WelcomeDialogController extends AbstractDialogController {
         final String versionName = ApplicationContext.getProperties().getProperty(Constants.PROPERTY_APPLICATION_VERSION_NAME);
         final String buildNumber = ApplicationContext.getProperties().getProperty(Constants.PROPERTY_APPLICATION_BUILD_NUMBER);
         // Wait for the HTML to load
-        webViewStateChangeListener = new ChangeListener<Worker.State>() {
-            @Override
-            public void changed(ObservableValue<? extends Worker.State> ov, Worker.State oldState, Worker.State newState) {
-
-
-                if (newState == Worker.State.SUCCEEDED) {
-
-                    // Display warning note if application is SNAPSHOT
-                    if (ApplicationContext.isSnapshotRelease()) {
-                        webView.getEngine().executeScript("document.getElementById('snapshot_warning').style.display = 'block'");
-                    }
+        webViewStateChangeListener = (ObservableValue<? extends Worker.State> ov, Worker.State oldState, Worker.State newState) -> {
+            if (newState == Worker.State.SUCCEEDED) {
+                
+                // Display warning note if application is SNAPSHOT
+                if (ApplicationContext.isSnapshotRelease()) {
+                    webView.getEngine().executeScript("document.getElementById('snapshot_warning').style.display = 'block'");
                 }
             }
         };

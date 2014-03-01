@@ -121,40 +121,26 @@ public class MainApp extends Application {
      */
     private void registerCloseRequestHandler(final Stage stage) {
 
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(final WindowEvent we) {
-
-                if (ApplicationContext.getWorkspace().isModified()) {
-                    mainController.displayConfirmDialog(mainController.getResourceBundle().getString("dialog.confirm.close_app.unsaved.title"), mainController.getResourceBundle().getString("dialog.confirm.close_app.unsaved.text"), new EventHandler<ConfirmDialogController.ChoiceEvent>() {
-                        @Override
-                        public void handle(ConfirmDialogController.ChoiceEvent t) {
-
-                            if (t.getChoice() == ConfirmDialogController.Choice.NEGATIVE) {
-                                // Consume event to stop propagation and prevent close
-                                we.consume();
-                            } else {
-                                
-                                mainController.close();
-                                stage.setOnCloseRequest(null);
-                                stage.setOnHiding(null);
-                            }
-                        }
-                    });
-                } else {
-                    mainController.close();
-                }
-                
+        stage.setOnCloseRequest((final WindowEvent we) -> {
+            if (ApplicationContext.getWorkspace().isModified()) {
+                mainController.displayConfirmDialog(mainController.getResourceBundle().getString("dialog.confirm.close_app.unsaved.title"), mainController.getResourceBundle().getString("dialog.confirm.close_app.unsaved.text"), (ConfirmDialogController.ChoiceEvent t) -> {
+                    if (t.getChoice() == ConfirmDialogController.Choice.NEGATIVE) {
+                        // Consume event to stop propagation and prevent close
+                        we.consume();
+                    } else {
+                        
+                        mainController.close();
+                        stage.setOnCloseRequest(null);
+                        stage.setOnHiding(null);
+                    }
+                });
+            } else {
+                mainController.close();
             }
         });
         
-        stage.setOnHiding(new EventHandler<WindowEvent>() {
-
-            @Override
-            public void handle(WindowEvent t) {
-                stage.getOnCloseRequest().handle(t);
-             
-            }
+        stage.setOnHiding((WindowEvent t) -> {
+            stage.getOnCloseRequest().handle(t);
         });
        
     }

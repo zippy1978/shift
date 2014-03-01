@@ -30,6 +30,7 @@ import com.backelite.shift.gui.preview.PreviewController;
 import com.backelite.shift.gui.projectwizard.ProjectWizardController;
 import com.backelite.shift.util.FileUtils;
 import com.backelite.shift.workspace.artifact.Document;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,9 +46,9 @@ import javafx.scene.Node;
  */
 public abstract class AbstractPluginRegistry implements PluginRegistry {
 
-    protected List<Plugin> plugins = new ArrayList<Plugin>();
-    protected Map<String, Set<EditorFactory>> editorExtensions = new HashMap<String, Set<EditorFactory>>();
-    protected Map<String, Set<PreviewFactory>> previewExtensions = new HashMap<String, Set<PreviewFactory>>();
+    protected List<Plugin> plugins = new ArrayList<>();
+    protected Map<String, Set<EditorFactory>> editorExtensions = new HashMap<>();
+    protected Map<String, Set<PreviewFactory>> previewExtensions = new HashMap<>();
 
     @Override
     public Node newEditor(Document document, FXMLLoader loader) throws PluginException {
@@ -77,7 +78,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
 
             return node;
 
-        } catch (Exception e) {
+        } catch (IOException | ClassCastException e) {
             throw new PluginException(e);
         }
     }
@@ -99,7 +100,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
     @Override
     public List<PreviewFactory> getAvailablePreviewFactories(Document document) {
         
-        List<PreviewFactory> result = new ArrayList<PreviewFactory>();
+        List<PreviewFactory> result = new ArrayList<>();
         
         // Look for matching preview factory
         Set<PreviewFactory> matchingFactories = previewExtensions.get(FileUtils.getFileExtension(document.getName()));
@@ -159,7 +160,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
     @Override
     public List<PreviewFactory> getPreviewFactories() {
         
-        List<PreviewFactory> factories = new ArrayList<PreviewFactory>();
+        List<PreviewFactory> factories = new ArrayList<>();
         
         for(Plugin plugin : plugins) {
             factories.addAll(plugin.getPreviewFactories());
@@ -171,7 +172,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
     @Override
     public List<ProjectWizardFactory> getProjectWizardFactories() {
         
-        List<ProjectWizardFactory> factories = new ArrayList<ProjectWizardFactory>();
+        List<ProjectWizardFactory> factories = new ArrayList<>();
         
         for(Plugin plugin : plugins) {
             factories.addAll(plugin.getProjectWizardFactories());
@@ -184,7 +185,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
 
         Set<EditorFactory> factories = editorExtensions.get(extension.toLowerCase());
         if (factories == null) {
-            factories = new HashSet<EditorFactory>();
+            factories = new HashSet<>();
             editorExtensions.put(extension.toLowerCase(), factories);
         }
         factories.add(editorFactory);
@@ -194,7 +195,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
 
         Set<PreviewFactory> factories = previewExtensions.get(extension.toLowerCase());
         if (factories == null) {
-            factories = new HashSet<PreviewFactory>();
+            factories = new HashSet<>();
             previewExtensions.put(extension.toLowerCase(), factories);
         }
         factories.add(previewFactory);

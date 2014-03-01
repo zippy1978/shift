@@ -88,18 +88,15 @@ public class EditorsPaneController extends AbstractController implements Observe
         AnchorPane.setTopAnchor(tabPane, 0.0);
 
         // Tab selection listener
-        tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
-            @Override
-            public void changed(ObservableValue<? extends Tab> tab, Tab oldTab, Tab newTab) {
-                if (onActiveDocumentUpdated != null && newTab != null) {
-                    EditorController controller = (EditorController) newTab.getUserData();
-                    if (controller != null) {
-                        activeEditorControllerProperty.set(controller);
-                        onActiveDocumentUpdated.handle(new ActiveDocumentUpdatedEvent(EventType.ROOT, controller.getDocument()));
-                    }
-                } else {
-                    activeEditorControllerProperty.set(null);
+        tabPane.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Tab> tab, Tab oldTab, Tab newTab) -> {
+            if (onActiveDocumentUpdated != null && newTab != null) {
+                EditorController controller = (EditorController) newTab.getUserData();
+                if (controller != null) {
+                    activeEditorControllerProperty.set(controller);
+                    onActiveDocumentUpdated.handle(new ActiveDocumentUpdatedEvent(EventType.ROOT, controller.getDocument()));
                 }
+            } else {
+                activeEditorControllerProperty.set(null);
             }
         });
         
@@ -145,30 +142,17 @@ public class EditorsPaneController extends AbstractController implements Observe
                 tab.setContent(node);
                 tab.setUserData(controller);
                 tab.setGraphic(closeLink);
-                closeLink.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        final Tab tab = getTab((EditorController) ((Hyperlink) event.getSource()).getUserData());
-                        final EditorController controller = (EditorController) tab.getUserData();
-
-                        // Confirm close if document was modified
-                        if (controller.getDocument().isModified()) {
-                            displayConfirmDialog(getResourceBundle().getString("dialog.confirm.close_editor.unsaved.title"), getResourceBundle().getString("dialog.confirm.close_editor.unsaved.text"), new EventHandler<ConfirmDialogController.ChoiceEvent>() {
-                                @Override
-                                public void handle(ConfirmDialogController.ChoiceEvent t) {
-
-                                    if (t.getChoice() == ConfirmDialogController.Choice.POSITIVE) {
-                                        // Close editor
-                                        closeTab(tab);
-                                    }
-                                }
-                            });
-                        } else {
-                            // Close editor
-                            closeTab(tab);
-                        }
-
-
+                closeLink.setOnAction((ActionEvent event) -> {
+                    final Tab tab1 = getTab((EditorController) ((Hyperlink) event.getSource()).getUserData());
+                    final EditorController controller1 = (EditorController) tab1.getUserData();
+                    if (controller1.getDocument().isModified()) {
+                        displayConfirmDialog(getResourceBundle().getString("dialog.confirm.close_editor.unsaved.title"), getResourceBundle().getString("dialog.confirm.close_editor.unsaved.text"), (ConfirmDialogController.ChoiceEvent t) -> {
+                            if (t.getChoice() == ConfirmDialogController.Choice.POSITIVE) {
+                                closeTab(tab1);
+                            }
+                        });
+                    } else {
+                        closeTab(tab1);
                     }
                 });
 
@@ -327,16 +311,18 @@ public class EditorsPaneController extends AbstractController implements Observe
         super.saveState(state);
 
         // Editors
-        List<Map<String, Object>> editorsState = new ArrayList<Map<String, Object>>();
-        for (Tab tab : tabPane.getTabs()) {
+        List<Map<String, Object>> editorsState = new ArrayList<>();
+        tabPane.getTabs().stream().map((tab) -> {
             EditorController controller = (EditorController) tab.getUserData();
-            Map<String, Object> editorState = new HashMap<String, Object>();
+            Map<String, Object> editorState = new HashMap<>();
             if (tab.isSelected()) {
                 editorState.put("selected", tab.isSelected());
             }
             editorState.put("documentWorkspacePath", controller.getDocument().getWorkspacePath());
+            return editorState;
+        }).forEach((editorState) -> {
             editorsState.add(editorState);
-        }
+        });
 
         state.put("editors", editorsState);
     }
@@ -376,7 +362,7 @@ public class EditorsPaneController extends AbstractController implements Observe
     }
 
     /**
-     * @param onActiveDocumentUpdated the onActiveDocumentUpdated to set
+     * @param onActiveDocumentChanged the onActiveDocumentChanged to set
      */
     public void setOnActiveDocumentUpdated(EventHandler<ActiveDocumentUpdatedEvent> onActiveDocumentChanged) {
         this.onActiveDocumentUpdated = onActiveDocumentChanged;

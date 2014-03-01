@@ -51,18 +51,18 @@ public class FileUtils {
     }
 
     public static byte[] getFileContent(File file) throws IOException {
-
-        FileInputStream fis = new FileInputStream(file);
-        byte[] content = IOUtils.toByteArray(fis);
-        fis.close();
+        byte[] content;
+        try (FileInputStream fis = new FileInputStream(file)) {
+            content = IOUtils.toByteArray(fis);
+        }
 
         return content;
     }
 
     public static void saveContentToFile(byte[] content, File file) throws IOException {
-        FileOutputStream fos = new FileOutputStream(file);
-        fos.write(content);
-        fos.close();
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(content);
+        }
     }
 
     public static String getFileContentAsStringFromClasspathResource(String resourcePath) {
