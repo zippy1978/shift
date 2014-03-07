@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.logging.Level;
 import javafx.application.HostServices;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -261,7 +260,7 @@ public class ApplicationContext {
      * @return true / false
      */
     public static boolean isSnapshotRelease() {
-        String versionName = getProperties().getProperty(Constants.PROPERTY_APPLICATION_VERSION_NAME);
-        return versionName.split(".").length > 3;
+        String buildChannel = getProperties().getProperty(Constants.PROPERTY_APPLICATION_BUILD_CHANNEL);
+        return buildChannel.equals("snapshots");
     }
 }

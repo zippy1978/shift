@@ -173,6 +173,11 @@
                                                        break
                                             }
                         
+                                            /* Append build number to version for snapshots */
+                                            if (chan == 'snapshots') {
+                                                newName = newName.replaceAll(project.version, project.version + "b$bn")
+                                            }
+                        
                                             if (newName) {
                                                 it.renameTo(new File(bundlesDir, newName))
                                             }

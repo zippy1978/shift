@@ -58,5 +58,6 @@ public interface Constants {
     public static final String PROPERTY_APPLICATION_VERSION_CODE = "application.version.code";
     public static final String PROPERTY_APPLICATION_VERSION_NAME = "application.version.name";
     public static final String PROPERTY_APPLICATION_BUILD_NUMBER = "application.build.number";
+    public static final String PROPERTY_APPLICATION_BUILD_CHANNEL = "application.build.channel";
     
 }
