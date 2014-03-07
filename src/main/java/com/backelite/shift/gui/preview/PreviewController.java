@@ -52,7 +52,7 @@ public interface PreviewController extends DialogController {
     /**
      * Return a change listener to track the active editor.
      * If the preview does not provide the ability to track the active editor, return null.
-     * @param editorController 
+     * @return A ChangeListener
      */
     public ChangeListener<EditorController> getActiveEditorChangeListener();
     

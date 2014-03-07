@@ -14,11 +14,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <timestamp>${maven.build.timestamp}</timestamp>
+        <buildNumber>${env.BUILD_NUMBER}</buildNumber>
+        <channel>snapshots</channel>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
     </properties>
    
     <packaging>jar</packaging>
-    <version>0.1.1.${maven.build.timestamp}</version>
+    <version>0.1.1</version>
     
     <organization>
         <!-- Used as the 'Vendor' for JNLP generation -->
@@ -137,7 +139,8 @@
                                 def outPath = project.basedir.getAbsolutePath() + File.separator + 'target' + File.separator + 'upload'
                                 def opSys = System.getProperty("os.name").toLowerCase().split(" ").first()
                                 def architecture = System.getProperty("os.arch").toLowerCase()
-                                def chan = project.version.split('\\.').length > 2 ? 'snapshots' : 'releases'
+                                def chan = project.properties['channel']
+                                def bn = project.properties['buildNumber'] ?: '0'
                                 def timestamp = project.properties['timestamp']
                                 
                                 /* Get bundles dir */
@@ -198,10 +201,10 @@
                                 /* Write info.json */
                                 def jsonBuilder = new groovy.json.JsonBuilder()
                                 jsonBuilder {
-                                    buildNumber timestamp
+                                    buildNumber bn
                                     os System.getProperty("os.name").toLowerCase().split(" ").first()
                                     arch System.getProperty("os.arch").toLowerCase()
-                                    channel project.version.split('\\.').length > 2 ? 'snapshots' : 'releases'
+                                    channel chan
                                     version project.version
                                     packages pkgs
                                 }
