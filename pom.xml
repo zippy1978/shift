@@ -168,6 +168,9 @@
                                                 case 'deb':
                                                     newName = it.name.toLowerCase().replaceAll('\\.deb', '.' + architecture + '.deb')
                                                     break
+                                                case 'msi':
+                                                    newName = it.name.replaceAll('\\.msi', '.' + architecture + '.msi')
+                                                    break
                                                 case 'dmg':
                                                     newName = it.name.replaceAll('\\.dmg', '-' + project.version + '.dmg')
                                                        break
