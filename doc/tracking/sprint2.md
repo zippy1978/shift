@@ -11,15 +11,13 @@
 
 ## Plugins
 
-<t>✘</t> Add ability to enable / disable a plugin on some conditions
-
-<t>✘</t> Move experimental WOPE support to standalone plugin and make it available on SNAPSHOT releases only
+<d>✔ 03/09/14</d> Move experimental WOPE support to standalone plugin and make it available on SNAPSHOT releases only
 
 ## Project navigator
 
 ### Context menu  
 
-<d>✔ 02/12/13</d> 'Import' on projects and folders : to import local files into the workspace.
+<d>✔ 02/12/14</d> 'Import' on projects and folders : to import local files into the workspace.
 
 ## Packaging
 
