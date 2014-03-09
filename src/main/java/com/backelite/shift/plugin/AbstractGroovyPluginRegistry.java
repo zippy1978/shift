@@ -26,6 +26,7 @@ package com.backelite.shift.plugin;
  * #L%
  */
 
+import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.util.FileUtils;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
@@ -69,6 +70,11 @@ public abstract class AbstractGroovyPluginRegistry extends AbstractPluginRegistr
         
         // Load built in plugin
         this.loadPlugin(FileUtils.getFileContentAsStringFromClasspathResource("/BuiltinPlugin.groovy"));
+        
+        // Load experimental built in plugin (if running a SNAPSHOT version)
+        if (ApplicationContext.isSnapshotRelease()) {
+            this.loadPlugin(FileUtils.getFileContentAsStringFromClasspathResource("/ExperimentalBuiltinPlugin.groovy"));
+        }
     }
 
     @Override

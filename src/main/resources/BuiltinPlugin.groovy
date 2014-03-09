@@ -168,7 +168,6 @@ plugin {
         
         onUnload = {
             
-            WOPERuntimeManager.getInstance().shutdownAllRuntimes()
         }
     }
     
@@ -292,17 +291,6 @@ plugin {
             supportedExtensions = ['html']
             code = {loader ->   
                 Node node = (Node) loader.load(getClass().getResourceAsStream("/fxml/remote_html_preview.fxml"))
-                return node
-            }
-        }
-        
-        // WOPE preview
-        previewFactory {
-            name = "WOPE Preview"
-            description = "Builtin WOPE preview"
-            supportedExtensions = ['html']
-            code = {loader ->   
-                Node node = (Node) loader.load(getClass().getResourceAsStream("/fxml/wope_preview.fxml"))
                 return node
             }
         }

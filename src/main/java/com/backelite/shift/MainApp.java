@@ -33,14 +33,15 @@ import com.sun.javafx.runtime.VersionInfo;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.text.Font;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
@@ -85,8 +86,9 @@ public class MainApp extends Application {
         ApplicationContext.getStateManager().restore(mainController);
 
 
-        // Set scene
-        Scene scene = new Scene(rootNode, 800, 600);
+        // Set scene (compute main window size according to the actual screen size)
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+        Scene scene = new Scene(rootNode, primaryScreenBounds.getHeight(), primaryScreenBounds.getHeight() / 1.5);
         scene.getStylesheets().add(ApplicationContext.getThemeManager().getCSS());
 
         stage.setTitle(ApplicationContext.getProperties().getProperty("application.name"));
