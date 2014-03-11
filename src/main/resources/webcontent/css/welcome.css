@@ -1,0 +1,14 @@
+/************ welcome.html */
+
+/** Title */
+
+.title {
+  background-image: url(../img/big-logo.png);
+  background-size: 4em;
+  background-position: 0.8em 0.8em;
+  background-repeat: no-repeat;
+}
+
+.orbit-container .orbit-slides-container img {
+  padding: 0 10em 0 10em;
+}

@@ -55,6 +55,7 @@ public class AboutDialogController extends AbstractDialogController {
         super.initialize(url, rb);
         
         webView.getEngine().load(getClass().getResource("/webcontent/about.html").toExternalForm());
+        webView.setContextMenuEnabled(false);
         
         // Open external links in native browser
         locationChangeListener = (ObservableValue<? extends String> ov, String t, String t1) -> {

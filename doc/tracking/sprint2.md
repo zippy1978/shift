@@ -21,7 +21,7 @@
 
 ## Packaging
 
-<t>✘</t> Better welcome window (inspired by website)
+<d>✔ 03/11/14</d> Better welcome window (inspired by website)
 
 <t>✘</t> Better about window (inspired by website)
 

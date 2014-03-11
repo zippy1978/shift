@@ -184,9 +184,9 @@ public class MainController extends AbstractController {
         }
 
         // Open welcome dialog if first start or upgraded version
-        if (ApplicationContext.isFirstLaunch()) {
+        //if (ApplicationContext.isFirstLaunch()) {
             this.openWelcomeWindow();
-        }
+        //}
     }
 
     private void openWelcomeWindow() {

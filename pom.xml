@@ -130,103 +130,103 @@
                     <providerSelection>2.0</providerSelection>
                     <source>
                                 
-                                /* Move file to a given dir */
-                                def moveFile = {file, destDir ->
-                                    file.renameTo(new File(destDir, file.getName()));
-                                }
+                        /* Move file to a given dir */
+                        def moveFile = {file, destDir ->
+                        file.renameTo(new File(destDir, file.getName()));
+                        }
                                 
-                                /* Get build info */
-                                def outPath = project.basedir.getAbsolutePath() + File.separator + 'target' + File.separator + 'upload'
-                                def opSys = System.getProperty("os.name").toLowerCase().split(" ").first()
-                                def architecture = System.getProperty("os.arch").toLowerCase()
-                                def chan = project.properties['channel']
-                                def bn = project.properties['buildNumber'] ?: '0'
-                                def timestamp = project.properties['timestamp']
+                        /* Get build info */
+                        def outPath = project.basedir.getAbsolutePath() + File.separator + 'target' + File.separator + 'upload'
+                        def opSys = System.getProperty("os.name").toLowerCase().split(" ").first()
+                        def architecture = System.getProperty("os.arch").toLowerCase()
+                        def chan = project.properties['channel']
+                        def bn = project.properties['buildNumber'] ?: '0'
+                        def timestamp = project.properties['timestamp']
                                 
-                                /* Get bundles dir */
-                                def bundlesDir = new File(project.basedir, 'target' + File.separator + 'jfx' + File.separator + 'native' + File.separator + 'bundles')
-                                if (!bundlesDir.exists()) {
-                                    println "Cannot prepare output because bundles directory is missing : make sure jfx:native was run first"
-                                    return
-                                }
+                        /* Get bundles dir */
+                        def bundlesDir = new File(project.basedir, 'target' + File.separator + 'jfx' + File.separator + 'native' + File.separator + 'bundles')
+                        if (!bundlesDir.exists()) {
+                        println "Cannot prepare output because bundles directory is missing : make sure jfx:native was run first"
+                        return
+                        }
                         
                                 
-                                /* Create target dir */
-                                def targetDir = new File(outPath, timestamp)
-                                targetDir.mkdirs()
+                        /* Create target dir */
+                        def targetDir = new File(outPath, timestamp)
+                        targetDir.mkdirs()
                         
-                                /* Rename package files */
-                                bundlesDir.eachFile {
-                                    if (it.file) {
-                                        if (it.name.contains('.')) {
-                                            def format = it.name.split('\\.').last()
-                                            def newName = null
-                                            switch(format) {
-                                                case 'rpm':
-                                                    newName = it.name.toLowerCase()
-                                                    break
-                                                case 'deb':
-                                                    newName = it.name.toLowerCase().replaceAll('\\.deb', '.' + architecture + '.deb')
-                                                    break
-                                                case 'msi':
-                                                    newName = it.name.replaceAll('\\.msi', '.' + architecture + '.msi')
-                                                    break
-                                                case 'dmg':
-                                                    newName = it.name.replaceAll('\\.dmg', '-' + project.version + '.dmg')
-                                                       break
-                                            }
+                        /* Rename package files */
+                        bundlesDir.eachFile {
+                        if (it.file) {
+                        if (it.name.contains('.')) {
+                        def format = it.name.split('\\.').last()
+                        def newName = null
+                        switch(format) {
+                        case 'rpm':
+                        newName = it.name.toLowerCase()
+                        break
+                        case 'deb':
+                        newName = it.name.toLowerCase().replaceAll('\\.deb', '.' + architecture + '.deb')
+                        break
+                        case 'msi':
+                        newName = it.name.replaceAll('\\.msi', '.' + architecture + '.msi')
+                        break
+                        case 'dmg':
+                        newName = it.name.replaceAll('\\.dmg', '-' + project.version + '.dmg')
+                        break
+                        }
                         
-                                            /* Append build number to version for snapshots */
-                                            if (chan == 'snapshots') {
-                                                newName = newName.replaceAll(project.version, project.version + "b$bn")
-                                            }
+                        /* Append build number to version for snapshots */
+                        if (chan == 'snapshots') {
+                        newName = newName.replaceAll(project.version, project.version + "b$bn")
+                        }
                         
-                                            if (newName) {
-                                                it.renameTo(new File(bundlesDir, newName))
-                                            }
-                                        }
-                                    }
-                                }
+                        if (newName) {
+                        it.renameTo(new File(bundlesDir, newName))
+                        }
+                        }
+                        }
+                        }
                         
-                                /* Gather packages info */
-                                def pkgs = []
-                                bundlesDir.eachFile {
-                                    if (it.file) {
-                                        if (it.name.contains('.')) {
-                                            def n = it.name
-                                            def f = it.name.split('\\.').last()
-                                            def s = it.size()
+                        /* Gather packages info */
+                        def pkgs = []
+                        bundlesDir.eachFile {
+                        if (it.file) {
+                        if (it.name.contains('.')) {
+                        def n = it.name
+                        def f = it.name.split('\\.').last()
+                        def s = it.size()
                         
-                                            pkgs.add({
-                                                name n
-                                                format f
-                                                size s
-                                            })
-                                        }
-                                    }
-                                }
+                        pkgs.add({
+                        name n
+                        format f
+                        size s
+                        })
+                        }
+                        }
+                        }
                                 
-                                /* Write info.json */
-                                def jsonBuilder = new groovy.json.JsonBuilder()
-                                jsonBuilder {
-                                    buildNumber bn
-                                    os System.getProperty("os.name").toLowerCase().split(" ").first()
-                                    arch System.getProperty("os.arch").toLowerCase()
-                                    channel chan
-                                    version project.version
-                                    packages pkgs
-                                }
-                                new File(targetDir, 'info.json').withWriter{ it <![CDATA[<<]]> jsonBuilder.toString()}
+                        /* Write info.json */
+                        def jsonBuilder = new groovy.json.JsonBuilder()
+                        jsonBuilder {
+                        buildNumber bn
+                        os System.getProperty("os.name").toLowerCase().split(" ").first()
+                        arch System.getProperty("os.arch").toLowerCase()
+                        channel chan
+                        version project.version
+                        packages pkgs
+                        }
+                        new File(targetDir, 'info.json').withWriter{ it <![CDATA[<<]]> jsonBuilder.toString()}
                         
-                                /* Move packages to output dir */
-                                bundlesDir.eachFile {
-                                    // Copy files with extension only
-                                    if (it.file) {
-                                        if (it.name.contains('.')) {
-                                            moveFile(it, targetDir)
-                                        }
-                                    }
-                                }
+                        /* Move packages to output dir */
+                        bundlesDir.eachFile {
+                        // Copy files with extension only
+                        if (it.file) {
+                        if (it.name.contains('.')) {
+                        moveFile(it, targetDir)
+                        }
+                        }
+                        }
                                 
                     </source>
                 </configuration>
@@ -282,6 +282,14 @@
             <groupId>com.miglayout</groupId>
             <artifactId>miglayout-javafx</artifactId>
             <version>4.2</version>
+        </dependency>
+        
+        <!-- ControlFX -->
+        
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.0.5</version>
         </dependency>
 
         <!-- Apache Commons -->

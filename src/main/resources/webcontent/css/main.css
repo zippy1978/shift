@@ -1,0 +1,46 @@
+/** Foundation overrides */
+html {
+  font-size: 95%;
+}
+
+h1 {
+    color: #aac400;
+}
+
+h4 {
+  color: #aac400;
+  font-size: 1.5em;
+}
+
+i {
+  color: #aac400;
+  background-position: 0.5em;
+  font-size: 1em;
+}
+
+/** General */
+
+.centered {
+	text-align: center;
+}
+
+/** Logos */
+
+.large-logo {
+  height: 8em;
+}
+
+.medium-logo {
+  height: 2em;
+}
+
+/** Icons */
+
+.large-icon {
+  font-size: 4em;
+}
+
+
+
+
+
