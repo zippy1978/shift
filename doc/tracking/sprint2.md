@@ -7,7 +7,7 @@
 
 ## Preferences
 
-<t>✘</t> Support for preference map merging feature (such as list merging feature, already available)
+<d>✔ 03/11/14</d> Support for preference map merging feature (such as list merging feature, already available)
 
 ## Plugins
 

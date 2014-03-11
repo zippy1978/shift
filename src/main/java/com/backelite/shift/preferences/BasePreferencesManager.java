@@ -26,6 +26,7 @@ package com.backelite.shift.preferences;
  * #L%
  */
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,37 @@ public abstract class BasePreferencesManager implements PreferencesManager {
             this.setValue(key, value);
         }
     }
+
+    @Override
+    public void mergeMapValue(String key, Map value) throws PreferencesException {
+        
+        Object existingValue = this.getValue(key);
+        
+        if (existingValue != null) {
+            
+            if (existingValue instanceof Map) {
+                
+                Map existingMap = (Map) existingValue;
+                
+                for (Object mapKey : value.keySet()) {
+                    if (!existingMap.containsKey(mapKey)) {
+                        existingMap.put(mapKey, value.get(mapKey));
+                    }
+                }
+                
+                
+            // Wrong existing value
+            } else {
+                throw new PreferencesException(String.format("%s preference is not a Map", key));
+            }
+            
+        // No value set yet ...
+        } else {
+            this.setValue(key, value);
+        }
+    }
+    
+    
 
     @Override
     public void mergeListValue(String key, List value) throws PreferencesException {
@@ -85,7 +117,7 @@ public abstract class BasePreferencesManager implements PreferencesManager {
                        }
                    }
                    
-                } catch(Exception e) {
+                } catch(IOException e) {
                     throw new PreferencesException(String.format("%s preference cannot be read", key));
                 }
                    

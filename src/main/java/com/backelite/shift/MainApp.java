@@ -28,6 +28,7 @@ package com.backelite.shift;
 import com.backelite.shift.gui.FXMLLoaderFactory;
 import com.backelite.shift.gui.MainController;
 import com.backelite.shift.gui.dialog.ConfirmDialogController;
+import com.backelite.shift.preferences.PreferencesException;
 import com.backelite.shift.preferences.PreferencesManager;
 import com.sun.javafx.runtime.VersionInfo;
 import java.util.HashMap;
@@ -170,9 +171,9 @@ public class MainApp extends Application {
             shortcuts.put(Constants.SHORTCUT_REPLACE_ALL, new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_CONTENT_ASSIST, new KeyCodeCombination(KeyCode.SPACE, KeyCombination.CONTROL_DOWN).getName());
             shortcuts.put(Constants.SHORTCUT_NEW_PREVIEW, new KeyCodeCombination(KeyCode.P, KeyCombination.SHORTCUT_DOWN).getName());
-            preferencesManager.setInitialValue(Constants.PREFERENCES_KEY_SHORTCUTS, shortcuts);
+            preferencesManager.mergeMapValue(Constants.PREFERENCES_KEY_SHORTCUTS, shortcuts);
             preferencesManager.commit();
-        } catch (Exception e) {
+        } catch (PreferencesException e) {
             log.error("Failed to initialize preferences");
         }
     }

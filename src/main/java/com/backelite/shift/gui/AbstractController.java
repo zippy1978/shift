@@ -319,11 +319,16 @@ public abstract class AbstractController implements Controller {
      * @return Window created (Stage)
      */
     public Stage newModalWindow(String title, Parent rootNode) {
+        
 
         Stage stage = new Stage();
+        
         if (!PlatformUtils.isMacOSX()) {
             stage.initModality(Modality.APPLICATION_MODAL);
+        } else {
+            stage.initModality(Modality.WINDOW_MODAL);
         }
+        
         stage.initOwner(ApplicationContext.getMainStage());
         Scene scene = new Scene(rootNode);
         scene.getStylesheets().add(ApplicationContext.getThemeManager().getCSS());

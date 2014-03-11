@@ -58,6 +58,14 @@ public interface PreferencesManager {
      * @throws PreferencesException 
      */
     public void mergeListValue(String key, List value) throws PreferencesException;
+    
+    /**
+     * Merge map with an existing map value.
+     * @param key
+     * @param value
+     * @throws PreferencesException 
+     */
+    public void mergeMapValue(String key, Map value) throws PreferencesException;
 
     public Object getValue(String key);
 

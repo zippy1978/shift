@@ -26,6 +26,7 @@ package com.backelite.shift.preferences;
  * #L%
  */
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -57,7 +58,7 @@ public class LocalPreferencesManager extends BasePreferencesManager {
         File file = new File(rootDirectory, FILENAME);
         try {
             mapper.writeValue(file, loadedValues);
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             throw new PreferencesException(ex);
         }
     }
@@ -71,10 +72,9 @@ public class LocalPreferencesManager extends BasePreferencesManager {
 
         File file = new File(rootDirectory, FILENAME);
         if (file.exists()) {
-            ObjectMapper mapper = new ObjectMapper();
             try {
                 loadedValues = mapper.readValue(file, Map.class);
-            } catch (Exception ex) {
+            } catch (IOException ex) {
                 throw new PreferencesException(ex);
             }
         }

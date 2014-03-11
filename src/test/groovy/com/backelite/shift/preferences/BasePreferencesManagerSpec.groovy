@@ -70,5 +70,21 @@ class BasePreferencesManagerSpec extends Specification {
 
     }
     
+    def "merge map values"() {
+        
+        setup:
+        def manager = new NullPreferencesManager()
+        manager.setInitialValue('test.key', ['one' : '1', 'two' : '2', 'three': '3'])
+        
+        expect:
+        manager.mergeMapValue('test.key', input)
+        manager.getValue('test.key') == result
+        
+        where:
+        input                                     | result
+        ['four' : '4', 'five' : '5', 'six' : '6'] | ['one' : '1', 'two' : '2', 'three' : '3', 'four' : '4', 'five' : '5', 'six' : '6']
+        [:]                                        | ['one' : '1', 'two' : '2', 'three' : '3']
+    }
+    
 }
 
