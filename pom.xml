@@ -15,7 +15,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <timestamp>${maven.build.timestamp}</timestamp>
         <buildNumber>${env.BUILD_NUMBER}</buildNumber>
-        <channel>snapshots</channel>
+<!--        <channel>snapshots</channel>-->
+        <channel>releases</channel>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
     </properties>
    
