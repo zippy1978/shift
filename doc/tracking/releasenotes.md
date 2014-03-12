@@ -12,3 +12,4 @@
 * [FEAT] Added 'Import...' feature into project navigator context menu: this allows importing local files into the workspace.
 * [FIX] Error message when closing last editor tab and a preview windows is opened.
 * [FEAT] Edit history is not cleared anymore on file save.
+* [FEAT] New welcome window on first lanunch.

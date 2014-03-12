@@ -1,4 +1,7 @@
 /** Foundation overrides */
+* {
+  font-family: 'Helvetica' !important;
+}
 html {
   font-size: 95%;
 }

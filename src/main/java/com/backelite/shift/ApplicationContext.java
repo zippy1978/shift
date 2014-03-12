@@ -6,6 +6,7 @@ import com.backelite.shift.plugin.LocalPluginRegistry;
 import com.backelite.shift.plugin.PluginException;
 import com.backelite.shift.plugin.PluginRegistry;
 import com.backelite.shift.preferences.LocalPreferencesManager;
+import com.backelite.shift.preferences.PreferencesException;
 import com.backelite.shift.preferences.PreferencesManager;
 import com.backelite.shift.state.LocalStateManager;
 import com.backelite.shift.state.StateManager;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.logging.Level;
 import javafx.application.HostServices;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -65,6 +67,7 @@ public class ApplicationContext {
     private static Properties PROPERTIES_INSTANCE;
     private static HostServices HOST_SERVICES;
     private static boolean FIRST_LAUNCH = false;
+    private static boolean UPDATED = false;
     
     /**
      * Holds the main stage.
@@ -111,6 +114,13 @@ public class ApplicationContext {
 
         if (PREFERENCES_MANAGER_INSTANCE == null) {
             PREFERENCES_MANAGER_INSTANCE = new LocalPreferencesManager(getApplicationDataDirectory());
+            
+            // Read currentVersionCode property
+            Integer lastVersionCode = (Integer)PREFERENCES_MANAGER_INSTANCE.getValue(Constants.PREFERENCES_KEY_CURRENT_VERSION_CODE);
+            Integer newVersionCode = Integer.valueOf(getProperties().getProperty(Constants.PROPERTY_APPLICATION_VERSION_CODE));
+            if (lastVersionCode == null || lastVersionCode != newVersionCode) {
+                UPDATED = true;
+            }
         }
 
         return PREFERENCES_MANAGER_INSTANCE;
@@ -141,6 +151,13 @@ public class ApplicationContext {
     public static void destroy() {
 
         log.debug("Destroying application context");
+        try {
+            // Save current applicaiton version code
+            getPreferencesManager().setValue(Constants.PREFERENCES_KEY_CURRENT_VERSION_CODE, Integer.valueOf(getProperties().getProperty(Constants.PROPERTY_APPLICATION_VERSION_CODE)));
+            getPreferencesManager().commit();
+        } catch (PreferencesException ex) {
+            log.error("Failed to persist preferences", ex);
+        }
 
         WORKSPACE_INSTANCE = null;
         STATE_MANAGER_INSTANCE = null;
@@ -247,13 +264,24 @@ public class ApplicationContext {
     }
     
     /**
-     * Check is it's the first application launch.
+     * Check if it's the first application launch.
      * @return true / false
      */
     public static boolean isFirstLaunch() {
         return FIRST_LAUNCH;
     }
     
+    /**
+     * Check if it's the first launch after an application update.
+     * @return true / false
+     */
+    public static boolean isUpdated() {
+        
+        // Make sure preferences are loaded
+        getPreferencesManager();
+        
+        return UPDATED;
+    }
     /**
      * Check if the current application release is a SNAPSHOT.
      * A SNAPSHOT is a version number with 4 parts

@@ -29,17 +29,12 @@ import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.Constants;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.beans.value.WeakChangeListener;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.web.WebView;
 
 /**
@@ -55,12 +50,13 @@ public class WelcomeDialogController extends AbstractDialogController {
     @FXML
     private Label infoLabel;
     private EventHandler<ActionEvent> closeButtonActionEventHandler;
+    
+    private String page;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
 
-        webView.getEngine().load(getClass().getResource("/webcontent/welcome.html").toExternalForm());
         webView.setContextMenuEnabled(false);
 
         // Close button click
@@ -69,11 +65,25 @@ public class WelcomeDialogController extends AbstractDialogController {
         };
         closeButton.setOnAction(new WeakEventHandler<>(closeButtonActionEventHandler));
 
-
         String versionName = ApplicationContext.getProperties().getProperty(Constants.PROPERTY_APPLICATION_VERSION_NAME);
         String buildNumber = ApplicationContext.getProperties().getProperty(Constants.PROPERTY_APPLICATION_BUILD_NUMBER);
-       
+
         // Set version info
         infoLabel.setText(String.format(getResourceBundle().getString("welcome.info"), versionName, buildNumber));
+    }
+
+    /**
+     * @return the page
+     */
+    public String getPage() {
+        return page;
+    }
+
+    /**
+     * @param page the page to set
+     */
+    public void setPage(String page) {
+        this.page = page;
+        webView.getEngine().load(getClass().getResource(page).toExternalForm());
     }
 }

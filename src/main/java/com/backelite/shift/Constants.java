@@ -37,6 +37,7 @@ package com.backelite.shift;
 public interface Constants {
     
     public static final String PREFERENCES_KEY_SHORTCUTS = "shortcuts";
+    public static final String PREFERENCES_KEY_CURRENT_VERSION_CODE = "currentVersionCode";
     public static final String SHORTCUT_NEW_FILE = "new_file";
     public static final String SHORTCUT_OPEN_PROJECT = "open_project";
     public static final String SHORTCUT_SAVE = "save";

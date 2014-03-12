@@ -30,6 +30,7 @@ import com.backelite.shift.Constants;
 import com.backelite.shift.gui.dialog.ConfirmDialogController;
 import com.backelite.shift.gui.dialog.DialogController;
 import com.backelite.shift.gui.dialog.PickerDialogController;
+import com.backelite.shift.gui.dialog.WelcomeDialogController;
 import com.backelite.shift.gui.editor.EditorController;
 import com.backelite.shift.gui.editor.EditorsPaneController;
 import com.backelite.shift.gui.preview.PreviewController;
@@ -185,18 +186,21 @@ public class MainController extends AbstractController {
 
         // Open welcome dialog if first start or upgraded version
         if (ApplicationContext.isFirstLaunch()) {
-            this.openWelcomeWindow();
+            this.openWelcomeWindow("/webcontent/firstlaunch.html");
+        } else if (ApplicationContext.isUpdated()) {
+            this.openWelcomeWindow("/webcontent/updated.html");
         }
     }
 
-    private void openWelcomeWindow() {
+    private void openWelcomeWindow(String page) {
 
         FXMLLoader loader = FXMLLoaderFactory.newInstance();
         try {
             Stage stage = this.newDecoratedWindow(getResourceBundle().getString("welcome.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/welcome_dialog.fxml")));
-            DialogController controller = (DialogController) loader.getController();
+            WelcomeDialogController controller = (WelcomeDialogController) loader.getController();
             controller.setStage(stage);
             controller.setParentController(this);
+            controller.setPage(page);
             stage.setResizable(false);
             stage.showAndWait();
         } catch (IOException ex) {

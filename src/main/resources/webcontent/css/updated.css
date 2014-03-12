@@ -1,0 +1,21 @@
+/************ updated.html */
+
+/** General */
+ul {
+  font-size: 0.9em;
+}
+
+li {
+  margin-bottom: 0.2em
+}
+
+/** Title */
+
+.title {
+  background-image: url(../img/big-logo.png);
+  background-size: 4em;
+  background-position: 0.8em 0.8em;
+  background-repeat: no-repeat;
+}
+
+

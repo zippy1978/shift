@@ -1,10 +1,6 @@
 
 # Shift - Backlog
 
-## Preferences
-
-<t>✘</t> Preferences window (with tree navigation)
-
 ## Output pane
 
 <t>✘</t> Output pane at the bottom of the MainController to display : lint and other output in tabs (or something else...)
@@ -28,14 +24,6 @@
 <t>✘</t> Search file by name
 
 <t>✘</t> Search file with content
-
-## WOPE support
-
-<t>✘</t> WOPE XHTML editor with completion  
-
-<t>✘</t> WOPE preferences pane (selection of WOPE runtime and licence)  
-
-<t>✘</t> WOPE preview (device presets)
 
 ## Project nature
 

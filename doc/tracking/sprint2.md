@@ -23,6 +23,4 @@
 
 <d>✔ 03/11/14</d> Better welcome window (inspired by website)
 
-<t>✘</t> Better about window (inspired by website)
-
-<t>✘</t> Update window displayed on first start after update to show release notes
+<d>✔ 03/12/14</d> Update window displayed on first start after update to show release notes

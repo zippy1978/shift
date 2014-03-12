@@ -1,0 +1,60 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foundation | Welcome</title>
+    <link rel="stylesheet" href="css/foundation.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/updated.css" />
+    <link rel="stylesheet" href="css/general_enclosed_foundicons.css">
+    <script src="js/vendor/modernizr.js"></script>
+  </head>
+  <body>
+    
+    <div class="row title">
+      <div class="large-12 columns centered">
+        <h1>Thanks for updating !</h1>
+        <h5>
+          What's new ?
+        </h5>
+      </div>
+      <hr/>
+     </div>
+      
+    <div class="row">
+      <div class="large-12 columns">
+        
+        <p class="summary">
+          This release is mostly a bug-fix release...
+        </p>
+        
+        <h4>New features</h4>
+        <ul>
+          <li>Added 'Import...' feature into project navigator context menu: this allows importing local files into the workspace.</li>
+          <li>Edit history is not cleared anymore on file save.</li>
+          <li>New welcome window on first lanunch.</li>
+        </ul>
+        
+        <h4>Fixes</h4>
+          <ul>
+            <li>Display glitches in project navigator.</li>
+          	<li>On first start when the welcome window is closed, it is still listed in the 'Windows' menu.</li>
+            <li>Children windows not closed on application exit.</li>
+            <li>Code editor: when paste on selected text, selected text should be replaced by pasted one.</li>
+            <li>HTML Preview and Remote HTML Preview cannot display pages when file path contains spaces.</li>
+            <li>Duplicate entries appearing in device list of HTML Preview.</li>
+            <li>Opened preview windows should not get focus after any action in project navigator.</li>
+            <li>Error message when closing last editor tab and a preview windows is opened.</li>
+          </ul>
+        
+      </div>
+    </div>
+    
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+  </body>
+</html>
