@@ -54,8 +54,6 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
     public Node newEditor(Document document, FXMLLoader loader) throws PluginException {
 
         try {
-            // Open document
-            document.open();
 
             // Look for matching editor factory
             Set<EditorFactory> matchingFactories = editorExtensions.get(FileUtils.getFileExtension(document.getName()));
@@ -78,7 +76,7 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
 
             return node;
 
-        } catch (IOException | ClassCastException e) {
+        } catch (ClassCastException e) {
             throw new PluginException(e);
         }
     }

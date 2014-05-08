@@ -25,11 +25,18 @@ package com.backelite.shift.gui.editor;
  * THE SOFTWARE.
  * #L%
  */
+import com.backelite.shift.ApplicationContext;
 import com.backelite.shift.gui.AbstractController;
 import com.backelite.shift.gui.control.CodeEditor;
+import com.backelite.shift.task.TaskManagerListener;
 import com.backelite.shift.workspace.artifact.Document;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.event.WeakEventHandler;
@@ -39,9 +46,10 @@ import javafx.fxml.FXML;
  *
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
-public class CodeEditorController extends AbstractController implements EditorController {
+public class CodeEditorController extends AbstractController implements EditorController, TaskManagerListener {
 
     public enum Mode {
+
         NONE,
         HTML,
         JAVASCRIPT,
@@ -50,24 +58,28 @@ public class CodeEditorController extends AbstractController implements EditorCo
         GROOVY,
         XML
     };
-    
+
     private Document document;
     private Mode mode;
     @FXML
     private CodeEditor codeEditor;
     private EventHandler<CursorChangedEvent> onCursorChanged;
-    
+
     private EventHandler<CodeEditor.ContentChangedEvent> codeEditorContentChangedEventHandler;
     private EventHandler<CodeEditor.CursorChangedEvent> codeEditorCursorChangedEventHandler;
+
+    private Task documentOpeningTask;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.initialize(url, rb);
 
+        ApplicationContext.getTaskManager().addListener(this);
+
         if (document != null) {
-            codeEditor.setContent(document.getContentAsString());
+            this.setEditorContent();
         }
-        
+
         // Content changed event
         codeEditorContentChangedEventHandler = (CodeEditor.ContentChangedEvent event) -> {
             String newContent = codeEditor.getContent();
@@ -76,7 +88,7 @@ public class CodeEditorController extends AbstractController implements EditorCo
             }
         };
         codeEditor.setOnContentChanged(new WeakEventHandler<>(codeEditorContentChangedEventHandler));
-        
+
         // Cursor changed event (forward event)
         codeEditorCursorChangedEventHandler = (CodeEditor.CursorChangedEvent t) -> {
             if (getOnCursorChanged() != null) {
@@ -84,7 +96,7 @@ public class CodeEditorController extends AbstractController implements EditorCo
             }
         };
         codeEditor.setOnCursorChanged(new WeakEventHandler<>(codeEditorCursorChangedEventHandler));
-        
+
         // Code editor i18n
         codeEditor.setSearchPromptLabel(getResourceBundle().getString("editor.search.prompt"));
         codeEditor.setSearchTipLabel(getResourceBundle().getString("editor.search.tip"));
@@ -96,6 +108,32 @@ public class CodeEditorController extends AbstractController implements EditorCo
         codeEditor.setReplaceConfirmStopLabel(getResourceBundle().getString("stop"));
     }
 
+    @Override
+    public void onTaskStarted(Task task) {
+
+    }
+
+    @Override
+    public void onTaskFailed(Task task) {
+
+    }
+
+    @Override
+    public void onTaskSucceeded(Task task) {
+
+        // Document opening
+        if (task == documentOpeningTask) {
+            if (codeEditor != null) {
+                Platform.runLater(() -> {
+                    codeEditor.setContent(document.getContentAsString());
+                    codeEditor.setDisable(false);
+                });
+                
+            }
+        }
+
+    }
+
     /**
      * @return the document
      */
@@ -105,14 +143,43 @@ public class CodeEditorController extends AbstractController implements EditorCo
     }
 
     /**
+     * Set editor content from the document content. If the document is not
+     * opened yet, operation is asynchronous.
+     */
+    private void setEditorContent() {
+
+        if (document.isOpened()) {
+            if (codeEditor != null) {
+                codeEditor.setContent(document.getContentAsString());
+            }
+        } else {
+
+            codeEditor.setDisable(true);
+            documentOpeningTask = new Task() {
+                @Override
+                protected Object call() throws Exception {
+
+                    updateTitle(String.format(getResourceBundle().getString("task.opening_file"), document.getName()));
+                    document.open();
+                    updateProgress(1, 1);
+
+                    return document;
+                }
+            };
+
+            ApplicationContext.getTaskManager().addTask(documentOpeningTask);
+        }
+
+    }
+
+    /**
      * @param document the document to set
      */
     public void setDocument(Document document) {
+
         this.document = document;
 
-        if (codeEditor != null) {
-            codeEditor.setContent(document.getContentAsString());
-        }
+        this.setEditorContent();
     }
 
     /**
@@ -156,7 +223,7 @@ public class CodeEditorController extends AbstractController implements EditorCo
     public void setOnCursorChanged(EventHandler<CursorChangedEvent> onCursorChanged) {
         this.onCursorChanged = onCursorChanged;
     }
-    
+
     @Override
     public EventHandler<CursorChangedEvent> getOnCursorChanged() {
         return onCursorChanged;
@@ -164,7 +231,7 @@ public class CodeEditorController extends AbstractController implements EditorCo
 
     @Override
     public void close() {
-        
+
         document.close();
     }
 
@@ -192,7 +259,7 @@ public class CodeEditorController extends AbstractController implements EditorCo
     public void cut() {
         codeEditor.cut();
     }
-    
+
     @Override
     public void copy() {
         codeEditor.copy();
@@ -202,12 +269,12 @@ public class CodeEditorController extends AbstractController implements EditorCo
     public void paste() {
         codeEditor.paste();
     }
-    
+
     @Override
     public void selectAll() {
-       codeEditor.selectAll();
+        codeEditor.selectAll();
     }
-    
+
     @Override
     public void contentAssist() {
         codeEditor.contentAssist();
@@ -222,8 +289,6 @@ public class CodeEditorController extends AbstractController implements EditorCo
     public boolean canSearch() {
         return true;
     }
-    
-    
 
     @Override
     public void find() {
@@ -248,8 +313,8 @@ public class CodeEditorController extends AbstractController implements EditorCo
     @Override
     public void replaceAll() {
         codeEditor.replace();
-    }    
-    
+    }
+
     @Override
     public void clearHistory() {
         codeEditor.clearHistory();
@@ -260,7 +325,5 @@ public class CodeEditorController extends AbstractController implements EditorCo
         CodeEditor.CursorPosition position = codeEditor.getCursorPosition();
         return new CursorPosition(position.getLine(), position.getCh());
     }
-    
-    
-    
+
 }

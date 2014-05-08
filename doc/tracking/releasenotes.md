@@ -4,6 +4,8 @@
 
 * [FEAT] Added .scss editor support.
 * [FIX] Cannot paste text into code editor search field.
+* [FIX] Status bar label is often cut when text is too long.
+* [FEAT] Asynchronous document opening in editors.
 
 ## 0.1.1 (03/15/2014)
 

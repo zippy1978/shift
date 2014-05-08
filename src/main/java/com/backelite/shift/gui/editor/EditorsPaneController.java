@@ -127,10 +127,12 @@ public class EditorsPaneController extends AbstractController implements Observe
 
             try {
 
+                // Load editor
                 node = ApplicationContext.getPluginRegistry().newEditor(document, loader);
                 EditorController controller = (EditorController) loader.getController();
                 controller.getDocument().addObserver(this);
 
+                // Close cross and tab head
                 Hyperlink closeLink = new Hyperlink();
                 closeLink.setText("X");
                 closeLink.setFocusTraversable(false);

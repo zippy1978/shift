@@ -9,6 +9,8 @@
 
 <d>✔ 05/08/2014</d> .scss support
 
+<d>✔ 05/08/2014</d> Asynchronous document opening in editors
+
 ## Workspace
 
 <t>✘</t> Watch external file change and notify is opened in Shift

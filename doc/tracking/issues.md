@@ -24,6 +24,8 @@
 
 <d>✔ 0.1.2</d> Cannot paste text into code editor search field.
 
+<d>✔ 0.1.2</d> Status bar label is often cut when text is too long.
+
 ## Windows
 
 <t>✘</t> Missing icon on main window.

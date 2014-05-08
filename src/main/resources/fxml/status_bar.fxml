@@ -14,7 +14,7 @@
   <children>
     <HBox fx:id="taskBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" minWidth="0.0" prefHeight="30.0" prefWidth="392.0" AnchorPane.leftAnchor="0.0">
       <children>
-        <Label id="titleLabel" fx:id="taskTitleLabel" prefHeight="16.0" prefWidth="140.0" text="Label" HBox.hgrow="SOMETIMES" HBox.margin="$x1">
+        <Label id="titleLabel" fx:id="taskTitleLabel" text="Label" HBox.hgrow="SOMETIMES" HBox.margin="$x1">
           <labelFor>
             <ProgressBar id="progressBar" fx:id="taskProgressBar" prefWidth="125.0" progress="0.0" HBox.hgrow="NEVER">
               <HBox.margin>
