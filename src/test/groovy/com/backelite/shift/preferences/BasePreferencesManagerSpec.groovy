@@ -23,9 +23,9 @@
  * THE SOFTWARE.
  * #L%
  */
-package com.backelite.shift.preferences
+package org.shiftedit.preferences
 
-import com.backelite.shift.preferences.BasePreferencesManager
+import org.shiftedit.preferences.BasePreferencesManager
 import spock.lang.Specification
 
 /**

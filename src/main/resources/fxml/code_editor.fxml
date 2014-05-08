@@ -7,9 +7,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
-<?import com.backelite.shift.gui.control.*?>
+<?import org.shiftedit.gui.control.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.editor.CodeEditorController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.shiftedit.gui.editor.CodeEditorController">
   <children>
    <CodeEditor fx:id="codeEditor" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
    </CodeEditor>

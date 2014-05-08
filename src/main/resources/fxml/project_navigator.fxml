@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
 
-<ScrollPane id="projectNavigator" fitToHeight="true" fitToWidth="true" maxWidth="-Infinity" prefHeight="348.0" prefWidth="260.9998779296875" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.projectnavigator.ProjectNavigatorController">
+<ScrollPane id="projectNavigator" fitToHeight="true" fitToWidth="true" maxWidth="-Infinity" prefHeight="348.0" prefWidth="260.9998779296875" xmlns:fx="http://javafx.com/fxml" fx:controller="org.shiftedit.gui.projectnavigator.ProjectNavigatorController">
   <content>
     <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="347.0" prefWidth="260.0">
       <children>

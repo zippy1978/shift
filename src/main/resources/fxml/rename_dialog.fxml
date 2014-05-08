@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.backelite.shift.gui.control.*?>
+<?import org.shiftedit.gui.control.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.collections.*?>
@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
 
-<AnchorPane minHeight="69.0" minWidth="289.0" prefHeight="105.0" prefWidth="377.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.dialog.RenameDialogController">
+<AnchorPane minHeight="69.0" minWidth="289.0" prefHeight="105.0" prefWidth="377.0" xmlns:fx="http://javafx.com/fxml" fx:controller="org.shiftedit.gui.dialog.RenameDialogController">
   <children>
     <AnchorPane minHeight="22.0" prefHeight="41.0" prefWidth="360.0" styleClass="bottom-tool-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
       <children>

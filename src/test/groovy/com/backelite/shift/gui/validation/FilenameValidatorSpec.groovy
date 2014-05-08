@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package com.backelite.shift.gui.validation
+package org.shiftedit.gui.validation
 
 import spock.lang.*
 

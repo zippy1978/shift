@@ -28,12 +28,12 @@
  * and open the template in the editor.
  */
 
-package com.backelite.shift.workspace
+package org.shiftedit.workspace
 
 import spock.lang.*
 import com.github.goldin.spock.extensions.tempdir.*
-import com.backelite.shift.workspace.artifact.Project
-import com.backelite.shift.workspace.artifact.FileSystemProject
+import org.shiftedit.workspace.artifact.Project
+import org.shiftedit.workspace.artifact.FileSystemProject
 import java.lang.ref.ReferenceQueue
 import java.lang.ref.WeakReference
 /**

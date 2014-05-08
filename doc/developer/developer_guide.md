@@ -119,7 +119,7 @@ Child windows can be opened from the main windows, such as : preview windows, wi
 
 ## Application lifecycle
 
-The application is started by the `com.backelite.shift.MainApp` class (`start(…)` method).
+The application is started by the `org.shiftedit.MainApp` class (`start(…)` method).
 When it is shuting down, the method `stop(…)`of the same class is called.
 
 ### Startup sequence
@@ -143,7 +143,7 @@ At shutdown, the workspace state is saved, the main controller state is saved an
 
 ### ApplicationContext
 
-`com.backelite.shift.ApplicationContext` is the main entry point to access application centralized components.
+`org.shiftedit.ApplicationContext` is the main entry point to access application centralized components.
 
 It acts as a holder for storing singleton instances of application components, such as the workspace, the plugin manager, …
 
@@ -155,7 +155,7 @@ ApplicationContext.getPluginManager();
 
 # The workspace
 
-Classes related to the workspace are located in `com.backelite.shift.workspace`.
+Classes related to the workspace are located in `org.shiftedit.workspace`.
 
 The workspace is represented by the `Workspace` interface. The default workspace implementation is `LocalWorkspace`. 
 
@@ -163,7 +163,7 @@ This implementation manages artifacts from the local file system.
 
 `Workspace` extends the `PersistableState` interface in order to be able to save / restore the current workspace on application exit / restart.
 
-The application only holds one workspace (singleton). It can be accessed using `com.backelite.shift.ApplicationContext` static method: 
+The application only holds one workspace (singleton). It can be accessed using `org.shiftedit.ApplicationContext` static method: 
 
 ```java
 ApplicationContext.getWorkspace();
@@ -173,7 +173,7 @@ ApplicationContext.getWorkspace();
 
 When required (usually by previewers), the `HTTPWorkspaceProxyServer` (singleton) can be started in order to serve workspace artifacts on the HTTP protocol.
 
-The HTTP proxy can be accessed using `com.backelite.shift.ApplicationContext` static method: 
+The HTTP proxy can be accessed using `org.shiftedit.ApplicationContext` static method: 
 
 ```java
 ApplicationContext.getHTTPWorkspaceProxyServer();
@@ -191,11 +191,11 @@ It can be stopped with (automatically stopped at application shutdown):
 ApplicationContext.getHTTPWorkspaceProxyServer().stop();
 ```
 
-The port of the server is determined at runtime (on start) depending on port number availability (see `com.backelite.shift.util.NetworkUtil.findAvailablePort(…)` for more information).
+The port of the server is determined at runtime (on start) depending on port number availability (see `org.shiftedit.util.NetworkUtil.findAvailablePort(…)` for more information).
 
 ## Artifacts
 
-Classes related to workspace artifacts are located in `com.backelite.shift.workspace.artifact`.
+Classes related to workspace artifacts are located in `org.shiftedit.workspace.artifact`.
 
 ![Artifact inheritance diagram](img/artifact_uml.jpg)
 
@@ -308,7 +308,7 @@ This part deals with services / managers common to the whole application.
 
 Preferences are used to manage application settings across the application.
 
-Classes related to preferences are located inside `com.backelite.shift.preferences`.
+Classes related to preferences are located inside `org.shiftedit.preferences`.
 
 The heart of the preferences system is the `PreferencesManager`interface: it defines methods to store and retrieve preferences (`setValue(…)`, `getValue(…)`).
 
@@ -339,7 +339,7 @@ When the application (or a plugin) starts form the first time: it needs to set i
 
 To do so, the `PreferencesManager` exposes the `setInitialValue(…)`(to set a single value) and `setInitialValues(…)` (to set several values at the same time).
 
-When the application starts it checks and initializes initial values with thoses methods. The code is located inside `com.backelite.shift.MainApp.initializePreferences()` and it is called from `com.backelite.shift.MainApp.start(…)`. 
+When the application starts it checks and initializes initial values with thoses methods. The code is located inside `org.shiftedit.MainApp.initializePreferences()` and it is called from `org.shiftedit.MainApp.start(…)`. 
 
 See [Application lifecycle](#application-lifecycle) for more informations about the application startup sequence.
 
@@ -348,7 +348,7 @@ See [Application lifecycle](#application-lifecycle) for more informations about 
 
 States are used to save and restore application components states between application restarts.
 
-Classes relating to states management are located inside `com.backelite.shift.state`.
+Classes relating to states management are located inside `org.shiftedit.state`.
 
 Any object of the application can be persisted, it just needs to implement the `PersistableState` interface.
 
@@ -400,7 +400,7 @@ However, if the `getInstanceIdentifier()` returns a value, a state will be maint
 
 Tasks are used in the application to handle asynchronous processing. They are commonly used to handle time consuming operations without blocking the user interface.
 
-Class relating to tasks and task management are located inside the `com.backelite.shift.task`.
+Class relating to tasks and task management are located inside the `org.shiftedit.task`.
 
 Tasks used are common `javafx.concurrent.Task` objects. There are processed by a `TaskManager`.
 
@@ -410,7 +410,7 @@ The default concrete implementation of `TaskManager`is `LocalTaskManager`.
 
 ### Shared TaskManager
 
-A shared `TaskManager` can be accessed using `com.backelite.shift.ApplicationContext` static method:
+A shared `TaskManager` can be accessed using `org.shiftedit.ApplicationContext` static method:
 
 ```java
 ApplicationContext.getTaskManager();
@@ -506,7 +506,7 @@ At the moment, a plugin can provide the following items:
 * **Wizards**: wizards are pieces of GUI used to control code / files generation. Example : a HTML project wizard provides GUI and code to generate an initial HTML project structure.
 * **Previews**: previews are pieces of GUI in charge of rendering a document or project.
 
-Classes related to plugins are located inside the `com.backelite.shift.plugin` package.
+Classes related to plugins are located inside the `org.shiftedit.plugin` package.
 
 Plugins (plugin declarations) are represented by the `Plugin` class. They are held into a `PluginRegistry`.
 
@@ -518,7 +518,7 @@ The default implementation of `PluginRegistry` is `LocalPluginRegistry`. The `Lo
 
 `AbstractPluginRegistry` is the base implementation class. However, to leave the possibility to support other languages than Groovy for plugin declaration in the future, Groovy releated code is encapsulated inside the `AbstractGroovyPluginRegistry`.
 
-The singleton instance of the `PluginRegistry` can be accessed from the `com.backelite.shift.ApplicationContext` this way:
+The singleton instance of the `PluginRegistry` can be accessed from the `org.shiftedit.ApplicationContext` this way:
 
 ```java
 ApplicationContext.getPluginRegistry();
@@ -560,7 +560,7 @@ import groovytools.builder.MetaBuilder
 def metaBuilder = new MetaBuilder(getClass().getClassLoader())
 			
 metaBuilder.define {
-    plugin(factory: com.backelite.shift.plugin.Plugin) {
+    plugin(factory: org.shiftedit.plugin.Plugin) {
         properties {
             uid(req: true)
             name(req: true)
@@ -583,7 +583,7 @@ metaBuilder.define {
         }
     }
     
-    editorFactory(factory: com.backelite.shift.plugin.GroovyEditorFactory) {
+    editorFactory(factory: org.shiftedit.plugin.GroovyEditorFactory) {
         properties {
             name(req: true)
             description(req: true)
@@ -592,7 +592,7 @@ metaBuilder.define {
         }
     }
     
-    previewFactory(factory: com.backelite.shift.plugin.GroovyPreviewFactory) {
+    previewFactory(factory: org.shiftedit.plugin.GroovyPreviewFactory) {
         properties {
             name(req: true)
             description(req: true)
@@ -601,7 +601,7 @@ metaBuilder.define {
         }
     }
     
-    projectWizardFactory(factory: com.backelite.shift.plugin.GroovyProjectWizardFactory) {
+    projectWizardFactory(factory: org.shiftedit.plugin.GroovyProjectWizardFactory) {
         properties {
             name(req: true)
             description(req: true)
@@ -610,13 +610,13 @@ metaBuilder.define {
         }
     }
     
-    projectGenerator(factory: com.backelite.shift.plugin.GroovyProjectGenerator) {
+    projectGenerator(factory: org.shiftedit.plugin.GroovyProjectGenerator) {
         properties {
             code(req: true)
         }
     }
     
-    lifecycle(factory: com.backelite.shift.plugin.GroovyPluginLifecycle) {
+    lifecycle(factory: org.shiftedit.plugin.GroovyPluginLifecycle) {
         properties {
             onLoad(req: false)
         }
@@ -652,7 +652,7 @@ An editor factory must define 5 blocks:
 1. *name*: the name of the editor type 
 2. *description*: the description of the editor type
 3. *supportedExtensions*: array containing file extensions the editor applies to
-4. *code*: the factory code to build the editor given a context `com.backelite.shift.workspace.artifact.Document` instance and a `javafx.fxml.FXMLLoader`, it must return a `javafx.scene.Node`.
+4. *code*: the factory code to build the editor given a context `org.shiftedit.workspace.artifact.Document` instance and a `javafx.fxml.FXMLLoader`, it must return a `javafx.scene.Node`.
 
 The controller bound to the `javafx.scene.Node` built by the factory must implement the `EditorController` interface.
 
@@ -767,7 +767,7 @@ TODO
 
 Unfortunately, JavaFX does not provide any input validation system at the time. That is why the application uses its own.
 
-Classes related to validation are located in `com.backelite.shift.gui.validation`.
+Classes related to validation are located in `org.shiftedit.gui.validation`.
 
 The validation mechanism is pretty basic: it exposes a `Validator` interface with a single `validate(…)` method and a set of implementations to perform common validations : not blank, filename…
 

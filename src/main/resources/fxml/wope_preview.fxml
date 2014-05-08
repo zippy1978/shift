@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.backelite.shift.gui.control.*?>
+<?import org.shiftedit.gui.control.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.collections.*?>
@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
 
-<AnchorPane minWidth="114.0" prefHeight="415.00019999999495" prefWidth="424.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.preview.wope.WOPEPreviewController">
+<AnchorPane minWidth="114.0" prefHeight="415.00019999999495" prefWidth="424.0" xmlns:fx="http://javafx.com/fxml" fx:controller="org.shiftedit.gui.preview.wope.WOPEPreviewController">
   <children>
     <AnchorPane fx:id="topToolBar" minHeight="22.0" prefHeight="81.0" prefWidth="424.0" styleClass="top-tool-bar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
       <children>

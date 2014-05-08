@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package com.backelite.shift.workspace.artifact
+package org.shiftedit.workspace.artifact
 
 import spock.lang.*
 import com.github.goldin.spock.extensions.tempdir.*

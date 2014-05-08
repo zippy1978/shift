@@ -10,7 +10,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.web.*?>
 
-<AnchorPane id="statusBar" maxHeight="30.0" minHeight="23.0" prefHeight="30.0" prefWidth="491.0" styleClass="bottom-tool-bar" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.statusbar.StatusBarController">
+<AnchorPane id="statusBar" maxHeight="30.0" minHeight="23.0" prefHeight="30.0" prefWidth="491.0" styleClass="bottom-tool-bar" xmlns:fx="http://javafx.com/fxml" fx:controller="org.shiftedit.gui.statusbar.StatusBarController">
   <children>
     <HBox fx:id="taskBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" minWidth="0.0" prefHeight="30.0" prefWidth="392.0" AnchorPane.leftAnchor="0.0">
       <children>

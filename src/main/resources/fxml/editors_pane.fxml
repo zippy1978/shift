@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
 
-<AnchorPane id="editorsPane" prefHeight="200.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.editor.EditorsPaneController">
+<AnchorPane id="editorsPane" prefHeight="200.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml" fx:controller="org.shiftedit.gui.editor.EditorsPaneController">
   <children>
     <TabPane fx:id="tabPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
     <Label fx:id="welcomeLabel" alignment="TOP_LEFT" prefWidth="372.0" styleClass="welcome-message" text="%editors_pane.welcome.message" wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />

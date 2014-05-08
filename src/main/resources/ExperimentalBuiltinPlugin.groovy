@@ -4,34 +4,38 @@
  * %%
  * Copyright (C) 2013 Gilles Grousset
  * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as 
- * published by the Free Software Foundation, either version 3 of the 
- * License, or (at your option) any later version.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Lesser Public License for more details.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  * 
- * You should have received a copy of the GNU General Lesser Public 
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * #L%
  */
 import javafx.scene.Node
-import com.backelite.shift.ApplicationContext
-import com.backelite.shift.gui.editor.CodeEditorController
-import com.backelite.shift.preferences.PreferencesManager
-import com.backelite.shift.workspace.artifact.FileSystemProject
-import com.backelite.shift.workspace.artifact.Project
-import com.backelite.shift.workspace.artifact.Document
-import com.backelite.shift.workspace.artifact.Folder
-import com.backelite.shift.util.FileUtils
-import com.backelite.shift.gui.preview.wope.WOPERuntimeManager
+import org.shiftedit.ApplicationContext
+import org.shiftedit.gui.editor.CodeEditorController
+import org.shiftedit.preferences.PreferencesManager
+import org.shiftedit.workspace.artifact.FileSystemProject
+import org.shiftedit.workspace.artifact.Project
+import org.shiftedit.workspace.artifact.Document
+import org.shiftedit.workspace.artifact.Folder
+import org.shiftedit.util.FileUtils
+import org.shiftedit.gui.preview.wope.WOPERuntimeManager
 
 plugin {
-    uid = "com.backelite.shift.plugin.experimentalbuiltin"
+    uid = "org.shiftedit.plugin.experimentalbuiltin"
     name = "Experimental Builtin plugin"
     versionCode = ${versionCode}
     versionName = "${versionName}"

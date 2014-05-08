@@ -3,7 +3,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.bakelite</groupId>
+    <groupId>org.shiftedit</groupId>
     <artifactId>shift</artifactId>
     <name>Shift</name>
 
@@ -25,7 +25,7 @@
     
     <organization>
         <!-- Used as the 'Vendor' for JNLP generation -->
-        <name>Backelite</name>
+        <name>Shift</name>
     </organization>
     <inceptionYear>2013</inceptionYear>
     
@@ -67,7 +67,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>2.0</version>
                 <configuration>
-                    <mainClass>com.backelite.shift.MainApp</mainClass>
+                    <mainClass>org.shiftedit.MainApp</mainClass>
                     <allPermissions>true</allPermissions>
                     <nativeReleaseVersion>${versionName}</nativeReleaseVersion>
                     <silentJfxFix>true</silentJfxFix>

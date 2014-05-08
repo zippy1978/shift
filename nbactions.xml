@@ -7,7 +7,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-Xms384m -Xmx2048m -classpath %classpath com.backelite.shift.MainApp</exec.args>
+                <exec.args>-Xms384m -Xmx2048m -classpath %classpath org.shiftedit.MainApp</exec.args>
                 <exec.executable>java</exec.executable>
                 <file.encoding>UTF-8</file.encoding>
             </properties>
@@ -57,7 +57,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -Xms384m -Xmx2048m -classpath %classpath com.backelite.shift.MainApp</exec.args>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -Xms384m -Xmx2048m -classpath %classpath org.shiftedit.MainApp</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
             </properties>
@@ -72,7 +72,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-Xms384m -Xmx2048m -classpath %classpath com.backelite.shift.MainApp</exec.args>
+                <exec.args>-Xms384m -Xmx2048m -classpath %classpath org.shiftedit.MainApp</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>

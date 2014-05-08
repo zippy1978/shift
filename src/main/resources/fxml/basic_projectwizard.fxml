@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.backelite.shift.gui.control.*?>
+<?import org.shiftedit.gui.control.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.collections.*?>
@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
 
-<AnchorPane minHeight="119.0" minWidth="400.0" prefHeight="172.0" prefWidth="434.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.backelite.shift.gui.projectwizard.BasicProjectWizardController">
+<AnchorPane minHeight="119.0" minWidth="400.0" prefHeight="172.0" prefWidth="434.0" xmlns:fx="http://javafx.com/fxml" fx:controller="org.shiftedit.gui.projectwizard.BasicProjectWizardController">
   <children>
     <ValidatedTextField fx:id="nameTextField" layoutX="92.0" layoutY="19.0" prefWidth="228.0" />
     <ValidatedTextField fx:id="locationTextField" editable="false" layoutX="92.0" layoutY="68.0" prefWidth="228.0" />
