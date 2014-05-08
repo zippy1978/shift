@@ -1,6 +1,11 @@
 # Shift - Release notes
 
-## 0.1.1 (xx/xx/xx)
+## 0.1.2 (xx/xx/xx)
+
+* [FEAT] Added .scss editor support.
+* [FIX] Cannot paste text into code editor search field.
+
+## 0.1.1 (03/15/2014)
 
 * [FIX] On first start when the welcome window is closed, it is still listed in the 'Windows' menu.
 * [FIX] Children windows not closed on application exit.

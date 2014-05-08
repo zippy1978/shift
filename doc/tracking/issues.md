@@ -22,7 +22,7 @@
 
 <d>✔ 0.1.1</d> Opened preview windows get focus after action on project navigator.
 
-<t>✘</t> Cannot paste text into code editor search field.
+<d>✔ 0.1.2</d> Cannot paste text into code editor search field.
 
 ## Windows
 

@@ -475,6 +475,10 @@ public class CodeEditor extends AnchorPane {
 
         return content;
     }
+    
+    private boolean isDocumentFocused() {
+        return (Boolean) webView.getEngine().executeScript("document.activeElement instanceof HTMLTextAreaElement");
+    }
 
     public void cut() {
 
@@ -506,21 +510,26 @@ public class CodeEditor extends AnchorPane {
     }
 
     public void paste() {
-
+        
         Clipboard clipboard = Clipboard.getSystemClipboard();
         String content = (String) clipboard.getContent(DataFormat.PLAIN_TEXT);
         if (content != null) {
             JSObject cmInstance = this.getCodeMirrorJSInstance();
             if (cmInstance != null) {
-                JSObject document = (JSObject) cmInstance.call("getDoc");
-                CursorPosition cursorPosition = this.getCursorPosition();
-                Boolean selected = (Boolean) document.call("somethingSelected");
-                if (selected) {
-                    // If something is selected : replace selection
-                    document.call("replaceSelection", content);
+                if (this.isDocumentFocused()) {
+                    JSObject document = (JSObject) cmInstance.call("getDoc");
+                    CursorPosition cursorPosition = this.getCursorPosition();
+                    Boolean selected = (Boolean) document.call("somethingSelected");
+                    if (selected) {
+                        // If something is selected : replace selection
+                        document.call("replaceSelection", content);
+                    } else {
+                        JSObject position = (JSObject) webView.getEngine().executeScript(String.format("endPos = {ch: %d, line: %d}", cursorPosition.getCh() - 1, cursorPosition.getLine() - 1));
+                        document.call("replaceRange", content, position);
+                    }
                 } else {
-                    JSObject position = (JSObject) webView.getEngine().executeScript(String.format("endPos = {ch: %d, line: %d}", cursorPosition.getCh() - 1, cursorPosition.getLine() - 1));
-                    document.call("replaceRange", content, position);
+                    // Document is not focused : the search box is opened
+                    webView.getEngine().executeScript(String.format("document.activeElement.value = '%s'", content));
                 }
             }
         }
