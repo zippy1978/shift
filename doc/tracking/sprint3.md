@@ -5,9 +5,13 @@
 
 <d>✔</d> Completed
 
-## Misc 
+## Editors 
 
 <d>✔ 05/08/2014</d> .scss support
+
+## Workspace
+
+<t>✘</t> Watch external file change and notify is opened in Shift
 
 ## Preferences
 
