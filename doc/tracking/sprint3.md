@@ -5,6 +5,10 @@
 
 <d>✔</d> Completed
 
+## Misc 
+
+<d>✔ 05/08/2014</d> .scss support
+
 ## Preferences
 
 <t>✘</t> Preferences window (with tree navigation)

@@ -218,7 +218,7 @@ plugin {
         editorFactory {
             name = "CSS editor"
             description = "Builtin CSS editor"
-            supportedExtensions = ['css']
+            supportedExtensions = ['css', 'scss']
             code = {document, loader ->   
                 Node node = (Node) loader.load(getClass().getResourceAsStream("/fxml/code_editor.fxml"))
                 CodeEditorController controller = (CodeEditorController) loader.getController()
