@@ -72,6 +72,7 @@
                     <nativeReleaseVersion>${versionName}</nativeReleaseVersion>
                     <silentJfxFix>true</silentJfxFix>
                     <identifier>Shift</identifier>
+                    <jvmArgs>-Xms=768m -Xmx=2048m</jvmArgs>
                 </configuration>
             </plugin>
            
