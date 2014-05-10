@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+
+<AnchorPane fx:id="preferences" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="511.0" prefWidth="752.0" xmlns:fx="http://javafx.com/fxml" fx:controller="org.shiftedit.gui.preferences.PreferencesDialogController">
+  <children>
+    <SplitPane fx:id="splitPane" dividerPositions="0.31866666666666665" focusTraversable="true" minHeight="361.0" prefHeight="361.0" prefWidth="600.0" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <TreeView fx:id="treeView" prefHeight="200.0" prefWidth="200.0" />
+        <Pane fx:id="containerPane" prefHeight="200.0" prefWidth="200.0" />
+      </items>
+    </SplitPane>
+    <AnchorPane minHeight="22.0" prefHeight="41.0" prefWidth="753.0" styleClass="bottom-tool-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0">
+      <children>
+        <Button fx:id="okButton" alignment="CENTER" contentDisplay="CENTER" defaultButton="true" mnemonicParsing="false" prefWidth="73.0" text="%ok" textAlignment="CENTER" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="97.0" AnchorPane.topAnchor="2.0" />
+        <Button fx:id="cancelButton" alignment="CENTER" cancelButton="true" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="73.0" text="%cancel" textAlignment="CENTER" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="2.0" />
+      </children>
+    </AnchorPane>
+  </children>
+</AnchorPane>

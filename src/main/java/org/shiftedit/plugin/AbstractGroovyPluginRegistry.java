@@ -122,7 +122,7 @@ public abstract class AbstractGroovyPluginRegistry extends AbstractPluginRegistr
         // Add plugin to list of loaded plugins
         plugins.add(plugin);
         
-        log.debug(String.format("%s %s loaded. %d editor(s), %d preview(s), %d project wizard(s)", plugin.getName(), plugin.getVersionName(), plugin.getEditorFactories().size(), plugin.getPreviewFactories().size(), plugin.getProjectWizardFactories().size()));
+        log.debug(String.format("%s %s loaded. %d editor(s), %d preview(s), %d preferences panel(s), %d project wizard(s)", plugin.getName(), plugin.getVersionName(), plugin.getEditorFactories().size(), plugin.getPreviewFactories().size(), plugin.getPreferencesPanelFactories().size(), plugin.getProjectWizardFactories().size()));
         
     }
 

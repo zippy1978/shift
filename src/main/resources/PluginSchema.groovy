@@ -45,6 +45,9 @@ metaBuilder.define {
             previewFactories {
                 previewFactory(schema: 'previewFactory')
             }
+            preferencesPanelFactories {
+                preferencesPanelFactory(schema: 'preferencesPanelFactory')
+            }
             projectWizardFactories {
                 projectWizardFactory(schema: 'projectWizardFactory')
             }
@@ -65,6 +68,13 @@ metaBuilder.define {
             name(req: true)
             description(req: true)
             supportedExtensions(req: true)
+            code(req: true)
+        }
+    }
+    
+    preferencesPanelFactory(factory: org.shiftedit.plugin.GroovyPreferencesPanelFactory) {
+        properties {
+            path(req: true)
             code(req: true)
         }
     }

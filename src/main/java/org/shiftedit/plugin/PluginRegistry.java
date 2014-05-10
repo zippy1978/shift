@@ -103,4 +103,10 @@ public interface PluginRegistry {
      * @return  ProjectWizardFactory list
      */
     public List<ProjectWizardFactory> getProjectWizardFactories();
+    
+    /**
+     * Return all available preferences panel factories.
+     * @return PreferencesPanelFactory list
+     */
+    public List<PreferencesPanelFactory> getPreferencesPanelFactories();
 }

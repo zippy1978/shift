@@ -45,7 +45,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import org.eclipse.jetty.server.Server;
 import org.slf4j.LoggerFactory;
 
 /**

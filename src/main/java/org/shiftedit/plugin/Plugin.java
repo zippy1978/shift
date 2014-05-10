@@ -45,6 +45,7 @@ public class Plugin {
     private List<EditorFactory> editorFactories = new ArrayList<>();
     private List<PreviewFactory> previewFactories = new ArrayList<>();
     private List<ProjectWizardFactory> projectWizardFactories = new ArrayList<>();
+    private List<PreferencesPanelFactory> preferencesPanelFactories = new ArrayList<>();
 
      /**
      * @return the uid
@@ -184,6 +185,20 @@ public class Plugin {
      */
     public void setLifecycle(PluginLifecycle lifecycle) {
         this.lifecycle = lifecycle;
+    }
+
+    /**
+     * @return the preferencesPanelFactories
+     */
+    public List<PreferencesPanelFactory> getPreferencesPanelFactories() {
+        return preferencesPanelFactories;
+    }
+
+    /**
+     * @param preferencesPanelFactories the preferencesPanelFactories to set
+     */
+    public void setPreferencesPanelFactories(List<PreferencesPanelFactory> preferencesPanelFactories) {
+        this.preferencesPanelFactories = preferencesPanelFactories;
     }
 
 }

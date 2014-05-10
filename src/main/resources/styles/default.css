@@ -166,6 +166,25 @@
     -fx-background-color: -fx-accent;
 }
 
+/* Tree view */
+
+.tree-view {
+    -fx-background-insets: 0;
+}
+
+.tree-cell {
+    -fx-text-fill: #333333;
+    -fx-background-color: null;    
+    -fx-cell-size: 24;
+    -fx-indent: 6;
+    -fx-padding: 3;
+}
+
+.tree-cell:selected {
+    -fx-font-weight: bold;
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: white;
+}
 
 /* Main */
 
@@ -189,26 +208,8 @@
 
 /* Project navigator */
 
-#projectNavigator .tree-view {
-    -fx-background-insets: 0;
-}
-
-#projectNavigator .tree-cell {
-    -fx-text-fill: #333333;
-    -fx-background-color: null;    
-    -fx-cell-size: 24;
-    -fx-indent: 6;
-    -fx-padding: 3;
-}
-
 #projectNavigator .tree-cell.folder {
     -fx-font-weight: bold;
-}
-
-#projectNavigator .tree-cell:selected {
-    -fx-font-weight: bold;
-    -fx-background-color: -fx-focus-color;
-    -fx-text-fill: white;
 }
 
 /* Editors pane */

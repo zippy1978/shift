@@ -166,6 +166,20 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
         
         return factories;
     }
+
+    @Override
+    public List<PreferencesPanelFactory> getPreferencesPanelFactories() {
+        
+        List<PreferencesPanelFactory> factories = new ArrayList<>();
+        
+        for(Plugin plugin : plugins) {
+            factories.addAll(plugin.getPreferencesPanelFactories());
+        }
+        
+        return factories;
+    }
+    
+    
     
     @Override
     public List<ProjectWizardFactory> getProjectWizardFactories() {

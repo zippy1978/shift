@@ -75,6 +75,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import org.shiftedit.gui.preferences.PreferencesDialogController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,6 +115,7 @@ public class MainController extends AbstractController {
     private Menu windowMenu;
     private MenuItem newPreviewMenuItem;
     private Menu helpMenu;
+    private MenuItem preferencesMenuItem;
     private MenuItem aboutMenuItem;
 
     @Override
@@ -442,10 +445,20 @@ public class MainController extends AbstractController {
         // Help menu
         helpMenu = new Menu(this.getResourceBundle().getString("main.menu.help"));
         
+        // Help > Preferences
+        preferencesMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.help.preferences"));
+        preferencesMenuItem.setOnAction((ActionEvent t) -> {
+            handlePreferencesMenuAction();
+        });
+        helpMenu.getItems().add(preferencesMenuItem);
+        
+        // Help > -
+        helpMenu.getItems().add(new SeparatorMenuItem());
+        
         // Help > About
         aboutMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.help.about"));
         aboutMenuItem.setOnAction((ActionEvent t) -> {
-            handleHelpMenuAction();
+            handleAboutMenuAction();
         });
         helpMenu.getItems().add(aboutMenuItem);
 
@@ -661,7 +674,7 @@ public class MainController extends AbstractController {
                             try {
                                 Stage stage = newDecoratedWindow("", (Parent) ApplicationContext.getPluginRegistry().newPreview(selection, loader));
                                 setupAndShowPreviewWindow(stage, loader);
-                            } catch (Exception ex) {
+                            } catch (PluginException ex) {
                                 displayErrorDialog(ex);
                             }
                         }
@@ -794,7 +807,20 @@ public class MainController extends AbstractController {
         }
     }
     
-    private void handleHelpMenuAction() {
+    private void handlePreferencesMenuAction() {
+        
+        try {
+            FXMLLoader loader = FXMLLoaderFactory.newInstance();
+            Stage stage = newModalWindow(getResourceBundle().getString("preferences.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/preferences_dialog.fxml")));
+            PreferencesDialogController controller = (PreferencesDialogController) loader.getController();
+            controller.setStage(stage);
+            stage.showAndWait();
+        } catch (IOException ex) {
+            this.displayErrorDialog(ex);
+        }
+    }
+    
+    private void handleAboutMenuAction() {
         
         try {
             FXMLLoader loader = FXMLLoaderFactory.newInstance();

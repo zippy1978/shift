@@ -66,4 +66,17 @@ plugin {
         
     }
     
+    preferencesPanelFactories {
+        
+        // WOPE panel
+        preferencesPanelFactory {
+            path = "a/b/c/d/wope"
+            code = {loader ->
+                Node node = (Node) loader.load(getClass().getResourceAsStream("/fxml/wope_preferences_panel.fxml"))
+                return node
+            }
+        }
+        
+    }
+    
 }
