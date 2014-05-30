@@ -49,7 +49,7 @@ public class PlaceholderPreferencesPanelFactory implements PreferencesPanelFacto
 
     @Override
     public Node newPreferencesPanel(FXMLLoader loader) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported");
     }
 
     /**

@@ -1,5 +1,9 @@
 package org.shiftedit.gui.preferences.panel;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+import org.shiftedit.gui.AbstractController;
+
 /*
  * #%L
  * WOPEPreferencesPanelController.java - Shift - 2013
@@ -30,6 +34,22 @@ package org.shiftedit.gui.preferences.panel;
  *
  * @author ggrousset
  */
-public class WOPEPreferencesPanelController implements PreferencesPanelController {
+public class WOPEPreferencesPanelController extends AbstractController implements PreferencesPanelController {
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        super.initialize(url, rb);
+        
+    }
+
+    
+    
+    @Override
+    public boolean applyChanges() {
+        System.out.println(">>> apply changes");
+        
+        return true;
+    }
+    
     
 }

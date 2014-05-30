@@ -30,7 +30,8 @@ package org.shiftedit.gui.preferences;
  * THE SOFTWARE.
  * #L%
  */
-
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TreeCell;
 import org.shiftedit.plugin.PreferencesPanelFactory;
@@ -48,20 +49,26 @@ public class PreferencesTreeCell extends TreeCell<PreferencesPanelFactory> {
 
         if (!empty && factory != null) {
             setContentDisplay(ContentDisplay.LEFT);
-            
+
             // Determine name
-            String itemName = factory.getPath();
-            if (factory.getPath().contains("/")) {
-                itemName = factory.getPath().substring(factory.getPath().lastIndexOf("/") + 1);
+            try {
+                ResourceBundle rb = (ResourceBundle) getUserData();
+                setText(rb.getString(String.format("preferences.panel.%s", factory.getPath().replaceAll("/", "."))));
+            } catch (MissingResourceException ex) {
+                // Fallback if label not defined
+                String itemName = factory.getPath();
+                if (factory.getPath().contains("/")) {
+                    itemName = factory.getPath().substring(factory.getPath().lastIndexOf("/") + 1);
+                }
+                setText(itemName);
             }
-            setText(itemName);
-            
+
         } else {
-            
+
             // If cell is empty : clear it (for reuse)
             setText(null);
             setTextFill(null);
-            
+
         }
     }
 }

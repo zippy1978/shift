@@ -28,28 +28,26 @@ package org.shiftedit.gui.preferences;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
 import org.shiftedit.ApplicationContext;
 import org.shiftedit.gui.FXMLLoaderFactory;
 import org.shiftedit.gui.dialog.AbstractDialogController;
-import org.shiftedit.gui.projectnavigator.ArtifactTreeCell;
-import org.shiftedit.gui.projectnavigator.ProjectNavigatorController;
+import org.shiftedit.gui.preferences.panel.PreferencesPanelController;
 import org.shiftedit.plugin.PreferencesPanelFactory;
-import org.shiftedit.workspace.artifact.Artifact;
-import org.shiftedit.workspace.artifact.PlaceHolderArtifact;
+import org.shiftedit.preferences.PreferencesException;
 
 /**
  *
@@ -67,6 +65,7 @@ public class PreferencesDialogController extends AbstractDialogController {
     private Button cancelButton;
 
     private TreeItem<PreferencesPanelFactory> treeItemRoot;
+    private PreferencesPanelController currentPreferencesPanelController;
 
     private EventHandler<ActionEvent> cancelActionEventHandler;
     private EventHandler<ActionEvent> okActionEventHandler;
@@ -95,6 +94,8 @@ public class PreferencesDialogController extends AbstractDialogController {
         treeItemRoot.setExpanded(true);
         treeView.setCellFactory((TreeView<PreferencesPanelFactory> treeView) -> {
             PreferencesTreeCell cell = new PreferencesTreeCell();
+            // Pass resource bundle for i18n
+            cell.setUserData(getResourceBundle());
             return cell;
         });
 
@@ -105,10 +106,25 @@ public class PreferencesDialogController extends AbstractDialogController {
         treeViewChangeListener = (ObservableValue<? extends TreeItem<PreferencesPanelFactory>> ov, TreeItem<PreferencesPanelFactory> t, TreeItem<PreferencesPanelFactory> t1) -> {
             if (t1 != null) {
                 try {
-                    PreferencesPanelFactory panelFactory = (PreferencesPanelFactory) t1.getValue();
-                    containerPane.getChildren().clear();
-                    if (!(panelFactory instanceof PlaceholderPreferencesPanelFactory)) {
-                        containerPane.getChildren().add(panelFactory.newPreferencesPanel(FXMLLoaderFactory.newInstance()));
+
+                    // Apply changes before leaving current panel
+                    boolean canChange = true;
+                    if (currentPreferencesPanelController != null) {
+                        canChange = currentPreferencesPanelController.applyChanges();
+                    }
+
+                    if (canChange) {
+
+                        PreferencesPanelFactory panelFactory = (PreferencesPanelFactory) t1.getValue();
+                        containerPane.getChildren().clear();
+                        currentPreferencesPanelController = null;
+                        if (!(panelFactory instanceof PlaceholderPreferencesPanelFactory)) {
+                            FXMLLoader loader = FXMLLoaderFactory.newInstance();
+                            Node panelNode = panelFactory.newPreferencesPanel(loader);
+                            currentPreferencesPanelController = (PreferencesPanelController) loader.getController();
+                            containerPane.getChildren().add(panelNode);
+                        }
+
                     }
                 } catch (Exception e) {
                     displayErrorDialog(e);
@@ -190,15 +206,56 @@ public class PreferencesDialogController extends AbstractDialogController {
     }
 
     private void handleCancelButtonAction() {
+
+        try {
+            // Rollback changes
+            ApplicationContext.getPreferencesManager().rollback();
+
+        } catch (PreferencesException ex) {
+            this.displayErrorDialog(ex);
+        }
+
+        // Close anyway...
         this.close();
+
     }
 
     private void handleOKButtonAction() {
-        this.close();
+
+        // Apply changes
+        boolean canCommit = true;
+        if (currentPreferencesPanelController != null) {
+            canCommit = currentPreferencesPanelController.applyChanges();
+        }
+
+        if (canCommit) {
+
+            try {
+
+                // Commit pending changes
+                ApplicationContext.getPreferencesManager().commit();
+
+                // Close
+                this.close();
+
+            } catch (PreferencesException ex) {
+                this.displayErrorDialog(ex);
+            }
+
+        }
+
     }
 
     @Override
     public void close() {
+
+        // Rollback changes
+        try {
+            ApplicationContext.getPreferencesManager().rollback();
+
+        } catch (PreferencesException ex) {
+            this.displayErrorDialog(ex);
+        }
 
         treeView.getSelectionModel().selectedItemProperty().removeListener(treeViewChangeListener);
 

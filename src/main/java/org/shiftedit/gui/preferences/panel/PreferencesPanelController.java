@@ -32,4 +32,10 @@ package org.shiftedit.gui.preferences.panel;
  */
 public interface PreferencesPanelController {
     
+    /**
+     * Apply panel pending changes.
+     * Used to save changes to preferences.
+     * @return true if changes where applied successfully
+     */
+    public boolean applyChanges();
 }
