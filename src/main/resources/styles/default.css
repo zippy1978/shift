@@ -122,6 +122,11 @@
     -fx-font-weight: bold;
 }
 
+.preferences-title-label {
+    -fx-font-size: 130%;
+    -fx-font-weight: bold;
+}
+
 /* Dialogs */
 
 .dialog-symbol {

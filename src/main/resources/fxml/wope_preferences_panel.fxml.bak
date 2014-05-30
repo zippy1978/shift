@@ -17,7 +17,7 @@
     <Label fx:id="locationErrorLabel" alignment="CENTER_RIGHT" layoutX="92.0" layoutY="76.0" prefWidth="228.0" styleClass="error-label" text="Label" />
     <Separator AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="37.0" />
     <Label prefWidth="405.0" styleClass="preferences-title-label" text="%builtin.plugin.preferences.wope.license" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
-    <TableView prefHeight="200.0" prefWidth="403.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="136.0">
+    <TableView prefHeight="200.0" prefWidth="405.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="136.0">
       <columns>
         <TableColumn prefWidth="75.0" text="Column X" />
         <TableColumn prefWidth="75.0" text="Column X" />

@@ -41,6 +41,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import org.shiftedit.ApplicationContext;
 import org.shiftedit.gui.FXMLLoaderFactory;
@@ -58,7 +59,7 @@ public class PreferencesDialogController extends AbstractDialogController {
     @FXML
     private TreeView<PreferencesPanelFactory> treeView;
     @FXML
-    private Pane containerPane;
+    private AnchorPane containerPane;
     @FXML
     private Button okButton;
     @FXML
@@ -122,6 +123,10 @@ public class PreferencesDialogController extends AbstractDialogController {
                             FXMLLoader loader = FXMLLoaderFactory.newInstance();
                             Node panelNode = panelFactory.newPreferencesPanel(loader);
                             currentPreferencesPanelController = (PreferencesPanelController) loader.getController();
+                            AnchorPane.setRightAnchor(panelNode, 0.0);
+                            AnchorPane.setTopAnchor(panelNode, 0.0);
+                            AnchorPane.setLeftAnchor(panelNode, 0.0);
+                            AnchorPane.setBottomAnchor(panelNode, 0.0);
                             containerPane.getChildren().add(panelNode);
                         }
 

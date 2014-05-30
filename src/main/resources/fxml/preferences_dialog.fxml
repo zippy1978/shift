@@ -13,7 +13,7 @@
     <SplitPane fx:id="splitPane" dividerPositions="0.31866666666666665" focusTraversable="true" minHeight="361.0" prefHeight="361.0" prefWidth="600.0" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
         <TreeView fx:id="treeView" prefHeight="200.0" prefWidth="200.0" />
-        <Pane fx:id="containerPane" prefHeight="200.0" prefWidth="200.0" />
+        <AnchorPane fx:id="containerPane" prefHeight="200.0" prefWidth="200.0" />
       </items>
     </SplitPane>
     <AnchorPane minHeight="22.0" prefHeight="41.0" prefWidth="753.0" styleClass="bottom-tool-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0">
