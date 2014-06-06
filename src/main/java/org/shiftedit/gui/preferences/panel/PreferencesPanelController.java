@@ -1,5 +1,7 @@
 package org.shiftedit.gui.preferences.panel;
 
+import javafx.stage.Stage;
+
 /*
  * #%L
  * PreferencesPanelController.java - Shift - 2013
@@ -38,4 +40,8 @@ public interface PreferencesPanelController {
      * @return true if changes where applied successfully
      */
     public boolean applyChanges();
+    
+    public void setStage(Stage stage);
+    
+    public Stage getStage();
 }

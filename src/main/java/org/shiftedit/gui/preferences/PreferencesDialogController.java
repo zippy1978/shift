@@ -123,6 +123,7 @@ public class PreferencesDialogController extends AbstractDialogController {
                             FXMLLoader loader = FXMLLoaderFactory.newInstance();
                             Node panelNode = panelFactory.newPreferencesPanel(loader);
                             currentPreferencesPanelController = (PreferencesPanelController) loader.getController();
+                            currentPreferencesPanelController.setStage(this.getStage());
                             AnchorPane.setRightAnchor(panelNode, 0.0);
                             AnchorPane.setTopAnchor(panelNode, 0.0);
                             AnchorPane.setLeftAnchor(panelNode, 0.0);

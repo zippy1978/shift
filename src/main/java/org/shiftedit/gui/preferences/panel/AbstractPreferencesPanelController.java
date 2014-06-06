@@ -1,13 +1,14 @@
-package org.shiftedit.wope;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import org.shiftedit.gui.AbstractController;
-import org.shiftedit.gui.preferences.panel.PreferencesPanelController;
+package org.shiftedit.gui.preferences.panel;
 
 /*
  * #%L
- * WOPEPreferencesPanelController.java - Shift - 2013
+ * AbstractPreferencesPanelController.java - Shift - 2013
  * %%
  * Copyright (C) 2013 - 2014 Shift
  * %%
@@ -31,25 +32,29 @@ import org.shiftedit.gui.preferences.panel.PreferencesPanelController;
  * #L%
  */
 
+import javafx.stage.Stage;
+import org.shiftedit.gui.AbstractController;
+
 /**
  *
  * @author ggrousset
  */
-public class WOPEPreferencesPanelController extends AbstractController implements PreferencesPanelController {
+public abstract class AbstractPreferencesPanelController extends AbstractController implements PreferencesPanelController{
+    
+    private Stage stage;
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        super.initialize(url, rb);
-        
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
-    
-    
     @Override
-    public boolean applyChanges() {
-        System.out.println(">>> apply changes");
-        
-        return true;
+    public Stage getStage() {
+        return this.stage;
+    }
+    
+    public void displayInvalidDataDialog() {
+        this.displayErrorDialog(getResourceBundle().getString("preferences.title"), getResourceBundle().getString("preferences.invalid_data.text"), null);
     }
     
     
