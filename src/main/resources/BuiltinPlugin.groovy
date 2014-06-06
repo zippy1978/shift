@@ -32,7 +32,6 @@ import org.shiftedit.workspace.artifact.Project
 import org.shiftedit.workspace.artifact.Document
 import org.shiftedit.workspace.artifact.Folder
 import org.shiftedit.util.FileUtils
-import org.shiftedit.gui.preview.wope.WOPERuntimeManager
 
 plugin {
     uid = "org.shiftedit.plugin.builtin"

@@ -25,24 +25,51 @@ package org.shiftedit.gui;
  * THE SOFTWARE.
  * #L%
  */
-
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
+import org.shiftedit.ApplicationContext;
+import org.shiftedit.plugin.Plugin;
+import org.shiftedit.util.MergeResourceBundle;
 
 /**
  *
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
 public class FXMLLoaderFactory {
-    
+
     private static final String BUNDLE_I18N = "i18n";
 
+    private static ResourceBundle bundle;
+
     public static FXMLLoader newInstance() {
-        
+
         FXMLLoader loader = new FXMLLoader();
-        loader.setResources(ResourceBundle.getBundle(BUNDLE_I18N, Locale.getDefault()));
-        
+
+        loader.setResources(getBundle());
+
         return loader;
+    }
+
+    /**
+     * Lazy load resource bundle.
+     */
+    private static synchronized ResourceBundle getBundle() {
+
+        if (bundle == null) {
+            MergeResourceBundle mergeBundle = new MergeResourceBundle();
+            mergeBundle.addResource(ResourceBundle.getBundle(BUNDLE_I18N, Locale.getDefault()));
+
+            // Plugin bundles
+            List<Plugin> plugins = ApplicationContext.getPluginRegistry().getPlugins();
+            plugins.stream().filter((plugin) -> (plugin.getI18nBundle() != null)).forEach((plugin) -> {
+                mergeBundle.addResource(ResourceBundle.getBundle(plugin.getI18nBundle(), Locale.getDefault()));
+            });
+            
+            bundle = mergeBundle;
+        }
+
+        return bundle;
     }
 }

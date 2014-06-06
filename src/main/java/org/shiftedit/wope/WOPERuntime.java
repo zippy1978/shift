@@ -1,4 +1,4 @@
-package org.shiftedit.gui.preview.wope;
+package org.shiftedit.wope;
 
 /*
  * #%L

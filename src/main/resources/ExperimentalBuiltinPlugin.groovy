@@ -32,13 +32,14 @@ import org.shiftedit.workspace.artifact.Project
 import org.shiftedit.workspace.artifact.Document
 import org.shiftedit.workspace.artifact.Folder
 import org.shiftedit.util.FileUtils
-import org.shiftedit.gui.preview.wope.WOPERuntimeManager
+import org.shiftedit.wope.WOPERuntimeManager
 
 plugin {
     uid = "org.shiftedit.plugin.experimentalbuiltin"
     name = "Experimental Builtin plugin"
     versionCode = ${versionCode}
     versionName = "${versionName}"
+    i18nBundle = 'wope/i18n'
     
     lifecycle {
         onLoad = {
@@ -59,7 +60,7 @@ plugin {
             description = "Builtin WOPE preview"
             supportedExtensions = ['html']
             code = {loader ->   
-                Node node = (Node) loader.load(getClass().getResourceAsStream("/fxml/wope_preview.fxml"))
+                Node node = (Node) loader.load(getClass().getResourceAsStream("/wope/fxml/wope_preview.fxml"))
                 return node
             }
         }
@@ -72,7 +73,7 @@ plugin {
         preferencesPanelFactory {
             path = "wope"
             code = {loader ->
-                Node node = (Node) loader.load(getClass().getResourceAsStream("/fxml/wope_preferences_panel.fxml"))
+                Node node = (Node) loader.load(getClass().getResourceAsStream("/wope/fxml/wope_preferences_panel.fxml"))
                 return node
             }
         }

@@ -1,4 +1,4 @@
-package org.shiftedit.gui.preview.wope;
+package org.shiftedit.wope;
 
 /*
  * #%L
@@ -29,7 +29,6 @@ package org.shiftedit.gui.preview.wope;
 
 
 import org.shiftedit.ApplicationContext;
-import org.shiftedit.task.LocalTaskManager;
 import org.shiftedit.util.FileUtils;
 import java.io.File;
 import java.io.IOException;
@@ -37,8 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.slf4j.LoggerFactory;
 
 /**

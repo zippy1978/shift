@@ -1,8 +1,9 @@
-package org.shiftedit.gui.preferences.panel;
+package org.shiftedit.wope;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import org.shiftedit.gui.AbstractController;
+import org.shiftedit.gui.preferences.panel.PreferencesPanelController;
 
 /*
  * #%L

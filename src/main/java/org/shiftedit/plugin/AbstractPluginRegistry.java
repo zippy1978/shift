@@ -193,6 +193,13 @@ public abstract class AbstractPluginRegistry implements PluginRegistry {
         return factories;
     }
 
+    @Override
+    public List<Plugin> getPlugins() {
+        return this.plugins;
+    }
+    
+    
+
     protected void addEditorFactoryToExtension(String extension, EditorFactory editorFactory) {
 
         Set<EditorFactory> factories = editorExtensions.get(extension.toLowerCase());

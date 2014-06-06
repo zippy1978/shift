@@ -109,4 +109,10 @@ public interface PluginRegistry {
      * @return PreferencesPanelFactory list
      */
     public List<PreferencesPanelFactory> getPreferencesPanelFactories();
+    
+    /**
+     * Return loaded plugins
+     * @return  Plugin list
+     */
+    public List<Plugin> getPlugins();
 }

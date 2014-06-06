@@ -36,6 +36,7 @@ metaBuilder.define {
             author(req:false)
             versionCode(req: true)
             versionName(req: true)
+            i18nBundle(req:false)
             lifecycle(req: false, schema: 'lifecycle')
         }
         collections {

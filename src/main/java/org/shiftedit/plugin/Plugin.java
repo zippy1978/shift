@@ -41,6 +41,7 @@ public class Plugin {
     private String author;
     private int versionCode;
     private String versionName;
+    private String i18nBundle;
     private PluginLifecycle lifecycle;
     private List<EditorFactory> editorFactories = new ArrayList<>();
     private List<PreviewFactory> previewFactories = new ArrayList<>();
@@ -199,6 +200,20 @@ public class Plugin {
      */
     public void setPreferencesPanelFactories(List<PreferencesPanelFactory> preferencesPanelFactories) {
         this.preferencesPanelFactories = preferencesPanelFactories;
+    }
+
+    /**
+     * @return the i18nBundle
+     */
+    public String getI18nBundle() {
+        return i18nBundle;
+    }
+
+    /**
+     * @param i18nBundle the i18nBundle to set
+     */
+    public void setI18nBundle(String i18nBundle) {
+        this.i18nBundle = i18nBundle;
     }
 
 }

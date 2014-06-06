@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.shiftedit.gui.preview.wope;
+package org.shiftedit.wope;
 
 /*
  * #%L
@@ -91,7 +91,7 @@ public class WOPEPreviewController extends HTMLPreviewController implements Task
 
         if (runtimeChoice.getItems().size() == 0) {
             // No runtime configured : raise warning message
-            displayInfoDialog(getResourceBundle().getString("builtin.plugin.preview.wope.title"), getResourceBundle().getString("builtin.plugin.preview.wope.not_configured.text"));
+            displayInfoDialog(getResourceBundle().getString("preview.wope.title"), getResourceBundle().getString("preview.wope.not_configured.text"));
             Platform.runLater(() -> {
                 close();
             });
@@ -100,7 +100,7 @@ public class WOPEPreviewController extends HTMLPreviewController implements Task
         // Later ...
         Platform.runLater(() -> {
             if (getStage() != null) {
-                getStage().setTitle(getResourceBundle().getString("builtin.plugin.preview.wope.title"));
+                getStage().setTitle(getResourceBundle().getString("preview.wope.title"));
             }
         });
 
@@ -123,7 +123,7 @@ public class WOPEPreviewController extends HTMLPreviewController implements Task
             protected Object call() throws Exception {
 
                 // Set title
-                updateTitle(String.format(getResourceBundle().getString("builtin.plugin.preview.wope.task.starting_runtime"), currentRuntime.getName()));
+                updateTitle(String.format(getResourceBundle().getString("preview.wope.task.starting_runtime"), currentRuntime.getName()));
 
                 if (previousRuntime != null) {
                     WOPERuntimeManager.getInstance().stopRuntime(previousRuntime);
@@ -178,7 +178,7 @@ public class WOPEPreviewController extends HTMLPreviewController implements Task
     public void onTaskStarted(Task task) {
         
         // Display loading page
-        this.webView.getEngine().load(getClass().getResource("/wope_starting.html").toExternalForm());
+        this.webView.getEngine().load(getClass().getResource("/wope/wope_starting.html").toExternalForm());
     }
 
     @Override
