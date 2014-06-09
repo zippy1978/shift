@@ -68,6 +68,10 @@ public class WOPERuntimeManager {
         return INSTANCE;
     }
     
+    public void reload() {
+        INSTANCE = null;
+    }
+    
     private void loadPreferences() {
     
         // License
