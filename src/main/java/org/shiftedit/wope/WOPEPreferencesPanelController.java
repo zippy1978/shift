@@ -120,13 +120,13 @@ public class WOPEPreferencesPanelController extends AbstractPreferencesPanelCont
         addButtonActionEventHandler = (ActionEvent t) -> {
             handleAddRuntime();
         };
-        addButton.setOnAction(addButtonActionEventHandler);
+        addButton.setOnAction(new WeakEventHandler<>(addButtonActionEventHandler));
 
         // Remove button
         removeButtonActionEventHandler = (ActionEvent t) -> {
             handleRemoveRuntime();
         };
-        removeButton.setOnAction(removeButtonActionEventHandler);
+        removeButton.setOnAction(new WeakEventHandler<>(removeButtonActionEventHandler));
         removeButton.disableProperty().bind(runtimeTable.getSelectionModel().selectedItemProperty().isNull());
 
         // Init existing values
