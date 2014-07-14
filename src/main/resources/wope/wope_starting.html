@@ -22,76 +22,96 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
   #L%
-  -->
+-->
 <!DOCTYPE html>
 <html>
     <head>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-      <title>shift-welcome-window</title>
-      <meta name="description" content="">
-      <meta name="viewport" content="width=device-width">
-      <style>
-          html {
-            font-family: 'Helvetica';
-            font-size: 100%;
-            -webkit-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-            color: #555555;
-          }
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>shift-welcome-window</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <style>
+            html {
+                font-family: 'Helvetica';
+                font-size: 100%;
+                -webkit-text-size-adjust: 100%;
+                -ms-text-size-adjust: 100%;
+                color: #555555;
+            }
 
-          h1 {
-            font-size: 150%;
-            color: rgb(170, 196, 0);
-            text-align: center;
-          }
+            .content{
+                position: absolute;
+                top: 35%;
+                width: 95%;
+                text-align: center;
+            }
 
-          h2 {
-            font-size: 120%;
-            color: rgb(170, 196, 0);
-          }
+            .spinner {
+                margin: 0px auto;
+                width: 50px;
+                height: 30px;
+                text-align: center;
+                font-size: 10px;
+            }
 
-          h3 {
-            font-size: 100%;
-            color: rgb(170, 196, 0);
-            font-weight: normal;
-          }
+            .spinner > div {
+                background-color: rgb(170, 196, 0);;
+                height: 100%;
+                width: 6px;
+                display: inline-block;
 
-          ul {
-            padding-left: 20px;
-            list-style-type: square;
-          }
+                -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+                animation: stretchdelay 1.2s infinite ease-in-out;
+            }
 
-          li {
-            padding-bottom: 5px;
-          	line-height: 20px;
-          }
+            .spinner .rect2 {
+                -webkit-animation-delay: -1.1s;
+                animation-delay: -1.1s;
+            }
 
-          .centered {
-              text-align: center;
-          }
+            .spinner .rect3 {
+                -webkit-animation-delay: -1.0s;
+                animation-delay: -1.0s;
+            }
 
-          .logo {
-              width: 128px;
-              height: 128px;
-          }
-        
-          .warning {
-          	background-color: #eabe38;
-          	font-weight: bold;
-          color: white;
-          	padding: 10px;
-          	border-radius: 5px;
-          }
-        
-        .warning p {
-          margin: 0px 0px 5px 0px;
-        }
+            .spinner .rect4 {
+                -webkit-animation-delay: -0.9s;
+                animation-delay: -0.9s;
+            }
 
-      </style>
+            .spinner .rect5 {
+                -webkit-animation-delay: -0.8s;
+                animation-delay: -0.8s;
+            }
+
+            @-webkit-keyframes stretchdelay {
+                0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+                20% { -webkit-transform: scaleY(1.0) }
+            }
+
+            @keyframes stretchdelay {
+                0%, 40%, 100% { 
+                    transform: scaleY(0.4);
+                    -webkit-transform: scaleY(0.4);
+                }  20% { 
+                    transform: scaleY(1.0);
+                    -webkit-transform: scaleY(1.0);
+                }
+            }
+
+        </style>
     </head>
     <body>
-        <p>WOPE runtime is starting</p>
-        <p>Please wait...</p>
+        <div class="content">
+            <p>WOPE runtime is starting</p>
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+        </div>
     </body>
 </html>
