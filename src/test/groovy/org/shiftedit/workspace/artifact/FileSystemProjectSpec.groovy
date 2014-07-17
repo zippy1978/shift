@@ -48,7 +48,7 @@ class FileSystemProjectSpec extends Specification {
         subDirFile.mkdirs()
         documentFile = new File(subDirFile, 'document.txt')
         documentFile.withWriter{it << 'Test doc'} 
-        project = new FileSystemProject(projectDir)
+        project = new FileSystemProject(projectDir, new FileSystemArtifactWatcher())
         
     }
     

@@ -158,8 +158,12 @@ public class ApplicationContext {
         } catch (PreferencesException ex) {
             log.error("Failed to persist preferences", ex);
         }
+        
+        if (WORKSPACE_INSTANCE != null) {
+            WORKSPACE_INSTANCE.clear();
+            WORKSPACE_INSTANCE = null;
+        }
 
-        WORKSPACE_INSTANCE = null;
         STATE_MANAGER_INSTANCE = null;
         PREFERENCES_MANAGER_INSTANCE = null;
         THEME_MANAGER_INSTANCE = null;

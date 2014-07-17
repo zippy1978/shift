@@ -29,6 +29,7 @@ import org.shiftedit.util.FileUtils;
 import org.shiftedit.util.WeakObservable;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * Abstract file system artifact implementation.
@@ -40,6 +41,10 @@ public abstract class AbstractFileSystemArtifact extends WeakObservable implemen
     protected File file;
     protected boolean loaded;
     protected boolean deleted;
+    private Date lastModificationDate;
+    private Date loadDate;
+    
+    protected FileSystemArtifactWatcher watcher;
 
     protected AbstractFileSystemArtifact(File file) {
 
@@ -49,10 +54,15 @@ public abstract class AbstractFileSystemArtifact extends WeakObservable implemen
 
     @Override
     public void load() throws IOException {
-        if (loaded) {
-            return;
-        }
+        this.loadDate = new Date();
     }
+
+    @Override
+    public void refresh() throws IOException {
+        this.loadDate = new Date();
+    }
+    
+    
 
     @Override
     public String getName() {
@@ -87,6 +97,10 @@ public abstract class AbstractFileSystemArtifact extends WeakObservable implemen
 
         FileUtils.moveFile(file, destFile);
         file = destFile;
+        
+        // Update watcher data
+        this.getWatcher().removeArtifact(this);
+        this.getWatcher().addArtifact(this);
 
         this.setChanged();
         this.notifyObservers();
@@ -108,6 +122,10 @@ public abstract class AbstractFileSystemArtifact extends WeakObservable implemen
 
         FileUtils.moveFile(file, destFile);
         file = destFile;
+        
+        // Update watcher data
+        this.getWatcher().removeArtifact(this);
+        this.getWatcher().addArtifact(this);
 
         this.setChanged();
         this.notifyObservers();
@@ -119,6 +137,59 @@ public abstract class AbstractFileSystemArtifact extends WeakObservable implemen
     @Override
     public boolean isDeleted() {
         return deleted;
+    }
+
+    @Override
+    public synchronized boolean isOutOfSync() {
+        
+        this.setLastModificationDate(new Date(new File(file.getAbsolutePath()).lastModified()));
+        return this.loaded && this.lastModificationDate.after(this.loadDate);
+    }
+    
+    /**
+     * Notify if document is out of sync.
+     */
+    protected void notifyOutOfSync() {
+        
+        if (this.isOutOfSync()) {
+            this.setChanged();
+            this.notifyObservers();
+        }
+    }
+    
+    /**
+     * @return the watcher
+     */
+    public FileSystemArtifactWatcher getWatcher() {
+        return watcher;
+    }
+
+    /**
+     * @return the lastModificationDate
+     */
+    public Date getLastModificationDate() {
+        return lastModificationDate;
+    }
+
+    /**
+     * @param lastModificationDate the lastModificationDate to set
+     */
+    public void setLastModificationDate(Date lastModificationDate) {
+        this.lastModificationDate = lastModificationDate;
+    }
+
+    /**
+     * @return the loadDate
+     */
+    public Date getLoadDate() {
+        return loadDate;
+    }
+
+    /**
+     * @param loadDate the loadDate to set
+     */
+    public void setLoadDate(Date loadDate) {
+        this.loadDate = loadDate;
     }
     
 }

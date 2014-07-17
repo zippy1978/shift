@@ -46,6 +46,8 @@ public interface EditorController {
     
     public Document getDocument();
     
+    public void setDocument(Document document);
+    
     public void find();
     
     public void findPrevious();

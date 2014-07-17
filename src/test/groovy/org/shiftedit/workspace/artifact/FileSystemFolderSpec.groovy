@@ -33,32 +33,46 @@ import com.github.goldin.spock.extensions.tempdir.*
  * @author ggrousset
  */
 class FileSystemFolderSpec extends Specification {
-	
+    	
     @Shared @TempDir File projectDir
     @Shared Project project
     @Shared File folderDir
     @Shared Folder folder
+    @Shared File documentFile
+    @Shared FileSystemDocument document
     
     def setupSpec() {
         
         // Setup test project and load it
         folderDir = new File(projectDir, 'folder')
         folderDir.mkdir()
-        project = new FileSystemProject(projectDir)
+        documentFile = new File(folderDir, 'document')
+        documentFile.withWriter{it << 'DOCUMENT'}
+        project = new FileSystemProject(projectDir, new FileSystemArtifactWatcher())
         project.load()
         folder = project.getSubFolders().get(0)
+        document = folder.getDocuments().get(0)
     }
     
     def "folder structure is updated on refresh when it changed outside the workspace"() {
         
         when:
+        // Create subfolder
         def subFolder = new File(folderDir, 'subfolder')
         subFolder.mkdir()
+        // Modify document
+        document.open()
+        document.setContentAsString("MODIFIED")
+        
         folder.refresh()
         
         then:
+        // New folder detected
         folder.getSubFolders().size() == 1
+        // Modified document content must stay the same
+        document.getContentAsString() == 'MODIFIED'
         
     }
+    
 }
 

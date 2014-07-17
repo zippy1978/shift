@@ -40,14 +40,14 @@ import java.util.Observer;
  */
 public class FileSystemFolder extends AbstractFileSystemArtifact implements Folder, Observer {
 
-    private List<Folder> subFolders = new ArrayList<>();
-    private List<Document> documents = new ArrayList<>();
+    private final List<Folder> subFolders = new ArrayList<>();
+    private final List<Document> documents = new ArrayList<>();
     private Folder parentFolder;
     private Project project;
     
     public FileSystemFolder(Folder parentFolder, File file) {
         super(file);
-        this.parentFolder = parentFolder;
+        this.parentFolder = parentFolder;   
     }
 
     @Override
@@ -100,7 +100,125 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
     @Override
     public void refresh() throws IOException {
         
-        this.load();
+        super.refresh();
+        
+        boolean changeDetected = false;
+        
+        // Test if file exists
+        if (!file.exists()) {
+            throw new IOException(String.format("Directory %s not found", file.getAbsolutePath()));
+        }
+        
+        for (File child : file.listFiles()) {
+            
+            // Hidden files are skipped
+            if (!child.isHidden()) {
+            
+                if (child.isDirectory()) {
+                    // It's a folder
+                    
+                    Folder existingFolder = this.findChildFolder(child);
+                    
+                    // If not there : add it
+                    if (existingFolder == null) {
+                         changeDetected = true;
+                         Folder folder = new FileSystemFolder(this, child);
+                         folder.addObserver(this);
+                         subFolders.add(folder);
+                         folder.load();
+                    // If already there : refresh it
+                    } else {
+                        existingFolder.refresh();
+                    }
+                    
+                    // Look for children to delete (in folder, but not on file system anymore)
+                    List<Folder> foldersToDelete = new ArrayList<>();
+                    for(Folder folder : this.getSubFolders()) {
+                        File folderFile = new File(folder.getPath());
+                        if (!folderFile.exists()) {
+                            changeDetected = true;
+                            foldersToDelete.add(folder);
+                        }
+                    }
+                    for (Folder folder : foldersToDelete) {
+                        folder.delete();
+                    }
+                    
+
+                } else if (child.isFile()) {
+                    // It's a document
+                    
+                    Document existingDocument = this.findChildDocument(child);
+                    
+                    // If not there : add it
+                    if (existingDocument == null) {
+                        changeDetected = true;
+                        Document document =  new FileSystemDocument(this, child);
+                        document.addObserver(this);
+                        documents.add(document);
+                        document.load();
+                    // If already there : refresh if, only if not opened
+                    } else {
+                        if (!existingDocument.isOpened()) {
+                            existingDocument.refresh();
+                        }
+                    }
+                    
+                    // Look for children to delete (in folder, but not on file system anymore)
+                    List<Document> documentsToDelete = new ArrayList<>();
+                    for(Document document : this.getDocuments()) {
+                        File documentFile = new File(document.getPath());
+                        if (!documentFile.exists() && !document.isOpened()) {
+                            changeDetected = true;
+                            documentsToDelete.add(document);
+                        }
+                    }
+                    for(Document document : documentsToDelete) {
+                        document.delete();
+                    }
+                    
+                }
+            
+            }
+        }
+        
+        // Notify
+        if (changeDetected) {
+            this.setChanged();
+            this.notifyObservers();
+        }
+    }
+    
+    /**
+     * Returns a folder mathching a given file into current folder children.
+     * @param file File to look for
+     * @return Folder found or null
+     */
+    private Folder findChildFolder(File file) {
+        
+        for (Folder folder : this.getSubFolders()) {
+            if (folder.getPath().equals(file.getAbsolutePath())) {
+                return folder;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Returns a document matching a given file into the current folder children.
+     * @param file File to look for
+     * @return File found or null
+     */
+    private Document findChildDocument(File file) {
+        
+        for (Document document : this.getDocuments()) {
+            if (document.getPath().equals(file.getAbsolutePath())) {
+                return document;
+            }
+        }
+        
+        return null;
     }
 
     @Override
@@ -161,6 +279,13 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
             }
         }
         
+        // Watch
+        if (this.parentFolder != null) {
+            this.watcher = ((FileSystemProject)this.getProject()).getWatcher();
+        }
+        this.watcher.removeArtifact(this);
+        this.watcher.addArtifact(this);
+        
         loaded = true;
     }
     
@@ -169,7 +294,7 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
         super.delete();
         
         // Delete
-        if (!FileUtils.deleteDirectory(file)) {
+        if (file.exists() && !FileUtils.deleteDirectory(file)) {
             throw new IOException(String.format("Failed to delete %s ", file.getAbsolutePath()));
         }
         
@@ -177,6 +302,9 @@ public class FileSystemFolder extends AbstractFileSystemArtifact implements Fold
         if (parentFolder != null) {
             parentFolder.getSubFolders().remove(this);
         }
+        
+        // Remove watch
+        this.watcher.removeArtifact(this);
         
         // Notify
         this.setChanged();

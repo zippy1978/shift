@@ -35,27 +35,51 @@ import org.shiftedit.workspace.artifact.Folder;
 import org.shiftedit.workspace.artifact.Project;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.shiftedit.workspace.artifact.FileSystemArtifactWatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Gilles Grousset (gi.grousset@gmail.com)
  */
 public class LocalWorkspace extends WeakObservable implements Workspace {
+    
+    private static final Logger log = LoggerFactory.getLogger(LocalWorkspace.class);
+    private final List<Project> projects = new ArrayList<>();
+    
+    private final FileSystemArtifactWatcher fileSystemArtifactWatcher;
 
-    private List<Project> projects = new ArrayList<>();
+    public LocalWorkspace() {
+        fileSystemArtifactWatcher = new FileSystemArtifactWatcher();
+    }
 
+    @Override
+    public void clear() {
+        
+        projects.clear();
+        fileSystemArtifactWatcher.stopWatching();
+    }
+    
+    
+    
     @Override
     public List<Project> getProjects() {
         return projects;
     }
-
+    
     @Override
     public Artifact findArtifactByWorkspacePath(String workspacePath) {
-
+        
         for (Project project : projects) {
             Artifact artifact = this.findArtifactByWorkspacePathFromArtifact(project, workspacePath);
             if (artifact != null) {
@@ -75,9 +99,9 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
      * @return
      */
     private Artifact findArtifactByWorkspacePathFromArtifact(Artifact artifact, String workspacePath) {
-
+        
         Artifact result = null;
-
+        
         if (artifact.getWorkspacePath().equals(workspacePath)) {
             return artifact;
         } else {
@@ -100,7 +124,7 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
         // Nothing found ...
         return null;
     }
-
+    
     @Override
     public void synchronize() throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -118,24 +142,24 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
      */
     @Override
     public Project createProject(String location, String name) throws IOException {
-
-        Project newProject = new FileSystemProject(new File(location, name));
+        
+        Project newProject = new FileSystemProject(new File(location, name), getFileSystemArtifactWatcher());
         newProject.save();
-
+        
         return newProject;
     }
-
+    
     @Override
     public Project importProjectFromDirectory(File sourceDirectory, String location, String name) throws IOException {
-
+        
         Project project = this.createProject(location, name);
-
+        
         this.importFolderFromDirectory(sourceDirectory, project);
-
+        
         return project;
-
+        
     }
-
+    
     private void importFolderFromDirectory(File sourceDirectory, Folder folder) throws IOException {
 
         // Browse source dir
@@ -149,14 +173,14 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
                 Document newDocument = folder.createDocument(file.getName());
                 newDocument.setContent(FileUtils.getFileContent(file));
                 newDocument.save();
-
+                
             }
         }
     }
-
+    
     @Override
     public void openProject(Project project) throws IOException {
-
+        
         if (!this.isProjectOpened(project.getPath())) {
 
             // Load project
@@ -168,10 +192,10 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
             // Notify
             this.setChanged();
             this.notifyObservers(project);
-
+            
         }
     }
-
+    
     @Override
     public void closeProject(Project project) throws IOException {
 
@@ -182,27 +206,27 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
         this.setChanged();
         this.notifyObservers(project);
     }
-
+    
     @Override
     public boolean isProjectOpened(String path) {
-
+        
         for (Project project : projects) {
             if (project.getPath().equals(path)) {
                 return true;
             }
         }
-
+        
         return false;
     }
-
+    
     @Override
     public boolean isProjectOpened(Project project) {
         return this.isProjectOpened(project.getPath());
     }
-
+    
     @Override
     public boolean isModified() {
-
+        
         for (Project project : projects) {
             if (project.isModified()) {
                 return true;
@@ -211,7 +235,7 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
         
         return false;
     }
-
+    
     @Override
     public void saveState(Map<String, Object> state) throws StateException {
 
@@ -221,14 +245,14 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
             Map<String, Object> projectState = new HashMap<>();
             projectState.put("path", project.getPath());
             projectState.put("class", project.getClass().getSimpleName());
-
+            
             projectsState.add(projectState);
         }
-
+        
         state.put("projects", projectsState);
-
+        
     }
-
+    
     @Override
     public void restoreState(Map<String, Object> state) throws StateException {
 
@@ -237,10 +261,10 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
         for (Map<String, Object> projectState : projectsState) {
             String path = (String) projectState.get("path");
             String clazz = (String) projectState.get("class");
-
+            
             if (clazz.equals(FileSystemProject.class.getSimpleName())) {
                 File file = new File(path);
-                Project project = new FileSystemProject(file);
+                Project project = new FileSystemProject(file, fileSystemArtifactWatcher);
                 if (file.exists()) {
                     try {
                         project.load();
@@ -252,9 +276,16 @@ public class LocalWorkspace extends WeakObservable implements Workspace {
             }
         }
     }
-
+    
     @Override
     public String getInstanceIdentifier() {
         return null;
+    }
+
+    /**
+     * @return the fileSystemArtifactWatcher
+     */
+    public FileSystemArtifactWatcher getFileSystemArtifactWatcher() {
+        return fileSystemArtifactWatcher;
     }
 }

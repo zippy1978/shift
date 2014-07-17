@@ -48,7 +48,7 @@ class FileSystemDocumentSpec extends Specification{
         textFile.withWriter{it << 'File content'} 
         binFile = new File(projectDir, '002.png')
         binFile.withOutputStream(){it << this.getClass().getResourceAsStream('/images/icon_512x512.png')}
-        project = new FileSystemProject(projectDir)
+        project = new FileSystemProject(projectDir, new FileSystemArtifactWatcher())
         project.load()
         textDocument = project.getDocuments().get(0)
         binDocument = project.getDocuments().get(1)

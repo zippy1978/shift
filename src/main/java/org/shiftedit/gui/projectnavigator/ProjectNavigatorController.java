@@ -40,7 +40,6 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -53,7 +52,6 @@ import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Callback;
 
 /**
  *
@@ -268,15 +266,15 @@ public class ProjectNavigatorController extends AbstractController implements Ob
     public void update(Observable o, Object arg) {
 
         boolean canRefresh = true;
-        boolean canSelect = true;
         
         // If workspace if empty : display welcome label
         this.refreshWelcomeMessage();
 
-        // Special case for document : no need to refresh if document is marked as modified
+        // Special case for document : no need to refresh navigator except for add / delete
         Document document = null;
         if (o instanceof Document) {
             document = (Document) o;
+            canRefresh = false;
 
         }
         if (arg != null && arg instanceof Document) {
@@ -285,14 +283,12 @@ public class ProjectNavigatorController extends AbstractController implements Ob
         }
         if (document != null) {
             
-            if (document.isModified() && !document.isDeleted()) {
-                canRefresh = false;
+            if (document.isDeleted() || document.isNew()) {
+                canRefresh = true;
             }
-            if (!document.isNew()) {
-                canSelect = false;
-            }
+            
         }
-        
+          
         if (canRefresh) {
 
             // Refresh display

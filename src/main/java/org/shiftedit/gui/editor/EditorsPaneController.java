@@ -25,6 +25,7 @@ package org.shiftedit.gui.editor;
  * THE SOFTWARE.
  * #L%
  */
+import java.io.IOException;
 import org.shiftedit.ApplicationContext;
 import org.shiftedit.gui.AbstractController;
 import org.shiftedit.gui.FXMLLoaderFactory;
@@ -42,10 +43,14 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -68,10 +73,10 @@ public class EditorsPaneController extends AbstractController implements Observe
 
     @FXML
     private TabPane tabPane;
-    
-    @FXML 
+
+    @FXML
     private Label welcomeLabel;
-    
+
     /**
      * EventHandler in charge of notifying active document change or active
      * document updates. To track only active editor / document change consider
@@ -99,14 +104,14 @@ public class EditorsPaneController extends AbstractController implements Observe
                 activeEditorControllerProperty.set(null);
             }
         });
-        
+
         // Display welcome message if no tab opened
         this.refreshWelcomeMessage();
 
         // Observe Worspace changes (in case a project is closed)
         ApplicationContext.getWorkspace().addObserver(this);
     }
-    
+
     private void refreshWelcomeMessage() {
         // Display welcome message if no tab opened
         welcomeLabel.setVisible(tabPane.getTabs().isEmpty());
@@ -161,7 +166,7 @@ public class EditorsPaneController extends AbstractController implements Observe
                 tabPane.getTabs().add(tab);
                 SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
                 selectionModel.select(tab);
-                
+
                 this.refreshWelcomeMessage();
 
                 return tab;
@@ -188,7 +193,6 @@ public class EditorsPaneController extends AbstractController implements Observe
 
         return null;
 
-
     }
 
     private void closeTab(Tab tab) {
@@ -199,7 +203,7 @@ public class EditorsPaneController extends AbstractController implements Observe
         controller.setOnCursorChanged(null);
         tabPane.getTabs().remove(tab);
         tab.setGraphic(null);
-        
+
         this.refreshWelcomeMessage();
 
         // Notify document changed
@@ -254,7 +258,14 @@ public class EditorsPaneController extends AbstractController implements Observe
                         if (document.isDeleted()) {
                             tabsToRemove.add(tab);
                         }
+
                     }
+
+                    // Document is out of sync
+                    if (document.isOutOfSync()) {
+                        this.handleOutOfSyncEditor(controller);
+                    }
+
                 }
             }
 
@@ -289,6 +300,65 @@ public class EditorsPaneController extends AbstractController implements Observe
             }
 
         }
+    }
+
+    private void handleOutOfSyncEditor(EditorController controller) {
+
+        displayConfirmDialog(getResourceBundle().getString("dialog.confirm.out_of_sync.title"), 
+                String.format(getResourceBundle().getString("dialog.confirm.out_of_sync.text"), controller.getDocument().getName()), 
+                getResourceBundle().getString("dialog.confirm.out_of_sync.positive.text"),
+                getResourceBundle().getString("dialog.confirm.out_of_sync.negative.text"),
+                (ConfirmDialogController.ChoiceEvent t) -> {
+
+            Document document = controller.getDocument();
+            
+            if (t.getChoice() == ConfirmDialogController.Choice.POSITIVE) {
+                // Keep : resave the doc
+                
+                // Async save
+                ApplicationContext.getTaskManager().addTask(new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        if (document != null) {
+
+                            updateTitle(String.format(getResourceBundle().getString("task.saving_file"), document.getName()));
+                            document.save();
+                            updateProgress(1, 1);
+
+                        }
+                        return document;
+                    }
+                });
+        
+            } else {
+                // Refresh the doc
+                
+                // Async refresh
+                ApplicationContext.getTaskManager().addTask(new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        if (document != null) {
+
+                            updateTitle(String.format(getResourceBundle().getString("task.opening_file"), document.getName()));
+                            document.refresh();
+                            updateProgress(1, 1);
+                            
+                            Platform.runLater(new Thread() {
+
+                                @Override
+                                public void run() {
+                                    controller.setDocument(document);
+                                }
+                                
+                            });
+
+                        }
+                        return document;
+                    }
+                    
+                });
+            }
+        });
     }
 
     /**

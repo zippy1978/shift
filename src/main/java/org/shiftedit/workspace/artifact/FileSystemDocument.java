@@ -29,6 +29,7 @@ import org.shiftedit.util.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 /**
  *
@@ -49,6 +50,7 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
         super(file);
         this.parentFolder = parentFolder;
         opened = false;
+        
     }
 
     @Override
@@ -60,6 +62,12 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
         if (!file.exists()) {
             throw new IOException(String.format("File %s not found", file.getAbsolutePath()));
         }
+        
+        // Watch
+        if (this.parentFolder != null) {
+            this.watcher = ((FileSystemProject)this.getProject()).getWatcher();
+        }
+        this.watcher.addArtifact(this);
 
         loaded = true;
     }
@@ -69,7 +77,7 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
         super.delete();
 
         // Delete
-        if (!file.delete()) {
+        if (file.exists() && !file.delete()) {
             throw new IOException(String.format("Failed to delete %s ", file.getAbsolutePath()));
         }
 
@@ -77,6 +85,9 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
         if (parentFolder != null) {
             parentFolder.getDocuments().remove(this);
         }
+        
+        // Remove watch
+        this.watcher.removeArtifact(this);
 
         // Notify
         this.setChanged();
@@ -101,6 +112,9 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
             FileUtils.saveContentToFile(content, file);
 
             modified = false;
+            
+            // Update load date on save
+            this.setLoadDate(new Date());
 
             // Notify document changed
             this.setChanged();
@@ -117,11 +131,24 @@ public class FileSystemDocument extends AbstractFileSystemArtifact implements Do
     @Override
     public void refresh() throws IOException {
         
-        // If document is opened : reopen the document to get the new content
-        if (opened) {
-            this.close();
-            this.open();
+        super.refresh();
+        
+        if (file.exists()) {
+        
+            // If document is opened : reopen the document to get the new content
+            if (opened) {
+                this.close();
+                this.open();
+            }
+        
+        // If file does not exist anymore : delete
+        } else {
+            this.delete();
         }
+        
+        // Notify
+        this.setChanged();
+        this.notifyObservers();
     }
 
     @Override

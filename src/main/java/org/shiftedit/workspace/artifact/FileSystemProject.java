@@ -34,8 +34,9 @@ import java.io.File;
  */
 public class FileSystemProject extends FileSystemFolder implements Project {
 
-    public FileSystemProject(File file) {
+    public FileSystemProject(File file, FileSystemArtifactWatcher watcher) {
         super(null, file);
+        this.watcher = watcher;
     }
     
 }

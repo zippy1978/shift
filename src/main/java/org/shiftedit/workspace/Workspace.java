@@ -60,6 +60,8 @@ public interface Workspace extends PersistableState {
     
     public boolean isProjectOpened(Project project);
     
+    public void clear();
+    
     /**
      * Check if at least one artifact was modified in the workspace.
      * @return 

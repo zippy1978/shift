@@ -77,6 +77,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.shiftedit.gui.preferences.PreferencesDialogController;
+import org.shiftedit.workspace.LocalWorkspace;
+import org.shiftedit.workspace.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -150,13 +152,13 @@ public class MainController extends AbstractController {
         projectNavigatorController.setOnNewFolder((ProjectNavigatorController.NewFolderEvent t) -> {
             handleNewFolderMenuAction();
         });
-        
+
         // Register import artifacts action on project navigator
         projectNavigatorController.setOnImportArtifacts((ProjectNavigatorController.ImportArtifactsEvent t) -> {
             handleImportArtifactsMenuAction();
         });
-        
-         // Register rename artifact action on project navigator
+
+        // Register rename artifact action on project navigator
         projectNavigatorController.setOnRenameArtifact((ProjectNavigatorController.RenameArtifactEvent t) -> {
             handleRenameArtifactMenuAction();
         });
@@ -319,7 +321,6 @@ public class MainController extends AbstractController {
         });
         fileMenu.getItems().add(newFolderMenuItem);
 
-
         // File > -
         fileMenu.getItems().add(new SeparatorMenuItem());
 
@@ -425,7 +426,7 @@ public class MainController extends AbstractController {
 
         // Edit > Find
         this.buildFindSubMenu();
-        
+
         // Edit > -
         editMenu.getItems().add(new SeparatorMenuItem());
 
@@ -441,20 +442,20 @@ public class MainController extends AbstractController {
         // Window menu
         windowMenu = new Menu(this.getResourceBundle().getString("main.menu.window"));
         this.buildWindowMenu();
-        
+
         // Help menu
         helpMenu = new Menu(this.getResourceBundle().getString("main.menu.help"));
-        
+
         // Help > Preferences
         preferencesMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.help.preferences"));
         preferencesMenuItem.setOnAction((ActionEvent t) -> {
             handlePreferencesMenuAction();
         });
         helpMenu.getItems().add(preferencesMenuItem);
-        
+
         // Help > -
         helpMenu.getItems().add(new SeparatorMenuItem());
-        
+
         // Help > About
         aboutMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.help.about"));
         aboutMenuItem.setOnAction((ActionEvent t) -> {
@@ -473,17 +474,17 @@ public class MainController extends AbstractController {
         this.refreshEditMenu();
         this.refreshWindowMenu();
     }
-    
+
     /**
      * Build Edit > Find submenu
      */
     private void buildFindSubMenu() {
-     
+
         // Find menu
         findSubMenu = new Menu(this.getResourceBundle().getString("main.menu.edit.find"));
-        
+
         editMenu.getItems().add(findSubMenu);
-        
+
         // Find > Find...
         MenuItem findMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.find.find"));
         findMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_FIND));
@@ -491,7 +492,7 @@ public class MainController extends AbstractController {
             handleFindMenuAction();
         });
         findSubMenu.getItems().add(findMenuItem);
-        
+
         // Find > Find Next
         MenuItem findNextMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.find.find_next"));
         findNextMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_FIND_NEXT));
@@ -499,7 +500,7 @@ public class MainController extends AbstractController {
             handleFindNextMenuAction();
         });
         findSubMenu.getItems().add(findNextMenuItem);
-        
+
         // Find > Find Previous
         MenuItem findPreviousMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.find.find_previous"));
         findPreviousMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_FIND_PREVIOUS));
@@ -507,10 +508,10 @@ public class MainController extends AbstractController {
             handleFindPreviousMenuAction();
         });
         findSubMenu.getItems().add(findPreviousMenuItem);
-        
+
         // Find > -
         findSubMenu.getItems().add(new SeparatorMenuItem());
-        
+
         // Find > Replace ...
         MenuItem replaceMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.find.replace"));
         replaceMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_REPLACE));
@@ -518,7 +519,7 @@ public class MainController extends AbstractController {
             handleReplaceMenuAction();
         });
         findSubMenu.getItems().add(replaceMenuItem);
-        
+
         // Find > Replace All...
         MenuItem replaceAllMenuItem = new MenuItem(this.getResourceBundle().getString("main.menu.edit.find.replace_all"));
         replaceAllMenuItem.setAccelerator(this.getShortcut(Constants.SHORTCUT_REPLACE_ALL));
@@ -548,7 +549,7 @@ public class MainController extends AbstractController {
                     controller.setProjectGenerator(projectWizardFactory.getProjectGenerator());
                     controller.setStage(stage);
                     stage.showAndWait();
-                    
+
                 } catch (PluginException ex) {
                     displayErrorDialog(ex);
                 }
@@ -594,7 +595,7 @@ public class MainController extends AbstractController {
             }
 
         }
-        
+
         // refresh state
         this.refreshWindowMenu();
     }
@@ -604,11 +605,9 @@ public class MainController extends AbstractController {
 
         super.onChildWindowRemoved(stage);
 
-        
         // Update opened windows in Window menu
         this.buildWindowMenu();
-        
-        
+
     }
 
     @Override
@@ -670,7 +669,7 @@ public class MainController extends AbstractController {
                     displayPickerDialog(getResourceBundle().getString("main.preview_picker.title"), getResourceBundle().getString("main.preview_picker.text"), options, (PickerDialogController.SelectionEvent t) -> {
                         if (t.getPosition() > -1) {
                             PreviewFactory selection = availableFactories.get(t.getPosition());
-                            
+
                             try {
                                 Stage stage = newDecoratedWindow("", (Parent) ApplicationContext.getPluginRegistry().newPreview(selection, loader));
                                 setupAndShowPreviewWindow(stage, loader);
@@ -687,27 +686,25 @@ public class MainController extends AbstractController {
 
             }
 
-
-
         } catch (Exception ex) {
             this.displayErrorDialog(ex);
         }
     }
-    
+
     private void handleFindMenuAction() {
         EditorController editorController = editorsPaneController.getActiveEditorController();
         if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
             editorController.find();
         }
     }
-    
+
     private void handleFindNextMenuAction() {
         EditorController editorController = editorsPaneController.getActiveEditorController();
         if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
             editorController.findNext();
         }
     }
-    
+
     private void handleFindPreviousMenuAction() {
         EditorController editorController = editorsPaneController.getActiveEditorController();
         if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
@@ -721,14 +718,14 @@ public class MainController extends AbstractController {
             editorController.replace();
         }
     }
-    
+
     private void handleReplaceAllMenuAction() {
         EditorController editorController = editorsPaneController.getActiveEditorController();
         if (editorController != null && ApplicationContext.getMainStage().isFocused()) {
             editorController.replaceAll();
         }
     }
-    
+
     /**
      * Setup a newly created preview window
      *
@@ -748,7 +745,7 @@ public class MainController extends AbstractController {
         }
 
         previewStage.show();
-        
+
     }
 
     private void handleUndoMenuAction() {
@@ -806,9 +803,9 @@ public class MainController extends AbstractController {
             editorController.contentAssist();
         }
     }
-    
+
     private void handlePreferencesMenuAction() {
-        
+
         try {
             FXMLLoader loader = FXMLLoaderFactory.newInstance();
             Stage stage = newModalWindow(getResourceBundle().getString("preferences.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/preferences_dialog.fxml")));
@@ -819,9 +816,9 @@ public class MainController extends AbstractController {
             this.displayErrorDialog(ex);
         }
     }
-    
+
     private void handleAboutMenuAction() {
-        
+
         try {
             FXMLLoader loader = FXMLLoaderFactory.newInstance();
             Stage stage = newModalWindow(getResourceBundle().getString("main.about.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/about_dialog.fxml")));
@@ -851,12 +848,12 @@ public class MainController extends AbstractController {
             this.displayErrorDialog(ex);
         }
     }
-    
+
     private void handleRenameArtifactMenuAction() {
         // For the moment the action is not bound to any menu item
         // But in the future maybe...
-        
-         try {
+
+        try {
             // Open dialog
             FXMLLoader loader = FXMLLoaderFactory.newInstance();
             Stage stage = newModalWindow(getResourceBundle().getString("main.rename.title"), (Parent) loader.load(getClass().getResourceAsStream("/fxml/rename_dialog.fxml")));
@@ -870,7 +867,7 @@ public class MainController extends AbstractController {
         } catch (IOException ex) {
             this.displayErrorDialog(ex);
         }
- 
+
     }
 
     private void handleDeleteArtifactMenuAction() {
@@ -919,21 +916,21 @@ public class MainController extends AbstractController {
             });
         }
     }
-    
+
     private void handleImportArtifactsMenuAction() {
         // For the moment the action is not bound to any menu item
         // But in the future maybe...
-        
+
         final Artifact artifact = projectNavigatorController.getSelectedArtifact();
 
         if (artifact != null) {
-            
+
             // Display file chooser
             FileChooser fileChooser = new FileChooser();
-            
+
             fileChooser.setTitle(this.getResourceBundle().getString("main.import.title"));
             final List<File> selectedFiles = fileChooser.showOpenMultipleDialog(null);
-            
+
             if (selectedFiles != null) {
                 ApplicationContext.getTaskManager().addTask(new Task() {
 
@@ -941,12 +938,12 @@ public class MainController extends AbstractController {
                     protected Object call() throws Exception {
 
                         int i = 1;
-                        for(File file : selectedFiles) {
+                        for (File file : selectedFiles) {
 
                             updateTitle(String.format(getResourceBundle().getString("task.importing_artifact"), file.getName()));
 
                             if (artifact instanceof Folder) {
-                                Folder folder = (Folder)artifact;
+                                Folder folder = (Folder) artifact;
                                 Document newDocument = folder.createDocument(file.getName());
                                 newDocument.setContent(FileUtils.getFileContent(file));
                                 newDocument.save();
@@ -991,14 +988,21 @@ public class MainController extends AbstractController {
 
         if (selectedDirectory != null) {
 
-            // Add project into workspace
-            Project project = new FileSystemProject(selectedDirectory);
+            // Add project into workspace (if worksapce is a local workspace)
+            Workspace workspace = ApplicationContext.getWorkspace();
+            if (workspace instanceof LocalWorkspace) {
+                
+                LocalWorkspace localWorkspace = (LocalWorkspace)workspace;
 
-            try {
-                ApplicationContext.getWorkspace().openProject(project);
+                Project project = new FileSystemProject(selectedDirectory, localWorkspace.getFileSystemArtifactWatcher());
 
-            } catch (IOException ex) {
-                this.displayErrorDialog(ex);
+                try {
+                    ApplicationContext.getWorkspace().openProject(project);
+
+                } catch (IOException ex) {
+                    this.displayErrorDialog(ex);
+                }
+
             }
 
         }
@@ -1069,5 +1073,5 @@ public class MainController extends AbstractController {
         editorsPaneController.restoreState(editorsPaneState);
 
     }
-    
+
 }

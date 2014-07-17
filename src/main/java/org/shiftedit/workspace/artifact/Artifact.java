@@ -44,6 +44,7 @@ public interface Artifact {
     
     public boolean isDeleted();
     public boolean isModified();
+    public boolean isOutOfSync();
     
     /**
      * Load artifact and all its children.

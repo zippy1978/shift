@@ -32,8 +32,7 @@ package org.shiftedit.workspace
 
 import spock.lang.*
 import com.github.goldin.spock.extensions.tempdir.*
-import org.shiftedit.workspace.artifact.Project
-import org.shiftedit.workspace.artifact.FileSystemProject
+import org.shiftedit.workspace.artifact.*
 import java.lang.ref.ReferenceQueue
 import java.lang.ref.WeakReference
 /**
@@ -54,7 +53,7 @@ class LocalWorkspaceSpec extends Specification {
         subDirFile.mkdirs()
         documentFile = new File(subDirFile, 'document.txt')
         documentFile.withWriter{it << 'Test doc'} 
-        project = new FileSystemProject(projectDir)
+        project = new FileSystemProject(projectDir, new FileSystemArtifactWatcher())
         
     }
     
@@ -62,7 +61,7 @@ class LocalWorkspaceSpec extends Specification {
         
         when:
         LocalWorkspace workspace = new LocalWorkspace()
-        FileSystemProject project = new FileSystemProject(projectDir)
+        FileSystemProject project = new FileSystemProject(projectDir, new FileSystemArtifactWatcher())
         project.load()
         workspace.openProject(project)
         

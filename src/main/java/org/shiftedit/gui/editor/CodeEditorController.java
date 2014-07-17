@@ -175,6 +175,7 @@ public class CodeEditorController extends AbstractController implements EditorCo
     /**
      * @param document the document to set
      */
+    @Override
     public void setDocument(Document document) {
 
         this.document = document;
