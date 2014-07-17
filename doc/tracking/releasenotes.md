@@ -6,8 +6,10 @@
 * [FIX] Cannot paste text into code editor search field.
 * [FIX] Status bar label is often cut when text is too long.
 * [FEAT] Asynchronous document opening in editors.
-* [FEAT] Preferences dialog to tune the application
-* [FEAT] WOPE configuration panel to configure license and declare runtimes
+* [FEAT] Preferences dialog to tune the application.
+* [FEAT] WOPE configuration panel to configure license and declare runtimes.
+* [FEAT] WOPE HTML preview.
+* [FEAT] File system sync.
 
 ## 0.1.1 (03/15/2014)
 
