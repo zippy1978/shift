@@ -25,6 +25,7 @@ package org.shiftedit.gui;
  * THE SOFTWARE.
  * #L%
  */
+import javafx.scene.image.Image;
 import org.shiftedit.ApplicationContext;
 import org.shiftedit.gui.dialog.ConfirmDialogController;
 import org.shiftedit.gui.dialog.ErrorDialogController;
@@ -257,6 +258,7 @@ public abstract class AbstractController implements Controller {
         Scene scene = new Scene(rootNode);
         scene.getStylesheets().add(ApplicationContext.getThemeManager().getCSS());
         newStage.setScene(scene);
+        newStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icon_32x32.png")));
         newStage.setTitle(title);
 
         if (alwaysOnTop) {
