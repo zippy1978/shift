@@ -335,6 +335,7 @@ public abstract class AbstractController implements Controller {
         Scene scene = new Scene(rootNode);
         scene.getStylesheets().add(ApplicationContext.getThemeManager().getCSS());
         stage.setScene(scene);
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icon_32x32.png")));
         stage.setTitle(title);
 
         return stage;
