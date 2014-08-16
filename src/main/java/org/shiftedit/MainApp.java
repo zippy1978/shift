@@ -25,6 +25,7 @@ package org.shiftedit;
  * THE SOFTWARE.
  * #L%
  */
+import javafx.scene.image.Image;
 import org.shiftedit.gui.FXMLLoaderFactory;
 import org.shiftedit.gui.MainController;
 import org.shiftedit.gui.dialog.ConfirmDialogController;
@@ -94,6 +95,7 @@ public class MainApp extends Application {
 
         stage.setTitle(ApplicationContext.getProperties().getProperty("application.name"));
         stage.setScene(scene);
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icon_32x32.png")));
         stage.show();
 
         // Register close request handler
