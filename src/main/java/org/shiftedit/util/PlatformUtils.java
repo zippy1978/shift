@@ -27,6 +27,8 @@ package org.shiftedit.util;
  */
 
 
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -34,7 +36,26 @@ package org.shiftedit.util;
  */
 public class PlatformUtils {
 
+    private static List<String> ignoredFileNames;
+
     public static boolean isMacOSX() {
         return System.getProperty("os.name").toLowerCase().contains("mac");
+    }
+
+    /**
+     * Return file names to ignore on the current platform.
+     * Usually hidden system files.
+     * @return a List
+     */
+    public static synchronized List<String> getIgnoredFileNames() {
+        if (ignoredFileNames == null) {
+            ignoredFileNames = new ArrayList<>();
+
+            if (isMacOSX()) {
+                ignoredFileNames.add(".DS_Store");
+            }
+        }
+
+        return ignoredFileNames;
     }
 }

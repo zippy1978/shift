@@ -180,6 +180,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
      */
     public void refresh(boolean saveExpandedStateBefore) {
 
+
         if (saveExpandedStateBefore) {
             // Save expanded states
             this.expandedStates.clear();
@@ -230,6 +231,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
 
         // Observe
         project.addObserver(this);
+
     }
 
     private void addFolderNode(TreeItem<Artifact> parentNode, Folder folder) {
@@ -265,6 +267,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
     @Override
     public void update(Observable o, Object arg) {
 
+
         boolean canRefresh = true;
         
         // If workspace if empty : display welcome label
@@ -282,9 +285,11 @@ public class ProjectNavigatorController extends AbstractController implements Ob
             document = (Document) arg;
         }
         if (document != null) {
-            
+
             if (document.isDeleted() || document.isNew()) {
                 canRefresh = true;
+            } else {
+                canRefresh = false;
             }
             
         }
@@ -296,7 +301,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
 
             // Select artifact if it is new
             Artifact artifact = (Artifact) arg;
-            if (artifact != null && !artifact.isDeleted() && canRefresh) {
+            if (artifact != null && !artifact.isDeleted()) {
                 TreeItem<Artifact> item = searchTreeItem(treeItemRoot, artifact);
 
                 // Expand parent
@@ -305,6 +310,7 @@ public class ProjectNavigatorController extends AbstractController implements Ob
                     treeView.getSelectionModel().select(item);
                 }
             }
+
 
         }
 

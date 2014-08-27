@@ -39,7 +39,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
+
+import org.shiftedit.util.PlatformUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,19 +64,40 @@ public class FileSystemArtifactWatcher {
 
     public void addArtifact(AbstractFileSystemArtifact artifact) {
         artifacts.add(artifact);
-        this.restartWatching();
+
+        if (watchService != null) {
+            // If service already stared : use it
+
+            // Path are registered on folders only
+            if (artifact instanceof FileSystemFolder) {
+
+                try {
+                    if (new File(artifact.getPath()).exists()) {
+                        Path dataPath = Paths.get(artifact.getPath());
+                        WatchKey key = dataPath.register(watchService,
+                                StandardWatchEventKinds.ENTRY_MODIFY,
+                                StandardWatchEventKinds.ENTRY_CREATE,
+                                StandardWatchEventKinds.ENTRY_DELETE);
+                        keyMap.put(key, artifact);
+                    }
+                } catch (IOException e) {
+                    log.debug(String.format("Failed to register artifact %s", artifact.getWorkspacePath()));
+                }
+
+
+            }
+
+
+        } else {
+            // If service not started : start it
+            this.startWatching();
+        }
 
     }
 
     public void removeArtifact(AbstractFileSystemArtifact artifact) {
         artifacts.remove(artifact);
-        this.restartWatching();
 
-    }
-
-    private synchronized void restartWatching() {
-        this.stopWatching();
-        this.startWatching();
     }
 
     /**
@@ -101,6 +123,9 @@ public class FileSystemArtifactWatcher {
                                 StandardWatchEventKinds.ENTRY_MODIFY,
                                 StandardWatchEventKinds.ENTRY_CREATE,
                                 StandardWatchEventKinds.ENTRY_DELETE);
+
+                        log.debug(artifact.getWorkspacePath());
+
                         keyMap.put(key, artifact);
                     }
 
@@ -118,7 +143,7 @@ public class FileSystemArtifactWatcher {
 
                         while (!interrupted) {
 
-                            log.debug("Listening to file system changes...");
+                            //log.debug("Listening to file system changes...");
                             if (watchService != null) {
                                 WatchKey key = watchService.take();
                                 for (WatchEvent<?> event : key.pollEvents()) {
@@ -126,10 +151,10 @@ public class FileSystemArtifactWatcher {
                                     if (StandardWatchEventKinds.OVERFLOW != kind) {
 
                                         AbstractFileSystemArtifact sourceArtifact = keyMap.get(key);
-                                        if (sourceArtifact != null) {
+                                        if (sourceArtifact != null && !PlatformUtils.getIgnoredFileNames().contains(event.context().toString())) {
                                             String path = String.format("%s%s%s", sourceArtifact.getPath(), File.separator, event.context().toString());
 
-                                            log.debug(String.format("File system change detected on %s", path));
+                                            //log.debug(String.format("File system change detected on %s", path));
 
                                             try {
                                                 // Refresh folder
@@ -138,19 +163,30 @@ public class FileSystemArtifactWatcher {
                                                 log.error(String.format("Failed to refresh file system folder %s", sourceArtifact.getPath()), ex);
                                             }
                                             
-                                            // Notify out of sync on matching artifact
-                                            artifacts.stream().filter((artifact) -> (artifact.getPath().equals(path))).forEach((artifact) -> {
+                                            // Notify out of sync on matching artifact (working on artifact copy to avoid conccurent issues)
+                                            new ArrayList<>(artifacts).stream().filter((artifact) -> (artifact.getPath().equals(path))).forEach((artifact) -> {
+
+
+                                                if (!new File(path).exists()) {
+                                                    try {
+                                                        artifact.delete();
+                                                    } catch (IOException e) {
+                                                        log.error(String.format("Failed to delete artifact %s from workspace", artifact.getWorkspacePath()));
+                                                    }
+                                                }
+
                                                 artifact.notifyOutOfSync();
                                             });
 
                                         }
                                     }
 
+                                    if (!key.reset()) {
+                                        break;
+                                    }
+
                                 }
 
-                                if (!key.reset()) {
-                                    break;
-                                }
                             }
 
                         }
@@ -158,7 +194,7 @@ public class FileSystemArtifactWatcher {
                     } catch (InterruptedException | ClosedWatchServiceException ex) {
                         // Thrown on thread restart, or when service is not ready
                         if (ex instanceof InterruptedException) {
-                            log.debug("Watcher thread interrupted");
+                            //log.debug("Watcher thread interrupted");
                             interrupted = true;
                         } else {
                             // Watch service close

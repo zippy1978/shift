@@ -141,9 +141,10 @@ public abstract class AbstractFileSystemArtifact extends WeakObservable implemen
 
     @Override
     public synchronized boolean isOutOfSync() {
-        
+
         this.setLastModificationDate(new Date(new File(file.getAbsolutePath()).lastModified()));
         return this.loaded && this.lastModificationDate.after(this.loadDate);
+
     }
     
     /**
