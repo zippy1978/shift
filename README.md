@@ -6,7 +6,7 @@
 
 Shift is a code editor for the modern web.
 
-If you are interrested in using it and want to download binaries, then go to [http://www.shiftedit.com](http://www.shiftedit.com).
+If you are interrested in using it and want to download binaries, then go to [http://www.shiftedit.org](http://www.shiftedit.org).
 
 If your are interrested in building it from sources or contributing to the code, then you are at the right place!
 
